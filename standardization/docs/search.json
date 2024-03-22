@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "stock_assessment.html#entire-script",
+    "href": "stock_assessment.html#entire-script",
+    "title": "3  Stock assessment - how to set up R script",
+    "section": "3.1 Entire script",
+    "text": "3.1 Entire script\n\n# Model name and information on stock and location\n# Stock assessor name(s) (DD-MM-YYYY)\n# any notes on model should be here, delete any old notes\n\nlibrary(RTMB)\n# Data ----\ndat &lt;- load(\"data_file.RData\")    # data for stock assessment model\ndata &lt;- list()                    # all data for model should go into list called \"data\"\ndata$years &lt;- dat$fyear:dat$lyear # vector of years (first to last)\ndata$n_year &lt;- length(data$years) # number of years in model\ndata$ages &lt;- dat$fage:dat$lage    # vector of ages (first to last)\ndata$n_age &lt;- length(data$ages)   # number of ages in model\n### etc\n\n# Parameters ----\npar &lt;- list()\npar$log_rinit &lt;- 11\npar$log_q &lt;- -1\npar$sel_p1 &lt;- log(7)\npar$sel_p2 &lt;- log(5)\n### etc\n\n# Additional functions ----\nadd_function &lt;- function (arguments) {\n  ...\n  return(out)\n}\n\n# Stock assessment model ----\nf &lt;- function(par) {\n  getAll(data, par)\n  \"[&lt;-\" &lt;- ADoverload(\"[&lt;-\")\n\n  ## sections\n\n  ## Report and AD report section\n  REPORT(xx)\n  ADREPORT(xx)\n\n  return(jnll)\n}\n\n# Run model ----\nobj &lt;- MakeADFun(f, par)\nopt &lt;- nlminb(obj$par, obj$fn, obj$gr)\nsdr &lt;- sdreport(obj)\n# if REPORT()\nres &lt;- obj$report(opt$par) # use if only using fixed effects\n# res &lt;- as.list(sdr, \"Est\")\n# if ADREPORT()\nresl &lt;- as.list(sdr, \"Est\", report = TRUE)\nres_sd &lt;- as.list(sdrep, \"Std\", report = TRUE)\n\n# Plots ----"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "tutorials",
+    "section": "",
+    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books."
+  },
+  {
+    "objectID": "naming.html#data",
+    "href": "naming.html#data",
+    "title": "1  Naming convention - data and parameters",
+    "section": "1.1 Data",
+    "text": "1.1 Data\n\nobs_xx observed data\nn_year\nyears\nn_age\nages\nlinf\nvbk\nto\nla\nwa\nmat\nfec\nM\nobs_ct\nobs_eff\nobs_comp\nneff"
+  },
+  {
+    "objectID": "naming.html#parameters",
+    "href": "naming.html#parameters",
+    "title": "1  Naming convention - data and parameters",
+    "section": "1.2 Parameters",
+    "text": "1.2 Parameters\n\nlog_xx log space data/parameters\nar\nbr\nsig\nsel_p1\nsel_p2\nq"
+  },
+  {
+    "objectID": "naming.html#model",
+    "href": "naming.html#model",
+    "title": "1  Naming convention - data and parameters",
+    "section": "1.3 Model",
+    "text": "1.3 Model\n\nssb"
+  }
+]

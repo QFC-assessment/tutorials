@@ -1,0 +1,24 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "tutorials"
+  chapters:
+    - index.qmd
+    - naming.qmd
+    - data.qmd
+    - stock_assessment.qmd
+  search: true
+  repo-url: https://github.com/QFCatMSU/tutorials
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+

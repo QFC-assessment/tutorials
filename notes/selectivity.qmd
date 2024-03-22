@@ -8,3 +8,82 @@ format:
 editor: visual
 ---
 
+## Symbols
+
+- $F$: fishing mortality
+- $t$: time
+- $a$: age
+- $s$: selectivity
+- $q$: catchability
+- $E$: effort
+
+## Definition of selectivity
+
+**Selectivity**: relative vulnerability of a demographic group of the fished population to capture by a fishery or survey, with at least one demographic group being fully selected (Cadrin et al., 2015). 
+
+Selectivity is a combination of two processes:
+
+- the relative probability of capture for a demographic group (i.e., *contact selectivity*; Miller and Fryer, 1999)
+- proportion of the group that is available to the fishery in time and space (i.e., *population selectivity*; Miller and Fryer, 1999)
+  - aka *vulnerability*
+
+Assessments models typically require a particular form of selection curve and estimates a population selectivity curve. Selectivity is used to link observed composition data to model predictions about population abundance-at-age/-size. If multiple gear types operate in the fishery, or if the catch-at-age compositions from different segments of the fleet have distinct characteristics, then the catch-at-age data can be partitioned into separate matrices for each gear or fleet type with separate selectivity curves and parameters for each type. 
+
+### Selectivity and fishing mortality
+
+Selectivity is the portion of a demographic group that is vulnerable to capture by fishing:
+
+$$ 
+F_{t,a} = F_t s_a
+$$ {#eq-1}
+
+- $F_t$ is fishing mortality at time $t$ for fully-vulnerable ages (i.e., a year-specific fishing mortality multiplier)
+  - typically managed through limiting total fishing effort in a year 
+- $s_a$ is the selectivity of the age group
+  - typically managed by regulating fishing technology and behavior
+
+This definition is typically used for age-structure population models, but the same equation can be related to any other demographic groups (e.g., size intervals, life history stages). [Eq @eq-1] quantifies either constant or average selectivity during the time interval.  function expressed in [eq @eq-1] is termed *separability* because $F_{t,a}$ can be separated into the components $F_t$ and $s_a$.
+
+Catchability ($q$) is the effect of of a unit of fishing effort ($E$) directed on the population, with the effect measured as the exponential rate of fishing mortality imposed on the population over a time interval $t$:
+
+$$
+F_t = q E_t
+$$ {#eq-2}
+
+Considering that catchability and selectivity have a relationship with fishing mortality, [Eq @eq-1] & [-@eq-2] can be combined:
+
+$$
+F_{t,a} = s_a q E_t; \hspace{4mm} q_a = s_a  q
+$$
+
+Selectivity then plays an essential role as a component of the survival equation in abundance at age:
+
+$$
+N_{t,a} = N_{t-1,a-1}e^{-(F_{t-1} s_{a-1} + M_{t-1,a-1})}
+$$ {#eq-3}
+
+- $N_{t,a}$ is the abundance of survivors of an age class at the end of year $t$
+
+[Eq @eq-3] is the primary process equation for all age-structured stock assessment models. 
+
+## Selectivity functions
+
+### Logistic
+
+### Double logistic
+
+### Gamma
+
+Dome-shaped selectivity can be represented using a gamma function:
+$$
+s_a = \dfrac{a}{a_{max}}^{a_{max}/p} e^{(a_{max}-a)/p}; \hspace{6mm} p = 0.5 \left[\sqrt{{a_{max}}^2 + 4\gamma^2}- a_{max}\right]
+$$
+
+- $a_{max}$ is the full vulnerability to the fishery (i.e., $s_{a_{max}}$ = 1)
+- $\gamma$ is the gamma slope parameter
+
+## References
+
+Cadrin, S.X., DeCelles, G.R. and Reid, D., 2016. Informing fishery assessment and management with field observations of selectivity and efficiency. Fisheries Research, 184, pp.9-17.
+
+Millar, R. B., & Fryer, R. J. (1999). Estimating the size-selection curves of towed gears, traps, nets and hooks. Reviews in Fish Biology and Fisheries, 9, 89-116.

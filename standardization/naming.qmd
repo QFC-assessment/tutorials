@@ -1,0 +1,50 @@
+---
+title: "Naming convention - data and parameters"
+format:
+  html:
+    toc: true
+    page-layout: full
+    css: styles.css
+editor: visual
+---
+
+## Data
+
+- `obs_xx` observed data 
+- `n_year`
+- `years`
+- `n_age`
+- `ages`
+- `linf`
+- `vbk`
+- `to`
+- `la`
+- `wa`
+- `mat`
+- `fec`
+- `M`
+- `obs_ct`
+- `obs_eff`
+- `obs_comp`
+- `neff`
+
+## Parameters
+
+- `log_xx` log space data/parameters
+- `r_init`
+- `ar`
+- `br`
+- `sig`
+- `sel_p1`
+- `sel_p2`
+- `q`
+- `sdr`
+- `sdc`
+
+## Model
+
+- `F`
+- `ssb`
+- `ct`
+- `jnll` 
+

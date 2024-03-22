@@ -1,0 +1,126 @@
+---
+title: "Stock assessment - how to set up R script"
+format:
+  html:
+    toc: true
+    page-layout: full
+    css: styles.css
+editor: visual
+---
+
+This is a tutorial of how to set up script for running a stock assessment model. This is the format that all stock assessment scripts written in R/RTMB and from the QFC will use.
+
+First, create comments that has the model name (if it has a specific name) and any information on the stock and location, modeler's name, and any important notes on the model. Put dates if you are not using version control (i.e., not using GitHub). Delete any old comments that are not relevant to the most up-to-date model. Right after the comments, put `library(RTMB)` to open the RTMB R package.
+
+```{r, eval = FALSE}
+# Model name and information on stock and location
+# Stock assessor name(s) (DD-MM-YYYY)
+# any notes on model should be here, delete any old notes
+
+library(RTMB)
+```
+
+Set up the data list. For RTMB, the data needs to go into a single list, which will be called `data`. For consistency, keep the names of the variables/data inputs the same as listed here. See [] for naming convention.
+
+```{r, eval = FALSE}
+dat <- load("data_file.RData")    # data for stock assessment model
+data <- list()                    # all data for model should go into list called "data"
+data$years <- dat$fyear:dat$lyear # vector of years (first to last)
+data$n_year <- length(data$years) # number of years in model
+data$ages <- dat$fage:dat$lage    # vector of ages (first to last)
+data$n_age <- length(data$ages)   # number of ages in model
+### etc
+```
+
+Right after the data, set up a single list for the parameters, which will be called `par`. Again, see naming convention here: [].
+
+```{r}
+par <- list()
+par$log_rinit <- 11
+par$log_q <- -1
+par$sel_p1 <- log(7)
+par$sel_p2 <- log(5)
+### etc
+```
+
+If there are any additional functions that are required to run the model, put it after the parameters and before the function for the assessment model.
+
+The function for the stock assessment model is next. 
+
+```{r}
+f <- function(par) {
+  getAll(data, par)
+  "[<-" <- ADoverload("[<-")
+
+  ## sections
+
+  ## Report and AD report section
+  REPORT(xx)
+  ADREPORT(xx)
+
+  return(jnll)
+}
+```
+
+## Entire script
+
+```{r, eval = FALSE}
+# Model name and information on stock and location
+# Stock assessor name(s) (DD-MM-YYYY)
+# any notes on model should be here, delete any old notes
+
+library(RTMB)
+# Data ----
+dat <- load("data_file.RData")    # data for stock assessment model
+data <- list()                    # all data for model should go into list called "data"
+data$years <- dat$fyear:dat$lyear # vector of years (first to last)
+data$n_year <- length(data$years) # number of years in model
+data$ages <- dat$fage:dat$lage    # vector of ages (first to last)
+data$n_age <- length(data$ages)   # number of ages in model
+### etc
+
+# Parameters ----
+par <- list()
+par$log_rinit <- 11
+par$log_q <- -1
+par$sel_p1 <- log(7)
+par$sel_p2 <- log(5)
+### etc
+
+# Additional functions ----
+add_function <- function (arguments) {
+  ...
+  return(out)
+}
+
+# Stock assessment model ----
+f <- function(par) {
+  getAll(data, par)
+  "[<-" <- ADoverload("[<-")
+
+  ## transform parameters
+  rinit <- exp(rinit)
+  ### etc
+
+  ## sections
+
+  ## Report and AD report section
+  REPORT(xx)
+  ADREPORT(xx)
+
+  return(jnll)
+}
+
+# Run model ----
+obj <- MakeADFun(f, par)
+opt <- nlminb(obj$par, obj$fn, obj$gr)
+sdr <- sdreport(obj)
+# if REPORT()
+res <- obj$report(opt$par) # use if only using fixed effects
+# res <- as.list(sdr, "Est")
+# if ADREPORT()
+resl <- as.list(sdr, "Est", report = TRUE)
+res_sd <- as.list(sdrep, "Std", report = TRUE)
+
+# Plots ----
+```

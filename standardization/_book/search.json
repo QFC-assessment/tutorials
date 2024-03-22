@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "tutorials",
+    "section": "",
+    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books."
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "2  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever."
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  },
+  {
+    "objectID": "stock_assessment.html#entire-script",
+    "href": "stock_assessment.html#entire-script",
+    "title": "2  Stock assessment - how to set up R script",
+    "section": "2.1 Entire script",
+    "text": "2.1 Entire script\n\n# Model name and information on stock and location\n# Stock assessor name(s) (DD-MM-YYYY)\n# any notes on model should be here, delete any old notes\n\nlibrary(RTMB)\ndat &lt;- # data for stock assessment model\ndata &lt;- list() # all data for model should go into list called \"data\"\ndata$years &lt;- dat$fyear:dat$lyear # vector of years (first to last)\ndata$n_year &lt;- length(data$years) # number of years in model\ndata$ages &lt;- dat$fage:dat$lage # vector of ages (first to last)\ndata$n_age &lt;- length(data$ages) # number of ages in model"
+  }
+]
