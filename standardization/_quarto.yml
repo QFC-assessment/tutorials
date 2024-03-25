@@ -6,6 +6,7 @@ book:
   title: "tutorials"
   chapters:
     - index.qmd
+    - rtmb_intro.qmd
     - naming.qmd
     - data.qmd
     - stock_assessment.qmd

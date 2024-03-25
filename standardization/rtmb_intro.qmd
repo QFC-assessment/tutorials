@@ -1,0 +1,19 @@
+---
+title: "RTMB Introduction"
+format:
+  html:
+    toc: true
+    page-layout: full
+    css: styles.css
+editor: visual
+---
+
+## What is RTMB?
+
+- RTMB is a new package that provides a native R interface for a subset of TMB so you can avoid coding in C++
+- Developed by Kasper Kristensen (DTU-Aqua)
+  - See <https://kaskr.r-universe.dev/RTMB>
+- Because code is all in R, both easier to code and for others to read that code -  a game changer!
+- A game changer *if* you know how to code in R, create an objective f(x) for your model 
+- No compiling or compiling errors! (.dll files)
+- Bottom line: less time developing and testing models, more intuitive code 

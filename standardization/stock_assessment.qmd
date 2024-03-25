@@ -10,6 +10,8 @@ editor: visual
 
 This is a tutorial of how to set up script for running a stock assessment model. This is the format that all stock assessment scripts written in R/RTMB and from the QFC will use.
 
+## R script header
+
 First, create comments that has the model name (if it has a specific name) and any information on the stock and location, modeler's name, and any important notes on the model. Put dates if you are not using version control (i.e., not using GitHub). Delete any old comments that are not relevant to the most up-to-date model. Right after the comments, put `library(RTMB)` to open the RTMB R package.
 
 ```{r, eval = FALSE}
@@ -20,15 +22,17 @@ First, create comments that has the model name (if it has a specific name) and a
 library(RTMB)
 ```
 
+## Data and parameters
+
 Set up the data list. For RTMB, the data needs to go into a single list, which will be called `data`. For consistency, keep the names of the variables/data inputs the same as listed here. See [] for naming convention.
 
 ```{r, eval = FALSE}
 dat <- load("data_file.RData")    # data for stock assessment model
 data <- list()                    # all data for model should go into list called "data"
-data$years <- dat$fyear:dat$lyear # vector of years (first to last)
-data$n_year <- length(data$years) # number of years in model
-data$ages <- dat$fage:dat$lage    # vector of ages (first to last)
-data$n_age <- length(data$ages)   # number of ages in model
+data$years <- dat$fyear:dat$lyear 
+data$n_year <- length(data$years)
+data$ages <- dat$fage:dat$lage 
+data$n_age <- length(data$ages)
 ### etc
 ```
 
@@ -45,22 +49,109 @@ par$sel_p2 <- log(5)
 
 If there are any additional functions that are required to run the model, put it after the parameters and before the function for the assessment model.
 
-The function for the stock assessment model is next. 
+## Creating objective function (i.e., the stock assessment model)
 
-```{r}
+Create the function for the objective function (i.e., stock assessment model). Call this function `f`. The only argument required is `par`, which is the parameter list. Note that `data` is not necessary in the function argument. 
+
+The first line should be the function `getAll(data, par)`, which is a function that makes all the list of elements of data and parameters visible inside the function so that one could write `years` instead of `data$years`. The next line contains `"[<-" <- ADoverload("[<-")`, which helps work around limitations in R's method dispatch system (e.g., R can't combine numeric and ADvector classes). 
+
+```{r, eval = FALSE}
 f <- function(par) {
   getAll(data, par)
   "[<-" <- ADoverload("[<-")
 
-  ## sections
+...
+}
+```
+
+Next, put the tranformation of parameters (e.g., parameters in log space). Note that the name of the tranformed parameter should be different than the initial parameter in the par list.
+
+```{r, eval = FALSE}
+f <- function(par) {
+...
+
+  ## Transform parameters
+  rinit <- exp(log_rinit)
+  ### etc
+
+...
+}
+```
+
+[Sections...]
+
+The last part of the stock assessment model (the `f` function) will be the report section and the value that will be returned from running the function. The `REPORT()` function tells RTMB that we want to report a calculation from the model. The `ADREPORT()` function tells RTMB that we want uncertainties for this intermediate calculation from the model. Note that using `ADREPORT()` will slow down the model run. The value within `return()` should always be the joint negative log likelihood (`jnll`) in any stock assessment model. 
+
+```{r, eval = FALSE}
+f <- function(par) {
+...
 
   ## Report and AD report section
-  REPORT(xx)
+  REPORT(xx1)
+  REPORT(xx2)
   ADREPORT(xx)
 
   return(jnll)
 }
+
 ```
+
+## Set up the objective function
+
+We then have to set up the objective function and define the fixed and/or random effects. The objective function (i.e., the assessment model) `f` and parameters `par` are processed by RTMB using the call `MakeADFun(f, par)`. 
+
+```{r, eval = FALSE}
+obj <- MakeADFun(f, par)
+```
+
+Random effects can be included using the argument `random = c("p1", "p2)`. A component of the parameter list (`par`) is marked as random if its name is matched by any of the parameters of the vector `random`. 
+
+```{r, eval = FALSE}
+obj <- MakeADFun(f, par, random = c("log_rinit", "log_q"))
+```
+
+If some parameters are specified as random effects, these will be integrated out of the objective function via the Laplace approximation. In this situation, the functions `fn` and `gr` perform an optimization of random effects of each function evaluation, which is referred to as the "inner optimization".
+
+Fixed parameters can be included in the argument `map = list("par1" = as.factor(NA))`. A map is a named list of factors with the following properties:
+
+- names(map) is a subset of names(par)
+- For a parameter "p" length(map\$p) equals length(par\$p)
+- Parameter entries with NAs in the factor are fixed
+
+```{r, eval = FALSE}
+obj <- MakeADFun(f, par, map = list("log_rinit" = as.factor(NA)))
+```
+
+## Fitting the model
+
+We optimize the model using `nlminb`. This function at minimum needs initial values for the parameters to be optimized (`obj$par`), the objective function to be minimized (`obj$fn`), and gradient of the objective function (`obj$gr`). 
+
+```{r, eval = FALSE}
+opt <- nlminb(obj$par, obj$fn, obj$gr)
+```
+
+## Calculating model outputs
+
+Uncertainties are calculated using `sdreport(obj)`. This should be saved into an object called `sdr`. The function `sdreport()` is used to calculate standard deviations of all model parameters, including non linear functions of random effects and parameters/estimates specified through `ADREPORT()`. 
+
+```{r, eval = FALSE}
+sdr <- sdreport(obj)
+```
+
+The quantities within the objective function (i.e., anything within `REPORT()`) can be extracted using `obj$report(opt$par)`. The parameters and standard errors can be extracted as separate lists using `as.list()`. Pass `report = TRUE` to get `ADREPORT`ed quantities.
+
+```{r, eval = FALSE}
+res <- obj$report(opt$par) # REPORT estimates
+res <- as.list(sdr, "Est") # get parameter estimates
+res <- as.list(sdr, "Std") # parameter uncertainties
+# if ADREPORT()
+resl <- as.list(sdr, "Est", report = TRUE)      # ADREPORT estimates
+resl_sd <- as.list(sdrep, "Std", report = TRUE) # ADREPORT uncertainties
+```
+
+[plots...]
+
+[diagnostics...]
 
 ## Entire script
 
@@ -73,10 +164,10 @@ library(RTMB)
 # Data ----
 dat <- load("data_file.RData")    # data for stock assessment model
 data <- list()                    # all data for model should go into list called "data"
-data$years <- dat$fyear:dat$lyear # vector of years (first to last)
-data$n_year <- length(data$years) # number of years in model
-data$ages <- dat$fage:dat$lage    # vector of ages (first to last)
-data$n_age <- length(data$ages)   # number of ages in model
+data$years <- dat$fyear:dat$lyear 
+data$n_year <- length(data$years)
+data$ages <- dat$fage:dat$lage 
+data$n_age <- length(data$ages)
 ### etc
 
 # Parameters ----
@@ -88,7 +179,7 @@ par$sel_p2 <- log(5)
 ### etc
 
 # Additional functions ----
-add_function <- function (arguments) {
+add_function <- function(arguments) {
   ...
   return(out)
 }
@@ -98,14 +189,15 @@ f <- function(par) {
   getAll(data, par)
   "[<-" <- ADoverload("[<-")
 
-  ## transform parameters
-  rinit <- exp(rinit)
+  ## Transform parameters
+  rinit <- exp(log_rinit)
   ### etc
 
-  ## sections
+  ## Sections
 
   ## Report and AD report section
-  REPORT(xx)
+  REPORT(xx1)
+  REPORT(xx2)
   ADREPORT(xx)
 
   return(jnll)
@@ -115,12 +207,15 @@ f <- function(par) {
 obj <- MakeADFun(f, par)
 opt <- nlminb(obj$par, obj$fn, obj$gr)
 sdr <- sdreport(obj)
-# if REPORT()
-res <- obj$report(opt$par) # use if only using fixed effects
-# res <- as.list(sdr, "Est")
+res <- obj$report(opt$par) # REPORT estimates
+res <- as.list(sdr, "Est") # get parameter estimates
+res <- as.list(sdr, "Std") # parameter uncertainties
 # if ADREPORT()
-resl <- as.list(sdr, "Est", report = TRUE)
-res_sd <- as.list(sdrep, "Std", report = TRUE)
+resl <- as.list(sdr, "Est", report = TRUE)      # ADREPORT estimates
+resl_sd <- as.list(sdrep, "Std", report = TRUE) # ADREPORT uncertainties
 
 # Plots ----
+
+# Diagnostics ----
+
 ```
