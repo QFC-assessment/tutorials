@@ -3,11 +3,21 @@ project:
   output-dir: docs
 
 website:
-  title: "tutorials"
+  title: "Stock assessment tutorials"
   navbar:
     left:
       - href: index.qmd
         text: Home
+      - text: Guides
+        menu:
+          - text: Introduction to RTMB
+            href: guides/rtmb_intro.qmd
+          - text: Naming convention
+            href: guides/naming.qmd
+      - text: Concepts
+        menu: 
+          - text: Selectivity
+            href: notes/selectivity.qmd
 
 format:
   html:
