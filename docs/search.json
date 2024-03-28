@@ -1,24 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "tutorials",
-    "section": "",
-    "text": "homepage"
-  },
-  {
     "objectID": "notes/selectivity.html",
     "href": "notes/selectivity.html",
     "title": "Selectivity",
     "section": "",
     "text": "\\(F\\): fishing mortality\n\\(t\\): time\n\\(a\\): age\n\\(s\\): selectivity\n\\(q\\): catchability\n\\(E\\): effort"
-  },
-  {
-    "objectID": "notes/selectivity.html#references",
-    "href": "notes/selectivity.html#references",
-    "title": "Selectivity",
-    "section": "References",
-    "text": "References\nCadrin, S.X., DeCelles, G.R. and Reid, D., 2016. Informing fishery assessment and management with field observations of selectivity and efficiency. Fisheries Research, 184, pp.9-17.\nMillar, R. B., & Fryer, R. J. (1999). Estimating the size-selection curves of towed gears, traps, nets and hooks. Reviews in Fish Biology and Fisheries, 9, 89-116."
   },
   {
     "objectID": "notes/selectivity.html#symbols",
@@ -32,34 +18,132 @@
     "href": "notes/selectivity.html#definition-of-selectivity",
     "title": "Selectivity",
     "section": "Definition of selectivity",
-    "text": "Definition of selectivity\nSelectivity: relative vulnerability of a demographic group of the fished population to capture by a fishery or survey, with at least one demographic group being fully selected (Cadrin et al., 2015).\nSelectivity is a combination of two processes:\n\nthe relative probability of capture for a demographic group (i.e., contact selectivity; Miller and Fryer, 1999)\nproportion of the group that is available to the fishery in time and space (i.e., population selectivity; Miller and Fryer, 1999)\n\naka vulnerability\n\n\nAssessments models typically require a particular form of selection curve and estimates a population selectivity curve. Selectivity is used to link observed composition data to model predictions about population abundance-at-age/-size. If multiple gear types operate in the fishery, or if the catch-at-age compositions from different segments of the fleet have distinct characteristics, then the catch-at-age data can be partitioned into separate matrices for each gear or fleet type with separate selectivity curves and parameters for each type.\n\nSelectivity and fishing mortality\nSelectivity is the portion of a demographic group that is vulnerable to capture by fishing:\n\\[\nF_{t,a} = F_t s_a\n\\tag{1}\\]\n\n\\(F_t\\) is fishing mortality at time \\(t\\) for fully-vulnerable ages (i.e., a year-specific fishing mortality multiplier)\n\ntypically managed through limiting total fishing effort in a year\n\n\\(s_a\\) is the selectivity of the age group\n\ntypically managed by regulating fishing technology and behavior\n\n\nThis definition is typically used for age-structure population models, but the same equation can be related to any other demographic groups (e.g., size intervals, life history stages). Eq 1 quantifies either constant or average selectivity during the time interval. function expressed in eq 1 is termed separability because \\(F_{t,a}\\) can be separated into the components \\(F_t\\) and \\(s_a\\).\nCatchability (\\(q\\)) is the effect of of a unit of fishing effort (\\(E\\)) directed on the population, with the effect measured as the exponential rate of fishing mortality imposed on the population over a time interval \\(t\\):\n\\[\nF_t = q E_t\n\\tag{2}\\]\nConsidering that catchability and selectivity have a relationship with fishing mortality, Eq 1 & 2 can be combined:\n\\[\nF_{t,a} = s_a q E_t; \\hspace{4mm} q_a = s_a  q\n\\]\nSelectivity then plays an essential role as a component of the survival equation in abundance at age:\n\\[\nN_{t,a} = N_{t-1,a-1}e^{-(F_{t-1} s_{a-1} + M_{t-1,a-1})}\n\\tag{3}\\]\n\n\\(N_{t,a}\\) is the abundance of survivors of an age class at the end of year \\(t\\)\n\nEq 3 is the primary process equation for all age-structured stock assessment models."
+    "text": "Definition of selectivity\nSelectivity: relative vulnerability of a demographic group of the fished population to capture by a fishery or survey, with at least one demographic group being fully selected (Cadrin et al., 2015).\nSelectivity is a combination of two processes:\n\nthe relative probability of capture for a demographic group (i.e., contact selectivity; Miller and Fryer, 1999)\nproportion of the group that is available to the fishery in time and space (i.e., population selectivity; Miller and Fryer, 1999)\n\naka vulnerability\n\n\nAssessments models typically require a particular form of selection curve and estimates a population selectivity curve. Selectivity is used to link observed composition data to model predictions about population abundance-at-age/-size. If multiple gear types operate in the fishery, or if the catch-at-age compositions from different segments of the fleet have distinct characteristics, then the catch-at-age data can be partitioned into separate matrices for each gear or fleet type with separate selectivity curves and parameters for each type.\n\nSelectivity and fishing mortality\nSelectivity is the portion of a demographic group that is vulnerable to capture by fishing:\n\\[\nF_{t,a} = F_t s_a\n\\tag{1}\\]\n\n\\(F_t\\) is fishing mortality at time \\(t\\) for fully-vulnerable ages (i.e., a year-specific fishing mortality multiplier)\n\ntypically managed through limiting total fishing effort in a year\n\n\\(s_a\\) is the selectivity of the age group\n\ntypically managed by regulating fishing technology and behavior\n\n\nThis definition is typically used for age-structure population models, but the same equation can be related to any other demographic groups (e.g., size intervals, life history stages). Eq 1 quantifies either constant or average selectivity during the time interval. The function expressed in eq 1 is termed separability because \\(F_{t,a}\\) can be separated into the components \\(F_t\\) and \\(s_a\\).\nRecall that catchability (\\(q\\)) is the effect of of a unit of fishing effort (\\(E\\)) directed on the population, with the effect measured as the exponential rate of fishing mortality imposed on the population over a time interval \\(t\\):\n\\[\nF_t = q E_t\n\\tag{2}\\]\nConsidering that catchability and selectivity have a relationship with fishing mortality, Eq 1 & 2 can be combined:\n\\[\nF_{t,a} = s_a q E_t; \\hspace{4mm} q_a = s_a  q\n\\]\nSelectivity then plays an essential role as a component of the survival equation in abundance at age:\n\\[\nN_{t,a} = N_{t-1,a-1}e^{-(F_{t-1} s_{a-1} + M_{t-1,a-1})}\n\\tag{3}\\]\n\n\\(N_{t,a}\\) is the abundance of survivors of an age class at the end of year \\(t\\)\n\nEq 3 is the primary process equation for all age-structured stock assessment models."
   },
   {
     "objectID": "notes/selectivity.html#selectivity-functions",
     "href": "notes/selectivity.html#selectivity-functions",
     "title": "Selectivity",
     "section": "Selectivity functions",
-    "text": "Selectivity functions\n\nLogistic\n\n\nDouble logistic\n\n\nGamma\nDome-shaped selectivity can be represented using a gamma function: \\[\ns_a = \\dfrac{a}{a_{max}}^{a_{max}/p} e^{(a_{max}-a)/p}; \\hspace{6mm} p = 0.5 \\left[\\sqrt{{a_{max}}^2 + 4\\gamma^2}- a_{max}\\right]\n\\]\n\n\\(a_{max}\\) is the full vulnerability to the fishery (i.e., \\(s_{a_{max}}\\) = 1)\n\\(\\gamma\\) is the gamma slope parameter"
+    "text": "Selectivity functions\nThere are several forms of fishing selectivity. Sampson and Scott (2012) defined four categories:\n\nAsymptotic: the oldest age classes are fully vulnerable\nIncreasing: selection increases with age\nSaddle: there is at least one local minimum selection in the intermediate range of age classes\nDomed: the age for maximum selectivity (\\(s = 1\\)) is imtermediate in the range of age classes\n\n\nLogistic\nAsymptotic selectivity is often modeled using a logistic function. There are many variations of the logistic selectivity function.\n\\[\ns_a = \\dfrac{1}{1 + e^{-\\sigma_s (a - a_{50})}}\n\\]\n\n\\(\\sigma_s\\) is the logistic slope parameter\n\\(a_{50}\\) is the age of 50% vulnerability to the fishery (i.e., \\(s_{a_{50}} = 0.5\\))\n\nExamples:\n\n\nDouble logistic\n\n\nGamma\nDome-shaped selectivity can be represented using a gamma function: \\[\ns_a = \\dfrac{a}{a_{max}}^{a_{max}/p} e^{(a_{max}-a)/p}; \\hspace{6mm} p = 0.5 \\left[\\sqrt{{a_{max}}^2 + 4\\gamma^2}- a_{max}\\right]\n\\]\n\n\\(a_{max}\\) is the full vulnerability to the fishery (i.e., \\(s_{a_{max}}\\) = 1)\n\\(\\gamma\\) is the gamma slope parameter"
   },
   {
-    "objectID": "standardization/stock_assessment.html",
-    "href": "standardization/stock_assessment.html",
+    "objectID": "notes/selectivity.html#extra",
+    "href": "notes/selectivity.html#extra",
+    "title": "Selectivity",
+    "section": "Extra",
+    "text": "Extra\n\n“cryptic” biomass phenomenon - population estimates of older fish that are not proportional to those observed through sampling efforts"
+  },
+  {
+    "objectID": "notes/selectivity.html#references",
+    "href": "notes/selectivity.html#references",
+    "title": "Selectivity",
+    "section": "References",
+    "text": "References\nCadrin, S.X., DeCelles, G.R. and Reid, D., 2016. Informing fishery assessment and management with field observations of selectivity and efficiency. Fisheries Research, 184, pp.9-17.\nMillar, R. B., & Fryer, R. J. (1999). Estimating the size-selection curves of towed gears, traps, nets and hooks. Reviews in Fish Biology and Fisheries, 9, 89-116."
+  },
+  {
+    "objectID": "guides/stock_assessment.html",
+    "href": "guides/stock_assessment.html",
     "title": "Stock assessment - how to set up R script",
     "section": "",
-    "text": "This is a tutorial of how to set up script for running a stock assessment model. This is the format that all stock assessment scripts written in R/RTMB and from the QFC will use.\nFirst, create comments that has the model name (if it has a specific name) and any information on the stock and location, modeler’s name, and any important notes on the model. Put dates if you are not using version control (i.e., not using GitHub). Delete any old comments that are not relevant to the most up-to-date model. Right after the comments, put library(RTMB) to open the RTMB R package.\n# Model name and information on stock and location\n# Stock assessor name(s) (DD-MM-YYYY)\n# any notes on model should be here, delete any old notes\n\nlibrary(RTMB)\nSet up the data list. For RTMB, the data needs to go into a single list, which will be called data. For consistency, keep the names of the variables/data inputs the same as listed here. See [] for naming convention.\ndat &lt;- # data for stock assessment model\ndata &lt;- list() # all data for model should go into list called \"data\"\ndata$years &lt;- dat$fyear:dat$lyear # vector of years (first to last)\ndata$n_year &lt;- length(data$years) # number of years in model\ndata$ages &lt;- dat$fage:dat$lage # vector of ages (first to last)\ndata$n_age &lt;- length(data$ages) # number of ages in model"
+    "text": "This is a tutorial of how to set up script for running a stock assessment model. This is the format that all stock assessment scripts written in R/RTMB and from the QFC will use."
   },
   {
-    "objectID": "standardization/stock_assessment.html#header",
-    "href": "standardization/stock_assessment.html#header",
+    "objectID": "guides/stock_assessment.html#r-script-header",
+    "href": "guides/stock_assessment.html#r-script-header",
     "title": "Stock assessment - how to set up R script",
-    "section": "Header",
-    "text": "Header\nFirst, create comments that has the model name (if it has a specific name) and any information on the stock and location, modeler’s name, and any important notes on the model. Put dates if you are not using version control (i.e., not using GitHub). Delete any old comments that are not relevant to the most up-to-date model. Right after the comments, put library(RTMB) to open the RTMB R package.\n\n# Model name and information on stock and location\n# Stock assessor name(s) (DD-MM-YYYY)\n# any notes on model should be here, delete any old notes\n\nlibrary(RTMB)\n\nSet up the data list. For RTMB, the data needs to go into a single list, which will be called data.\n\ndat &lt;- # data for stock assessment model\ndata &lt;- list() # all data for model should go into list called \"data\"\ndata$years &lt;- dat$fyear:dat$lyear # vector of years (first to last)\ndata$n_year &lt;- length(data$years) # number of years in model\ndata$ages &lt;- dat$fage:dat$lage # vector of ages (first to last)\ndata$n_age &lt;- length(data$ages) # number of ages in model"
+    "section": "R script header",
+    "text": "R script header\nFirst, create comments that has the model name (if it has a specific name) and any information on the stock and location, modeler’s name, and any important notes on the model. Put dates if you are not using version control (i.e., not using GitHub). Delete any old comments that are not relevant to the most up-to-date model. Right after the comments, put library(RTMB) to open the RTMB R package.\n\n# Model name and information on stock and location\n# Stock assessor name(s) (DD-MM-YYYY)\n# any notes on model should be here, delete any old notes\n\nlibrary(RTMB)"
   },
   {
-    "objectID": "standardization/stock_assessment.html#entire-script",
-    "href": "standardization/stock_assessment.html#entire-script",
+    "objectID": "guides/stock_assessment.html#data-and-parameters",
+    "href": "guides/stock_assessment.html#data-and-parameters",
+    "title": "Stock assessment - how to set up R script",
+    "section": "Data and parameters",
+    "text": "Data and parameters\nSet up the data list. For RTMB, the data needs to go into a single list, which will be called data. For consistency, keep the names of the variables/data inputs the same as listed here. See [] for naming convention.\n\ndat &lt;- load(\"data_file.RData\")    # data for stock assessment model\ndata &lt;- list()                    # all data for model should go into list called \"data\"\ndata$years &lt;- dat$fyear:dat$lyear \ndata$n_year &lt;- length(data$years)\ndata$ages &lt;- dat$fage:dat$lage \ndata$n_age &lt;- length(data$ages)\n### etc\n\nRight after the data, set up a single list for the parameters, which will be called par. Again, see naming convention here: [].\n\npar &lt;- list()\npar$log_rinit &lt;- 11\npar$log_q &lt;- -1\npar$sel_p1 &lt;- log(7)\npar$sel_p2 &lt;- log(5)\n### etc\n\nIf there are any additional functions that are required to run the model, put it after the parameters and before the function for the assessment model."
+  },
+  {
+    "objectID": "guides/stock_assessment.html#creating-objective-function-i.e.-the-stock-assessment-model",
+    "href": "guides/stock_assessment.html#creating-objective-function-i.e.-the-stock-assessment-model",
+    "title": "Stock assessment - how to set up R script",
+    "section": "Creating objective function (i.e., the stock assessment model)",
+    "text": "Creating objective function (i.e., the stock assessment model)\nCreate the function for the objective function (i.e., stock assessment model). Call this function f. The only argument required is par, which is the parameter list. Note that data is not necessary in the function argument.\nThe first line should be the function getAll(data, par), which is a function that makes all the list of elements of data and parameters visible inside the function so that one could write years instead of data$years. The next line contains \"[&lt;-\" &lt;- ADoverload(\"[&lt;-\"), which helps work around limitations in R’s method dispatch system (e.g., R can’t combine numeric and ADvector classes).\n\nf &lt;- function(par) {\n  getAll(data, par)\n  \"[&lt;-\" &lt;- ADoverload(\"[&lt;-\")\n\n...\n}\n\nNext, put the tranformation of parameters (e.g., parameters in log space). Note that the name of the tranformed parameter should be different than the initial parameter in the par list.\n\nf &lt;- function(par) {\n...\n\n  ## Transform parameters\n  rinit &lt;- exp(log_rinit)\n  ### etc\n\n...\n}\n\n[Sections…]\nThe last part of the stock assessment model (the f function) will be the report section and the value that will be returned from running the function. The REPORT() function tells RTMB that we want to report a calculation from the model. The ADREPORT() function tells RTMB that we want uncertainties for this intermediate calculation from the model. Note that using ADREPORT() will slow down the model run. The value within return() should always be the joint negative log likelihood (jnll) in any stock assessment model.\n\nf &lt;- function(par) {\n...\n\n  ## Report and AD report section\n  REPORT(xx1)\n  REPORT(xx2)\n  ADREPORT(xx)\n\n  return(jnll)\n}"
+  },
+  {
+    "objectID": "guides/stock_assessment.html#set-up-the-objective-function",
+    "href": "guides/stock_assessment.html#set-up-the-objective-function",
+    "title": "Stock assessment - how to set up R script",
+    "section": "Set up the objective function",
+    "text": "Set up the objective function\nWe then have to set up the objective function and define the fixed and/or random effects. The objective function (i.e., the assessment model) f and parameters par are processed by RTMB using the call MakeADFun(f, par).\n\nobj &lt;- MakeADFun(f, par)\n\nRandom effects can be included using the argument random = c(\"p1\", \"p2). A component of the parameter list (par) is marked as random if its name is matched by any of the parameters of the vector random.\n\nobj &lt;- MakeADFun(f, par, random = c(\"log_rinit\", \"log_q\"))\n\nIf some parameters are specified as random effects, these will be integrated out of the objective function via the Laplace approximation. In this situation, the functions fn and gr perform an optimization of random effects of each function evaluation, which is referred to as the “inner optimization”.\nFixed parameters can be included in the argument map = list(\"par1\" = as.factor(NA)). A map is a named list of factors with the following properties:\n\nnames(map) is a subset of names(par)\nFor a parameter “p” length(map$p) equals length(par$p)\nParameter entries with NAs in the factor are fixed\n\n\nobj &lt;- MakeADFun(f, par, map = list(\"log_rinit\" = as.factor(NA)))"
+  },
+  {
+    "objectID": "guides/stock_assessment.html#fitting-the-model",
+    "href": "guides/stock_assessment.html#fitting-the-model",
+    "title": "Stock assessment - how to set up R script",
+    "section": "Fitting the model",
+    "text": "Fitting the model\nWe optimize the model using nlminb. This function at minimum needs initial values for the parameters to be optimized (obj$par), the objective function to be minimized (obj$fn), and gradient of the objective function (obj$gr).\n\nopt &lt;- nlminb(obj$par, obj$fn, obj$gr)"
+  },
+  {
+    "objectID": "guides/stock_assessment.html#calculating-model-outputs",
+    "href": "guides/stock_assessment.html#calculating-model-outputs",
+    "title": "Stock assessment - how to set up R script",
+    "section": "Calculating model outputs",
+    "text": "Calculating model outputs\nUncertainties are calculated using sdreport(obj). This should be saved into an object called sdr. The function sdreport() is used to calculate standard deviations of all model parameters, including non linear functions of random effects and parameters/estimates specified through ADREPORT().\n\nsdr &lt;- sdreport(obj)\n\nThe quantities within the objective function (i.e., anything within REPORT()) can be extracted using obj$report(opt$par). The parameters and standard errors can be extracted as separate lists using as.list(). Pass report = TRUE to get ADREPORTed quantities.\n\nres &lt;- obj$report(opt$par) # REPORT estimates\nres &lt;- as.list(sdr, \"Est\") # get parameter estimates\nres &lt;- as.list(sdr, \"Std\") # parameter uncertainties\n# if ADREPORT()\nresl &lt;- as.list(sdr, \"Est\", report = TRUE)      # ADREPORT estimates\nresl_sd &lt;- as.list(sdrep, \"Std\", report = TRUE) # ADREPORT uncertainties\n\n[plots…]\n[diagnostics…]"
+  },
+  {
+    "objectID": "guides/stock_assessment.html#entire-script",
+    "href": "guides/stock_assessment.html#entire-script",
     "title": "Stock assessment - how to set up R script",
     "section": "Entire script",
-    "text": "Entire script\n\n# Model name and information on stock and location\n# Stock assessor name(s) (DD-MM-YYYY)\n# any notes on model should be here, delete any old notes\n\nlibrary(RTMB)\ndat &lt;- # data for stock assessment model\ndata &lt;- list() # all data for model should go into list called \"data\"\ndata$years &lt;- dat$fyear:dat$lyear # vector of years (first to last)\ndata$n_year &lt;- length(data$years) # number of years in model\ndata$ages &lt;- dat$fage:dat$lage # vector of ages (first to last)\ndata$n_age &lt;- length(data$ages) # number of ages in model"
+    "text": "Entire script\n\n# Model name and information on stock and location\n# Stock assessor name(s) (DD-MM-YYYY)\n# any notes on model should be here, delete any old notes\n\nlibrary(RTMB)\n# Data ----\ndat &lt;- load(\"data_file.RData\")    # data for stock assessment model\ndata &lt;- list()                    # all data for model should go into list called \"data\"\ndata$years &lt;- dat$fyear:dat$lyear \ndata$n_year &lt;- length(data$years)\ndata$ages &lt;- dat$fage:dat$lage \ndata$n_age &lt;- length(data$ages)\n### etc\n\n# Parameters ----\npar &lt;- list()\npar$log_rinit &lt;- 11\npar$log_q &lt;- -1\npar$sel_p1 &lt;- log(7)\npar$sel_p2 &lt;- log(5)\n### etc\n\n# Additional functions ----\nadd_function &lt;- function(arguments) {\n  ...\n  return(out)\n}\n\n# Stock assessment model ----\nf &lt;- function(par) {\n  getAll(data, par)\n  \"[&lt;-\" &lt;- ADoverload(\"[&lt;-\")\n\n  ## Transform parameters\n  rinit &lt;- exp(log_rinit)\n  ### etc\n\n  ## Sections\n\n  ## Report and AD report section\n  REPORT(xx1)\n  REPORT(xx2)\n  ADREPORT(xx)\n\n  return(jnll)\n}\n\n# Run model ----\nobj &lt;- MakeADFun(f, par)\nopt &lt;- nlminb(obj$par, obj$fn, obj$gr)\nsdr &lt;- sdreport(obj)\nres &lt;- obj$report(opt$par) # REPORT estimates\nres &lt;- as.list(sdr, \"Est\") # get parameter estimates\nres &lt;- as.list(sdr, \"Std\") # parameter uncertainties\n# if ADREPORT()\nresl &lt;- as.list(sdr, \"Est\", report = TRUE)      # ADREPORT estimates\nresl_sd &lt;- as.list(sdrep, \"Std\", report = TRUE) # ADREPORT uncertainties\n\n# Plots ----\n\n# Diagnostics ----"
+  },
+  {
+    "objectID": "guides/naming.html",
+    "href": "guides/naming.html",
+    "title": "Naming convention - data and parameters",
+    "section": "",
+    "text": "obs_xx observed data\nn_year\nyears\nn_age\nages\nlinf\nvbk\nto\nla\nwa\nmat\nfec\nM\nobs_ct\nobs_eff\nobs_comp\nneff"
+  },
+  {
+    "objectID": "guides/naming.html#data",
+    "href": "guides/naming.html#data",
+    "title": "Naming convention - data and parameters",
+    "section": "",
+    "text": "obs_xx observed data\nn_year\nyears\nn_age\nages\nlinf\nvbk\nto\nla\nwa\nmat\nfec\nM\nobs_ct\nobs_eff\nobs_comp\nneff"
+  },
+  {
+    "objectID": "guides/naming.html#parameters",
+    "href": "guides/naming.html#parameters",
+    "title": "Naming convention - data and parameters",
+    "section": "Parameters",
+    "text": "Parameters\n\nlog_xx log space data/parameters\nr_init\nar\nbr\nsig\nsel_p1\nsel_p2\nq\nsdr\nsdc"
+  },
+  {
+    "objectID": "guides/naming.html#model",
+    "href": "guides/naming.html#model",
+    "title": "Naming convention - data and parameters",
+    "section": "Model",
+    "text": "Model\n\nF\nssb\nct\njnll"
+  },
+  {
+    "objectID": "guides/rtmb_intro.html",
+    "href": "guides/rtmb_intro.html",
+    "title": "RTMB Introduction",
+    "section": "",
+    "text": "RTMB is a new package that provides a native R interface for a subset of TMB so you can avoid coding in C++\nDeveloped by Kasper Kristensen (DTU-Aqua)\n\nSee https://kaskr.r-universe.dev/RTMB\n\nBecause code is all in R, both easier to code and for others to read that code - a game changer!\nA game changer if you know how to code in R, create an objective f(x) for your model\nNo compiling or compiling errors! (.dll files)\nBottom line: less time developing and testing models, more intuitive code"
+  },
+  {
+    "objectID": "guides/rtmb_intro.html#what-is-rtmb",
+    "href": "guides/rtmb_intro.html#what-is-rtmb",
+    "title": "RTMB Introduction",
+    "section": "",
+    "text": "RTMB is a new package that provides a native R interface for a subset of TMB so you can avoid coding in C++\nDeveloped by Kasper Kristensen (DTU-Aqua)\n\nSee https://kaskr.r-universe.dev/RTMB\n\nBecause code is all in R, both easier to code and for others to read that code - a game changer!\nA game changer if you know how to code in R, create an objective f(x) for your model\nNo compiling or compiling errors! (.dll files)\nBottom line: less time developing and testing models, more intuitive code"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "tutorials",
+    "section": "",
+    "text": "homepage"
   }
 ]

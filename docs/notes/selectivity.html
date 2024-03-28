@@ -115,6 +115,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#double-logistic" id="toc-double-logistic" class="nav-link" data-scroll-target="#double-logistic">Double logistic</a></li>
   <li><a href="#gamma" id="toc-gamma" class="nav-link" data-scroll-target="#gamma">Gamma</a></li>
   </ul></li>
+  <li><a href="#extra" id="toc-extra" class="nav-link" data-scroll-target="#extra">Extra</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -178,8 +179,8 @@ F_{t,a} = F_t s_a
 <li>typically managed by regulating fishing technology and behavior</li>
 </ul></li>
 </ul>
-<p>This definition is typically used for age-structure population models, but the same equation can be related to any other demographic groups (e.g., size intervals, life history stages). <a href="#eq-1">Eq&nbsp;1</a> quantifies either constant or average selectivity during the time interval. function expressed in <a href="#eq-1">eq&nbsp;1</a> is termed <em>separability</em> because <span class="math inline">\(F_{t,a}\)</span> can be separated into the components <span class="math inline">\(F_t\)</span> and <span class="math inline">\(s_a\)</span>.</p>
-<p>Catchability (<span class="math inline">\(q\)</span>) is the effect of of a unit of fishing effort (<span class="math inline">\(E\)</span>) directed on the population, with the effect measured as the exponential rate of fishing mortality imposed on the population over a time interval <span class="math inline">\(t\)</span>:</p>
+<p>This definition is typically used for age-structure population models, but the same equation can be related to any other demographic groups (e.g., size intervals, life history stages). <a href="#eq-1">Eq&nbsp;1</a> quantifies either constant or average selectivity during the time interval. The function expressed in <a href="#eq-1">eq&nbsp;1</a> is termed <em>separability</em> because <span class="math inline">\(F_{t,a}\)</span> can be separated into the components <span class="math inline">\(F_t\)</span> and <span class="math inline">\(s_a\)</span>.</p>
+<p>Recall that catchability (<span class="math inline">\(q\)</span>) is the effect of of a unit of fishing effort (<span class="math inline">\(E\)</span>) directed on the population, with the effect measured as the exponential rate of fishing mortality imposed on the population over a time interval <span class="math inline">\(t\)</span>:</p>
 <p><span id="eq-2"><span class="math display">\[
 F_t = q E_t
 \tag{2}\]</span></span></p>
@@ -199,8 +200,24 @@ N_{t,a} = N_{t-1,a-1}e^{-(F_{t-1} s_{a-1} + M_{t-1,a-1})}
 </section>
 <section id="selectivity-functions" class="level2">
 <h2 class="anchored" data-anchor-id="selectivity-functions">Selectivity functions</h2>
+<p>There are several forms of fishing selectivity. Sampson and Scott (2012) defined four categories:</p>
+<ol type="1">
+<li>Asymptotic: the oldest age classes are fully vulnerable</li>
+<li>Increasing: selection increases with age</li>
+<li>Saddle: there is at least one local minimum selection in the intermediate range of age classes</li>
+<li>Domed: the age for maximum selectivity (<span class="math inline">\(s = 1\)</span>) is imtermediate in the range of age classes</li>
+</ol>
 <section id="logistic" class="level3">
 <h3 class="anchored" data-anchor-id="logistic">Logistic</h3>
+<p>Asymptotic selectivity is often modeled using a logistic function. There are many variations of the logistic selectivity function.</p>
+<p><span class="math display">\[
+s_a = \dfrac{1}{1 + e^{-\sigma_s (a - a_{50})}}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\sigma_s\)</span> is the logistic slope parameter</li>
+<li><span class="math inline">\(a_{50}\)</span> is the age of 50% vulnerability to the fishery (i.e., <span class="math inline">\(s_{a_{50}} = 0.5\)</span>)</li>
+</ul>
+<p>Examples:</p>
 </section>
 <section id="double-logistic" class="level3">
 <h3 class="anchored" data-anchor-id="double-logistic">Double logistic</h3>
@@ -215,6 +232,12 @@ s_a = \dfrac{a}{a_{max}}^{a_{max}/p} e^{(a_{max}-a)/p}; \hspace{6mm} p = 0.5 \le
 <li><span class="math inline">\(\gamma\)</span> is the gamma slope parameter</li>
 </ul>
 </section>
+</section>
+<section id="extra" class="level2">
+<h2 class="anchored" data-anchor-id="extra">Extra</h2>
+<ul>
+<li>“cryptic” biomass phenomenon - population estimates of older fish that are not proportional to those observed through sampling efforts</li>
+</ul>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>

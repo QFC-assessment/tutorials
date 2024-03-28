@@ -42,9 +42,9 @@ $$ {#eq-1}
 - $s_a$ is the selectivity of the age group
   - typically managed by regulating fishing technology and behavior
 
-This definition is typically used for age-structure population models, but the same equation can be related to any other demographic groups (e.g., size intervals, life history stages). [Eq @eq-1] quantifies either constant or average selectivity during the time interval.  function expressed in [eq @eq-1] is termed *separability* because $F_{t,a}$ can be separated into the components $F_t$ and $s_a$.
+This definition is typically used for age-structure population models, but the same equation can be related to any other demographic groups (e.g., size intervals, life history stages). [Eq @eq-1] quantifies either constant or average selectivity during the time interval. The function expressed in [eq @eq-1] is termed *separability* because $F_{t,a}$ can be separated into the components $F_t$ and $s_a$.
 
-Catchability ($q$) is the effect of of a unit of fishing effort ($E$) directed on the population, with the effect measured as the exponential rate of fishing mortality imposed on the population over a time interval $t$:
+Recall that catchability ($q$) is the effect of of a unit of fishing effort ($E$) directed on the population, with the effect measured as the exponential rate of fishing mortality imposed on the population over a time interval $t$:
 
 $$
 F_t = q E_t
@@ -68,9 +68,30 @@ $$ {#eq-3}
 
 ## Selectivity functions
 
+There are several forms of fishing selectivity. Sampson and Scott (2012) defined four categories:
+
+1. Asymptotic: the oldest age classes are fully vulnerable
+2. Increasing: selection increases with age
+3. Saddle: there is at least one local minimum selection in the intermediate range of age classes
+4. Domed: the age for maximum selectivity ($s = 1$) is imtermediate in the range of age classes
+
 ### Logistic
 
+Asymptotic selectivity is often modeled using a logistic function. There are many variations of the logistic selectivity function. 
+
+$$
+s_a = \dfrac{1}{1 + e^{-\sigma_s (a - a_{50})}}
+$$
+
+- $\sigma_s$ is the logistic slope parameter
+- $a_{50}$ is the age of 50% vulnerability to the fishery (i.e., $s_{a_{50}} = 0.5$)
+
+Examples:
+
+
 ### Double logistic
+
+
 
 ### Gamma
 
@@ -81,6 +102,11 @@ $$
 
 - $a_{max}$ is the full vulnerability to the fishery (i.e., $s_{a_{max}}$ = 1)
 - $\gamma$ is the gamma slope parameter
+
+## Extra
+
+- "cryptic" biomass phenomenon - population estimates of older fish that are not proportional to those observed through sampling efforts
+
 
 ## References
 
