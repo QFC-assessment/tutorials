@@ -10,14 +10,14 @@ website:
         text: Home
       - text: Guides
         menu:
-          - text: Introduction to RTMB
-            href: guides/rtmb_intro.qmd
-          - text: Naming convention
-            href: guides/naming.qmd
-      - text: Concepts
-        menu: 
-          - text: Selectivity
-            href: notes/selectivity.qmd
+          # - text: Introduction to RTMB
+          #   href: guides/rtmb_intro.qmd
+          - text: Model convergence and diagnostics
+            href: guides/diagnostics.qmd
+      # - text: Concepts
+      #   menu: 
+      #     - text: Selectivity
+      #       href: notes/selectivity.qmd
 
 format:
   html:

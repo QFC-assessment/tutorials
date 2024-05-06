@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Stock assessment tutorials - RTMB Introduction</title>
+<title>Stock assessment tutorials - Model convergence and diagnostics for non-linear models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -99,10 +133,6 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-guides">    
         <li>
-    <a class="dropdown-item" href="../guides/rtmb_intro.html">
- <span class="dropdown-text">Introduction to RTMB</span></a>
-  </li>  
-        <li>
     <a class="dropdown-item" href="../guides/diagnostics.html">
  <span class="dropdown-text">Model convergence and diagnostics</span></a>
   </li>  
@@ -124,7 +154,24 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-rtmb" id="toc-what-is-rtmb" class="nav-link active" data-scroll-target="#what-is-rtmb">What is RTMB?</a></li>
+  <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist">Checklist:</a>
+  <ul class="collapse">
+  <li><a href="#additional-things-to-check" id="toc-additional-things-to-check" class="nav-link" data-scroll-target="#additional-things-to-check">Additional things to check:</a></li>
+  </ul></li>
+  <li><a href="#additional-information" id="toc-additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information:</a>
+  <ul class="collapse">
+  <li><a href="#creating-the-objective-function-in-rtmb" id="toc-creating-the-objective-function-in-rtmb" class="nav-link" data-scroll-target="#creating-the-objective-function-in-rtmb">Creating the objective function in RTMB</a></li>
+  <li><a href="#convergence-message" id="toc-convergence-message" class="nav-link" data-scroll-target="#convergence-message">Convergence message</a></li>
+  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix">Hessian matrix</a></li>
+  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors">Standard errors</a></li>
+  <li><a href="#jitter-test" id="toc-jitter-test" class="nav-link" data-scroll-target="#jitter-test">Jitter test</a></li>
+  <li><a href="#likelihood-profile" id="toc-likelihood-profile" class="nav-link" data-scroll-target="#likelihood-profile">Likelihood profile</a></li>
+  <li><a href="#fit-vs-data" id="toc-fit-vs-data" class="nav-link" data-scroll-target="#fit-vs-data">Fit vs data</a></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals">Confidence intervals</a></li>
+  <li><a href="#residuals" id="toc-residuals" class="nav-link" data-scroll-target="#residuals">Residuals</a></li>
+  <li><a href="#leave-out-runs" id="toc-leave-out-runs" class="nav-link" data-scroll-target="#leave-out-runs">Leave-out runs</a></li>
+  <li><a href="#simulation-test" id="toc-simulation-test" class="nav-link" data-scroll-target="#simulation-test">Simulation test</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -133,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">RTMB Introduction</h1>
+<h1 class="title">Model convergence and diagnostics for non-linear models</h1>
 </div>
 
 
@@ -150,21 +197,158 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="what-is-rtmb" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-rtmb">What is RTMB?</h2>
+<p>This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).</p>
+<section id="checklist" class="level2">
+<h2 class="anchored" data-anchor-id="checklist">Checklist:</h2>
+<p>This is a checklist of convergence checks and diagnostics that should be conducted at minimum to verify a model:</p>
 <ul>
-<li>RTMB is a new package that provides a native R interface for a subset of TMB so you can avoid coding in C++</li>
-<li>Developed by Kasper Kristensen (DTU-Aqua)
+<li><input type="checkbox" unchecked=""> Model is executable (i.e., check objective function and gradients) </li>
+<li><input type="checkbox" unchecked=""> The convergence message from RTMB indicates that the diagnostics are consistent with convergence (<code>= 0</code>) </li>
+<li><input type="checkbox" unchecked=""> The Hessian matrix is positive definite </li>
+<li><input type="checkbox" unchecked=""> Standard errors for model estimates are reasonable </li>
+<li><input type="checkbox" unchecked=""> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </li>
+<li><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.: 
 <ul>
-<li>See <a href="https://kaskr.r-universe.dev/RTMB" class="uri">https://kaskr.r-universe.dev/RTMB</a></li>
+<li><input type="checkbox" unchecked=""> Initial abundance </li>
+<li><input type="checkbox" unchecked=""> Recruitment </li>
+<li><input type="checkbox" unchecked=""> Selectivity </li>
 </ul></li>
-<li>Because code is all in R, both easier to code and for others to read that code - a game changer!</li>
-<li>A game changer <em>if</em> you know how to code in R, create an objective f(x) for your model</li>
-<li>No compiling or compiling errors! (.dll files)</li>
-<li>Bottom line: less time developing and testing models, more intuitive code</li>
 </ul>
+<p>If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. However, these checks are not sufficient for accepting model results. There are additional model diagnostics that should be checked to determine your final model:</p>
+<section id="additional-things-to-check" class="level3">
+<h3 class="anchored" data-anchor-id="additional-things-to-check">Additional things to check:</h3>
+<ul>
+<li><input type="checkbox" unchecked=""> Fit vs data </li>
+<li><input type="checkbox" unchecked=""> Confidence intervals </li>
+<li><input type="checkbox" unchecked=""> Residuals </li>
+<li><input type="checkbox" unchecked=""> Retrospective analysis </li>
+<li><input type="checkbox" unchecked=""> Leave-out/jack knife runs </li>
+<li><input type="checkbox" unchecked=""> Simulation test </li>
+</ul>
+</section>
+</section>
+<section id="additional-information" class="level2">
+<h2 class="anchored" data-anchor-id="additional-information">Additional information:</h2>
+<section id="creating-the-objective-function-in-rtmb" class="level3">
+<h3 class="anchored" data-anchor-id="creating-the-objective-function-in-rtmb">Creating the objective function in RTMB</h3>
+<p>Say you construct an objective function called <code>obj</code> using <code>f</code> as the model function and <code>par</code> as a list of initial parameter values. Using <code>RTMB::MakeADFun</code>, you can create the objective function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> RTMB<span class="sc">::</span><span class="fu">MakeADFun</span>(f, par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You need to check if the objective function will run before running an optimizer. You can look at this by checking if the objective function produces a likelihood and if a gradient is calculated for each parameter:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check likelihood</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>obj<span class="sc">$</span><span class="fu">fn</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># check gradients</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>obj<span class="sc">$</span><span class="fu">gr</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What are gradients
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Gradients</strong> are the partial derivatives of the objective function with respect to the model parameters (goes into one vector - <code>obj$gr()</code>). These partial derivatives indicate how the objective function changes (direction and magnitude) as each parameter varies. This provides information for optimization algorithms to adjust the parameters iteratively to minimize or maximize the objective function.</p>
+</div>
+</div>
+</div>
+<p>If the model is estimable, it will calculate a likelihood based on the initial parameters. Each parameter should also provide a gradient value. If the gradient of a parameter = 0 or NA, this means that the model is not able to estimate that parameter or the parameter is not being used in the model.</p>
+<p>If the checks on the objective function are successful, you can run the objective function with an optimizer using the <code>nlminb</code> function and <code>opt</code> is the output:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> <span class="fu">nlminb</span>(obj<span class="sc">$</span>par, obj<span class="sc">$</span>fn, obj<span class="sc">$</span>gr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="convergence-message" class="level3">
+<h3 class="anchored" data-anchor-id="convergence-message">Convergence message</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the model is converged</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>opt<span class="sc">$</span>convergence</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># check type of convergence</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>opt<span class="sc">$</span>message</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If the diagnostics are consistent with convergence, then <code>opt$convergence = 0</code>. If the model did not converge, <code>opt$convergence = 1</code>. There can be some reasons why the model failed to converge (check <code>opt$message</code> for convergence message):</p>
+<ul>
+<li>singular convergence: model is likely overparameterized (too complex for the data, the data does not contain enough information to estimate the parameters reliably)</li>
+<li>false convergence: likelihood may be discontinuous (this could be related to the estimation of the parameters)</li>
+</ul>
+<p>You may encounter messages like these:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Warning messages<span class="sc">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> In <span class="fu">nlminb</span>(<span class="at">start =</span> par, <span class="at">objective =</span> fn, <span class="at">gradient =</span> gr) <span class="sc">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NA</span><span class="sc">/</span><span class="cn">NaN</span> <span class="cf">function</span> evaluation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution.</p>
+</section>
+<section id="hessian-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="hessian-matrix">Hessian matrix</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What is a Hessian matrix?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A Hessian matrix is a square matrix of second-order partial derivatives of the objective function. In other words, it contains information about how the rate of change of each parameter with respect to every other parameter changes.</p>
+<p>This represents the curvature of the likelihood surface and is used to calculate estimates of uncertainty for all the estimated model parameters and chosen derived quantities.</p>
+<ul>
+<li>Inverting the negative Hessian gives us the covariance matrix, which provides a measure of parameter uncertainty.</li>
+<li>The diagonal elements of the covariance matrix (i.e., inverse of the Hessian matrix) represent the variance of individual parameters.</li>
+<li>The square root of the diagonal elements (i.e., variance) gives standard errors of the parameter estimates.</li>
+</ul>
+</div>
+</div>
+</div>
+<p>The Hessian matrix will not be invertible if the negative log likelihood is not a true minimum. This usually occurs when the model is mis-specified, which could either mean that the model has been written incorrectly so the objective function is not differentiable/estimable with respect to all the parameters. Or the estimated parameters are confounded or overparameterized (i.e., too complex for the data). RTMB will warn you about a non-positive definite Hessian matrix.</p>
+</section>
+<section id="standard-errors" class="level3">
+<h3 class="anchored" data-anchor-id="standard-errors">Standard errors</h3>
+<p>If the standard errors for the parameter estimates are high, this suggests that the model is not fully converged. This can mean:</p>
+<ul>
+<li>low precision: there is a wide range of plausible values for the parameters</li>
+<li>lack of stability in the estimation of the parameter</li>
+<li>overfitting: model may be too complex and is capturing noise in the data rather than true underlying patterns</li>
+</ul>
+<p>Considerations to the model formulation and parameter estimates should be made if the standard errors are too high and unreasonable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sdrep <span class="ot">&lt;-</span> <span class="fu">sdreport</span>(obj)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sdrep</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="jitter-test" class="level3">
+<h3 class="anchored" data-anchor-id="jitter-test">Jitter test</h3>
+</section>
+<section id="likelihood-profile" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood-profile">Likelihood profile</h3>
+</section>
+<section id="fit-vs-data" class="level3">
+<h3 class="anchored" data-anchor-id="fit-vs-data">Fit vs data</h3>
+</section>
+<section id="confidence-intervals" class="level3">
+<h3 class="anchored" data-anchor-id="confidence-intervals">Confidence intervals</h3>
+</section>
+<section id="residuals" class="level3">
+<h3 class="anchored" data-anchor-id="residuals">Residuals</h3>
+</section>
+<section id="leave-out-runs" class="level3">
+<h3 class="anchored" data-anchor-id="leave-out-runs">Leave-out runs</h3>
+</section>
+<section id="simulation-test" class="level3">
+<h3 class="anchored" data-anchor-id="simulation-test">Simulation test</h3>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

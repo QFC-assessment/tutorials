@@ -51,3 +51,5 @@ rsconnect/
 .vscode
 *.exe
 /.quarto/
+
+scrap.txt

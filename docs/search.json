@@ -166,5 +166,96 @@
     "title": "Equilibrium Recruitment",
     "section": "Stock recruitment functions in terms of compensation ratio",
     "text": "Stock recruitment functions in terms of compensation ratio\nAn alternative estimation of recruitment uses compensation ratio (\\(CR\\)), which is defined as the ratio of \\(\\alpha\\) to the slope of the line drawn between the origin and the point on the stock-recruitment surve at which the stock is unfished (Goodyear, 1997; Myers et al., 1999).\n\\[\n\\]\n\nBeverton-Holt\n\\[\nCR = \\dfrac{4h}{1-h}\n\\]\n\\[\n\\alpha = \\dfrac{CR}{\\phi_{E_0}}\n\\]\n\\[\n\\beta = \\dfrac{\\alpha \\phi_{E_0} - 1}{R_0 \\phi_{E_0}}\n\\]\n\\[\nR_F = \\dfrac{\\alpha \\phi_{E_F} - 1}{\\beta \\phi_{E_F}}\n\\]\n\n\nRicker\n\\[\n\\alpha = \\dfrac{CR}{\\phi_{E_0}}\n\\]\n\\[\n\\beta = \\dfrac{log(\\alpha \\phi_{E_0})}{R_0 \\phi_{E_0}}\n\\]\n\\[\nR_F = \\dfrac{log(\\alpha \\phi_{E_F})}{\\beta \\phi_{E_F}}\n\\]"
+  },
+  {
+    "objectID": "guides/diagnostics.html",
+    "href": "guides/diagnostics.html",
+    "title": "Model convergence and diagnostics for non-linear models",
+    "section": "",
+    "text": "This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB)."
+  },
+  {
+    "objectID": "guides/diagnostics.html#checklist",
+    "href": "guides/diagnostics.html#checklist",
+    "title": "Model convergence and diagnostics for non-linear models",
+    "section": "Checklist:",
+    "text": "Checklist:\nThis is a checklist of convergence checks and diagnostics that should be conducted at minimum to verify a model:\n\n Model is executable (i.e., check objective function and gradients) \n The convergence message from RTMB indicates that the diagnostics are consistent with convergence (= 0) \n The Hessian matrix is positive definite \n Standard errors for model estimates are reasonable \n Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) \n Likelihood profiles for important parameters are reasonable, e.g.: \n\n Initial abundance \n Recruitment \n Selectivity \n\n\nIf all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. However, these checks are not sufficient for accepting model results. There are additional model diagnostics that should be checked to determine your final model:\n\nAdditional things to check:\n\n Fit vs data \n Confidence intervals \n Residuals \n Retrospective analysis \n Leave-out/jack knife runs \n Simulation test"
+  },
+  {
+    "objectID": "guides/diagnostics.html#other",
+    "href": "guides/diagnostics.html#other",
+    "title": "Model convergence and diagnostics",
+    "section": "Other",
+    "text": "Other\n\n Retrospective analysis \n\nRun model without last 1,2,3…, n years of data\nCompare key estimate to model run with all data (e.g., SSB, recruitment, fishing mortality, abundance)\n** only relevant after model verified via other model diagnostics\nsee [here] for an example (https://github.com/ChrisFishCahill/mscwf/blob/main/RTMB/wf_retro.r)\n\n Leave-out/jack knife runs \n\nLeaving out individual data sources one at a time\nUseful to see if one fleet is having an undue influence"
+  },
+  {
+    "objectID": "guides/diagnostics.html#other-diagnostic-tools",
+    "href": "guides/diagnostics.html#other-diagnostic-tools",
+    "title": "Model convergence and diagnostics",
+    "section": "Other diagnostic tools:",
+    "text": "Other diagnostic tools:\n\nRetrospective analysis\n\n\nLeave-out/jack knife runs"
+  },
+  {
+    "objectID": "guides/diagnostics.html#objective-function",
+    "href": "guides/diagnostics.html#objective-function",
+    "title": "Model convergence and diagnostics",
+    "section": "Objective function:",
+    "text": "Objective function:\nSay you construct an objective function called obj using f as the model function and par as a list of initial parameter values:\n\nobj &lt;- MakeADFun(f, par)\n\nIf the model is estimable, it will calculate a likelihood based on the initial parameters. Each parameter should also provide a gradient value. The gradient is a vector of derivatives of the negative log likelihood function with respect to each parameter. This provides information about the direction and magnitude of the steepest increase in the negative log likelihood function. If the gradient of a parameter = 0 or NA, this means that the model will not estimate that parameter or the paramter is not being used in the model.\nIf the checks of the objective function are successful, then you can run it with an optimizer. Here is an example using nlminb and opt is the output:\n\nopt &lt;- nlminb(obj$par, obj$fn, obj$gr)"
+  },
+  {
+    "objectID": "guides/diagnostics.html#convergence-checks",
+    "href": "guides/diagnostics.html#convergence-checks",
+    "title": "Model convergence and diagnostics",
+    "section": "Convergence checks",
+    "text": "Convergence checks\nA model is considered converged if:\n\n\n\nFor the model to be considered “converged”, it is crucial to follow each test step consecutively. If at any point a step/test fails, please refrain from proceeding to the next step or test.\n\nConvergence messages"
+  },
+  {
+    "objectID": "guides/diagnostics.html#model-diagnostics",
+    "href": "guides/diagnostics.html#model-diagnostics",
+    "title": "Model convergence and diagnostics",
+    "section": "Model diagnostics",
+    "text": "Model diagnostics\n\nJitter test\n\nUse a number of random (widely scattered) initial values\nVerify that the same solution is obtained"
+  },
+  {
+    "objectID": "guides/diagnostics.html#creating-the-objective-function-in-rtmb",
+    "href": "guides/diagnostics.html#creating-the-objective-function-in-rtmb",
+    "title": "Model convergence and diagnostics for non-linear models",
+    "section": "Creating the objective function in RTMB",
+    "text": "Creating the objective function in RTMB\nSay you construct an objective function called obj using f as the model function and par as a list of initial parameter values:\n\nobj &lt;- MakeADFun(f, par)\n\n\n Check if the model will run before running an optimizer \n\n Check likelihood function (obj$fn()) \n Check gradient function (obj$gr()) \n\n\nIf the model is estimable, it will calculate a likelihood based on the initial parameters. Each parameter should also provide a gradient value. If the gradient of a parameter = 0 or NA, this means that the model will not estimate that parameter or the paramter is not being used in the model.\nIf the checks on the objective function are successful, you can run the objective function with an optimizer using the nlminb function and opt is the output:\n\nopt &lt;- nlminb(obj$par, obj$fn, obj$gr)"
+  },
+  {
+    "objectID": "guides/diagnostics.html#additional-information",
+    "href": "guides/diagnostics.html#additional-information",
+    "title": "Model convergence and diagnostics for non-linear models",
+    "section": "Additional information:",
+    "text": "Additional information:\n\nCreating the objective function in RTMB\nSay you construct an objective function called obj using f as the model function and par as a list of initial parameter values. Using RTMB::MakeADFun, you can create the objective function:\n\nobj &lt;- RTMB::MakeADFun(f, par)\n\nYou need to check if the objective function will run before running an optimizer. You can look at this by checking if the objective function produces a likelihood and if a gradient is calculated for each parameter:\n\n# check likelihood\nobj$fn()\n\n# check gradients\nobj$gr()\n\n\n\n\n\n\n\nWhat are gradients\n\n\n\n\n\nGradients are the partial derivatives of the objective function with respect to the model parameters (goes into one vector - obj$gr()). These partial derivatives indicate how the objective function changes (direction and magnitude) as each parameter varies. This provides information for optimization algorithms to adjust the parameters iteratively to minimize or maximize the objective function.\n\n\n\nIf the model is estimable, it will calculate a likelihood based on the initial parameters. Each parameter should also provide a gradient value. If the gradient of a parameter = 0 or NA, this means that the model is not able to estimate that parameter or the parameter is not being used in the model.\nIf the checks on the objective function are successful, you can run the objective function with an optimizer using the nlminb function and opt is the output:\n\nopt &lt;- nlminb(obj$par, obj$fn, obj$gr)\n\n\n\nConvergence message\n\n# check if the model is converged\nopt$convergence\n# check type of convergence\nopt$message\n\nIf the diagnostics are consistent with convergence, then opt$convergence = 0. If the model did not converge, opt$convergence = 1. There can be some reasons why the model failed to converge (check opt$message for convergence message):\n\nsingular convergence: model is likely overparameterized (too complex for the data, the data does not contain enough information to estimate the parameters reliably)\nfalse convergence: likelihood may be discontinuous (this could be related to the estimation of the parameters)\n\nYou may encounter messages like these:\n\nWarning messages:\n1: In nlminb(start = par, objective = fn, gradient = gr) :\n  NA/NaN function evaluation\n\nThis does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution.\n\n\nHessian matrix\n\n\n\n\n\n\nWhat is a Hessian matrix?\n\n\n\n\n\nA Hessian matrix is a square matrix of second-order partial derivatives of the objective function. In other words, it contains information about how the rate of change of each parameter with respect to every other parameter changes.\nThis represents the curvature of the likelihood surface and is used to calculate estimates of uncertainty for all the estimated model parameters and chosen derived quantities.\n\nInverting the negative Hessian gives us the covariance matrix, which provides a measure of parameter uncertainty.\nThe diagonal elements of the covariance matrix (i.e., inverse of the Hessian matrix) represent the variance of individual parameters.\nThe square root of the diagonal elements (i.e., variance) gives standard errors of the parameter estimates.\n\n\n\n\nThe Hessian matrix will not be invertible if the negative log likelihood is not a true minimum. This usually occurs when the model is mis-specified, which could either mean that the model has been written incorrectly so the objective function is not differentiable/estimable with respect to all the parameters. Or the estimated parameters are confounded or overparameterized (i.e., too complex for the data). RTMB will warn you about a non-positive definite Hessian matrix.\n\n\nStandard errors\nIf the standard errors for the parameter estimates are high, this suggests that the model is not fully converged. This can mean:\n\nlow precision: there is a wide range of plausible values for the parameters\nlack of stability in the estimation of the parameter\noverfitting: model may be too complex and is capturing noise in the data rather than true underlying patterns\n\nConsiderations to the model formulation and parameter estimates should be made if the standard errors are too high and unreasonable.\n\nsdrep &lt;- sdreport(obj)\nsdrep\n\n\n\nJitter test\n\n\nLikelihood profile\n\n\nFit vs data\n\n\nConfidence intervals\n\n\nResiduals\n\n\nLeave-out runs\n\n\nSimulation test"
+  },
+  {
+    "objectID": "guides/intro_optimization.html",
+    "href": "guides/intro_optimization.html",
+    "title": "Introduction to optimization",
+    "section": "",
+    "text": "The uncertainties of the model and parameters imply that there will always exist a discrepancy between our observations and predictions produced by the model."
+  },
+  {
+    "objectID": "guides/intro_optimization.html#mathematical-and-statistical-models",
+    "href": "guides/intro_optimization.html#mathematical-and-statistical-models",
+    "title": "Introduction to optimization",
+    "section": "Mathematical and statistical models",
+    "text": "Mathematical and statistical models\nThe objective function is used to define some value that represents the discrepancy between observations and their corresponding model values. In statistics, this value is usually expressed in terms of probability, and referred to as the likelihood value. The optimizer uses a set of computational/mathematical/statistical rules and procedures (or algorithms) to find the best parameter set so that the objective function value is almost zero."
+  },
+  {
+    "objectID": "guides/intro_opt.html",
+    "href": "guides/intro_opt.html",
+    "title": "Introduction to Automatic Differentiation",
+    "section": "",
+    "text": "The uncertainties of the model and parameters imply that there will always exist a discrepancy between our observations and predictions produced by the model."
+  },
+  {
+    "objectID": "guides/intro_opt.html#mathematical-and-statistical-models",
+    "href": "guides/intro_opt.html#mathematical-and-statistical-models",
+    "title": "Introduction to Automatic Differentiation",
+    "section": "Mathematical and statistical models",
+    "text": "Mathematical and statistical models\nThe objective function is used to define some value that represents the discrepancy between observations and their corresponding model values. In statistics, this value is usually expressed in terms of probability, and referred to as the likelihood value. The optimizer uses a set of computational/mathematical/statistical rules and procedures (or algorithms) to find the best parameter set so that the objective function value is almost zero."
   }
 ]
