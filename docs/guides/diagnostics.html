@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.29">
+<meta name="generator" content="quarto-1.4.552">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Stock assessment tutorials – Model convergence and diagnostics for non-linear models</title>
+<title>Stock assessment tutorials - Model convergence and diagnostics for non-linear models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -170,10 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist"><span class="header-section-number">1</span> Checklist:</a>
-  <ul class="collapse">
-  <li><a href="#additional-things-to-check" id="toc-additional-things-to-check" class="nav-link" data-scroll-target="#additional-things-to-check"><span class="header-section-number">1.1</span> Additional things to check:</a></li>
-  </ul></li>
+  <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist"><span class="header-section-number">1</span> Checklist:</a></li>
   <li><a href="#additional-information" id="toc-additional-information" class="nav-link" data-scroll-target="#additional-information"><span class="header-section-number">2</span> Additional information:</a>
   <ul class="collapse">
   <li><a href="#creating-the-objective-function-in-rtmb" id="toc-creating-the-objective-function-in-rtmb" class="nav-link" data-scroll-target="#creating-the-objective-function-in-rtmb"><span class="header-section-number">2.1</span> Creating the objective function in RTMB</a></li>
@@ -217,7 +214,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).</p>
+<p>This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and that the model is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).</p>
 <section id="checklist" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="checklist"><span class="header-section-number">1</span> Checklist:</h2>
 <p>This is a checklist of convergence checks and diagnostics that should be conducted at minimum to verify a model:</p>
@@ -226,21 +223,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <label><input type="checkbox" unchecked=""> The Hessian matrix is positive definite </label><br>
 <label><input type="checkbox" unchecked=""> Standard errors for model estimates are reasonable </label><br>
 <label><input type="checkbox" unchecked=""> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </label><br>
-<label><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.: </label><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" unchecked=""> Initial abundance </label><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" unchecked=""> Recruitment </label></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" unchecked=""> Selectivity </label><br>
+<label><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.&nbsp;(initial abundance, recruitment, natural mortality, selectivity): </label><br>
 &nbsp;</p>
-<p>If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. However, these checks are not sufficient for accepting model results. There are additional model diagnostics that should be checked to determine your final model:</p>
-<section id="additional-things-to-check" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="additional-things-to-check"><span class="header-section-number">1.1</span> Additional things to check:</h3>
+<p>If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. Overall, the ideal is to apply as many diagnostic analyses as possible, along with running sensitivity analyses even if the model does not exhibit obvious problems. However, it is important to note that most of these diagnostics will indicate that they are consistent with convergence, not necessarily that this is the final model that should be selected.</p>
+<p>&nbsp;</p>
+<p>There are additional model diagnostics that should be checked to determine your final model:</p>
 <p><label><input type="checkbox" unchecked="">Fit vs data</label></p>
 <p><label><input type="checkbox" unchecked=""> Confidence intervals </label></p>
 <p><label><input type="checkbox" unchecked=""> Residuals </label></p>
 <p><label><input type="checkbox" unchecked=""> Retrospective analysis </label></p>
 <p><label><input type="checkbox" unchecked=""> Leave-out/jack knife runs </label></p>
 <p><label><input type="checkbox" unchecked=""> Simulation test </label></p>
-</section>
 </section>
 <section id="additional-information" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="additional-information"><span class="header-section-number">2</span> Additional information:</h2>
@@ -293,13 +286,15 @@ What are gradients
 <li>singular convergence: model is likely overparameterized (too complex for the data, the data does not contain enough information to estimate the parameters reliably)</li>
 <li>false convergence: likelihood may be discontinuous (this could be related to the estimation of the parameters)</li>
 </ul>
-<p>You may encounter messages like these:</p>
+<p>Ideally, you want the convergence message: “relative convergence”.</p>
+<p>&nbsp;</p>
+<p>You may also encounter messages like these:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Warning</span> messages:</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">1:</span> In nlminb<span class="er">(</span><span class="ex">start</span> = par, objective = fn, gradient = gr<span class="kw">)</span> <span class="bu">:</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">NA/NaN</span> function evaluation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution.</p>
+<p>This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution, it can sometimes mean that the parameterization or model equations are not correct. Ideally, you do not want a model that is able to wander off into a bad region.</p>
 </section>
 <section id="hessian-matrix" class="level3" data-number="2.3">
 <h3 data-number="2.3" class="anchored" data-anchor-id="hessian-matrix"><span class="header-section-number">2.3</span> Hessian matrix</h3>
@@ -343,24 +338,55 @@ What is a Hessian matrix?
 </section>
 <section id="jitter-test" class="level3" data-number="2.5">
 <h3 data-number="2.5" class="anchored" data-anchor-id="jitter-test"><span class="header-section-number">2.5</span> Jitter test</h3>
+<p>A jitter test is used to evaluate whether a model has actually converged to a global solution rather than a local minimum. This should check that none of the randomly generated starting values of the parameters results in a solution that has a smaller negative log likelihood than the reference model. A jitter test is conducted by changing the starting parameter values and rerunning the model several times. This should be done with multiple (if not all) the parameters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this function runs the optimizer with the new parameters (opt$par + randomization)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>doone <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">nlminb</span>(opt<span class="sc">$</span>par <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(opt<span class="sc">$</span>par), <span class="at">sd =</span> .<span class="dv">1</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    obj<span class="sc">$</span>fn, obj<span class="sc">$</span>gr,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">eval.max =</span> <span class="dv">1000</span>, <span class="at">iter.max =</span> <span class="dv">1000</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(fit<span class="sc">$</span>par, <span class="st">"convergence"</span> <span class="ot">=</span> fit<span class="sc">$</span>convergence)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># jitter the parameters 100 times</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>jit <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">100</span>, <span class="fu">doone</span>())</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the convergence are all 0s across the 100 iterations</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># check if there are any outliers or large intervals</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">t</span>(jit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note: the magnitude of the jittering should be done within reason (e.g., 10% CV) as extreme jitters could start the model search in an unrealistic place and then the model would not be able to detect gradients that point towards reasonable solutions.</p>
 </section>
 <section id="likelihood-profile" class="level3" data-number="2.6">
 <h3 data-number="2.6" class="anchored" data-anchor-id="likelihood-profile"><span class="header-section-number">2.6</span> Likelihood profile</h3>
+<p>A likelihood profile shows how the negative log likelihood changes as one of the parameters is fixed while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. The shape of the likelihood profile for a parameter should look like a U:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/likelihood.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>This does not have to be done on all parameters, but select important parameters. This typically includes initial abundance (e.g., R0, initial abundance at age vector), recruitment (e.g., steepness or compensation ratio), natural mortality, selectivity, etc. The goal is to identify if there are any conflicting information in the data about abundance.</p>
 </section>
 <section id="fit-vs-data" class="level3" data-number="2.7">
 <h3 data-number="2.7" class="anchored" data-anchor-id="fit-vs-data"><span class="header-section-number">2.7</span> Fit vs data</h3>
+<p>The model estimates should match (or smooth over) the data. Systematic misfit to data is a sign of model misspecification. Any data observations that are included in the negative log likelihood should be compared to the estimates of the model. Plotting the fits vs data is a good visual tool for checking.</p>
 </section>
 <section id="confidence-intervals" class="level3" data-number="2.8">
 <h3 data-number="2.8" class="anchored" data-anchor-id="confidence-intervals"><span class="header-section-number">2.8</span> Confidence intervals</h3>
+<p>(in progress)</p>
 </section>
 <section id="residuals" class="level3" data-number="2.9">
 <h3 data-number="2.9" class="anchored" data-anchor-id="residuals"><span class="header-section-number">2.9</span> Residuals</h3>
+<p>(in progress)</p>
 </section>
 <section id="leave-out-runs" class="level3" data-number="2.10">
 <h3 data-number="2.10" class="anchored" data-anchor-id="leave-out-runs"><span class="header-section-number">2.10</span> Leave-out runs</h3>
+<p>(in progress)</p>
 </section>
 <section id="simulation-test" class="level3" data-number="2.11">
 <h3 data-number="2.11" class="anchored" data-anchor-id="simulation-test"><span class="header-section-number">2.11</span> Simulation test</h3>
+<p>(in progress)</p>
 
 
 </section>
@@ -402,7 +428,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -434,29 +471,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -464,7 +479,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

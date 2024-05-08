@@ -2,7 +2,7 @@
 title: "Model convergence and diagnostics for non-linear models"
 ---
 
-This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).
+This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and that the model is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).
 
 ## Checklist:
 
@@ -13,16 +13,14 @@ This is a checklist of convergence checks and diagnostics that should be conduct
 <label><input type="checkbox" unchecked/> The Hessian matrix is positive definite </label>\
 <label><input type="checkbox" unchecked/> Standard errors for model estimates are reasonable </label>\
 <label><input type="checkbox" unchecked/> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </label>\
-<label><input type="checkbox" unchecked/> Likelihood profiles for important parameters are reasonable, e.g.: </label>\
-        <label><input type="checkbox" unchecked/> Initial abundance </label>\
-        <label><input type="checkbox" unchecked/> Recruitment </label>
-
-        <label><input type="checkbox" unchecked/> Selectivity </label>\
+<label><input type="checkbox" unchecked/> Likelihood profiles for important parameters are reasonable, e.g. (initial abundance, recruitment, natural mortality, selectivity): </label>\
  
 
-If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. However, these checks are not sufficient for accepting model results. There are additional model diagnostics that should be checked to determine your final model:
+If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. Overall, the ideal is to apply as many diagnostic analyses as possible, along with running sensitivity analyses even if the model does not exhibit obvious problems. However, it is important to note that most of these diagnostics will indicate that they are consistent with convergence, not necessarily that this is the final model that should be selected.
 
-### Additional things to check:
+ 
+
+There are additional model diagnostics that should be checked to determine your final model:
 
 <label><input type="checkbox" unchecked/>Fit vs data</label>
 
@@ -84,7 +82,11 @@ If the diagnostics are consistent with convergence, then `opt$convergence = 0`. 
 -   singular convergence: model is likely overparameterized (too complex for the data, the data does not contain enough information to estimate the parameters reliably)
 -   false convergence: likelihood may be discontinuous (this could be related to the estimation of the parameters)
 
-You may encounter messages like these:
+Ideally, you want the convergence message: "relative convergence".
+
+ 
+
+You may also encounter messages like these:
 
 ```{bash, eval=FALSE, highlight=FALSE}
 Warning messages:
@@ -92,7 +94,7 @@ Warning messages:
   NA/NaN function evaluation
 ```
 
-This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution.
+This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution, it can sometimes mean that the parameterization or model equations are not correct. Ideally, you do not want a model that is able to wander off into a bad region.
 
 ### Hessian matrix
 
@@ -127,14 +129,52 @@ sdrep
 
 ### Jitter test
 
+A jitter test is used to evaluate whether a model has actually converged to a global solution rather than a local minimum. This should check that none of the randomly generated starting values of the parameters results in a solution that has a smaller negative log likelihood than the reference model. A jitter test is conducted by changing the starting parameter values and rerunning the model several times. This should be done with multiple (if not all) the parameters.
+
+```{r, eval = FALSE}
+# this function runs the optimizer with the new parameters (opt$par + randomization)
+doone <- function() {
+  fit <- nlminb(opt$par + rnorm(length(opt$par), sd = .1),
+    obj$fn, obj$gr,
+    control = list(eval.max = 1000, iter.max = 1000)
+  )
+  c(fit$par, "convergence" = fit$convergence)
+}
+
+set.seed(123456)
+# jitter the parameters 100 times
+jit <- replicate(100, doone())
+# check if the convergence are all 0s across the 100 iterations
+# check if there are any outliers or large intervals
+boxplot(t(jit))
+```
+
+Note: the magnitude of the jittering should be done within reason (e.g., 10% CV) as extreme jitters could start the model search in an unrealistic place and then the model would not be able to detect gradients that point towards reasonable solutions.
+
 ### Likelihood profile
+
+A likelihood profile shows how the negative log likelihood changes as one of the parameters is fixed while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. The shape of the likelihood profile for a parameter should look like a U:
+
+![](figs/likelihood.png){fig-align="center"}
+
+This does not have to be done on all parameters, but select important parameters. This typically includes initial abundance (e.g., R0, initial abundance at age vector), recruitment (e.g., steepness or compensation ratio), natural mortality, selectivity, etc. The goal is to identify if there are any conflicting information in the data about abundance.
 
 ### Fit vs data
 
+The model estimates should match (or smooth over) the data. Systematic misfit to data is a sign of model misspecification. Any data observations that are included in the negative log likelihood should be compared to the estimates of the model. Plotting the fits vs data is a good visual tool for checking.
+
 ### Confidence intervals
+
+(in progress)
 
 ### Residuals
 
+(in progress)
+
 ### Leave-out runs
 
+(in progress)
+
 ### Simulation test
+
+(in progress)
