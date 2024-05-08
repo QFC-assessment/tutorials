@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.552">
+<meta name="generator" content="quarto-1.5.29">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Stock assessment tutorials - Model convergence and diagnostics for non-linear models</title>
+<title>Stock assessment tutorials – Model convergence and diagnostics for non-linear models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -74,11 +74,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "navbar",
+  "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "end",
-  "type": "overlay",
+  "panel-placement": "start",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -100,92 +100,112 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script>mod=true;</script>
+<script src="https://qfcatmsu.github.io/assets/quarto/qfc_styles.js"></script>
 
 
-<link rel="stylesheet" href="../styles.css">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://qfcatmsu.github.io/assets/quarto/qfc_styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
-      <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Stock assessment tutorials</span>
-    </a>
-  </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-  <span class="navbar-toggler-icon"></span>
-</button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-guides" role="button" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Guides</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-guides">    
-        <li>
-    <a class="dropdown-item" href="../guides/diagnostics.html">
- <span class="dropdown-text">Model convergence and diagnostics</span></a>
-  </li>  
-    </ul>
-  </li>
-</ul>
-          </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
-</div>
-      </div> <!-- /container-fluid -->
-    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Model convergence and diagnostics for non-linear models</h1>
+        </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Stock assessment tutorials</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Guides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/diagnostics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Model convergence and diagnostics</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist">Checklist:</a>
+  <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist"><span class="header-section-number">1</span> Checklist:</a>
   <ul class="collapse">
-  <li><a href="#additional-things-to-check" id="toc-additional-things-to-check" class="nav-link" data-scroll-target="#additional-things-to-check">Additional things to check:</a></li>
+  <li><a href="#additional-things-to-check" id="toc-additional-things-to-check" class="nav-link" data-scroll-target="#additional-things-to-check"><span class="header-section-number">1.1</span> Additional things to check:</a></li>
   </ul></li>
-  <li><a href="#additional-information" id="toc-additional-information" class="nav-link" data-scroll-target="#additional-information">Additional information:</a>
+  <li><a href="#additional-information" id="toc-additional-information" class="nav-link" data-scroll-target="#additional-information"><span class="header-section-number">2</span> Additional information:</a>
   <ul class="collapse">
-  <li><a href="#creating-the-objective-function-in-rtmb" id="toc-creating-the-objective-function-in-rtmb" class="nav-link" data-scroll-target="#creating-the-objective-function-in-rtmb">Creating the objective function in RTMB</a></li>
-  <li><a href="#convergence-message" id="toc-convergence-message" class="nav-link" data-scroll-target="#convergence-message">Convergence message</a></li>
-  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix">Hessian matrix</a></li>
-  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors">Standard errors</a></li>
-  <li><a href="#jitter-test" id="toc-jitter-test" class="nav-link" data-scroll-target="#jitter-test">Jitter test</a></li>
-  <li><a href="#likelihood-profile" id="toc-likelihood-profile" class="nav-link" data-scroll-target="#likelihood-profile">Likelihood profile</a></li>
-  <li><a href="#fit-vs-data" id="toc-fit-vs-data" class="nav-link" data-scroll-target="#fit-vs-data">Fit vs data</a></li>
-  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals">Confidence intervals</a></li>
-  <li><a href="#residuals" id="toc-residuals" class="nav-link" data-scroll-target="#residuals">Residuals</a></li>
-  <li><a href="#leave-out-runs" id="toc-leave-out-runs" class="nav-link" data-scroll-target="#leave-out-runs">Leave-out runs</a></li>
-  <li><a href="#simulation-test" id="toc-simulation-test" class="nav-link" data-scroll-target="#simulation-test">Simulation test</a></li>
+  <li><a href="#creating-the-objective-function-in-rtmb" id="toc-creating-the-objective-function-in-rtmb" class="nav-link" data-scroll-target="#creating-the-objective-function-in-rtmb"><span class="header-section-number">2.1</span> Creating the objective function in RTMB</a></li>
+  <li><a href="#convergence-message" id="toc-convergence-message" class="nav-link" data-scroll-target="#convergence-message"><span class="header-section-number">2.2</span> Convergence message</a></li>
+  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix"><span class="header-section-number">2.3</span> Hessian matrix</a></li>
+  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors"><span class="header-section-number">2.4</span> Standard errors</a></li>
+  <li><a href="#jitter-test" id="toc-jitter-test" class="nav-link" data-scroll-target="#jitter-test"><span class="header-section-number">2.5</span> Jitter test</a></li>
+  <li><a href="#likelihood-profile" id="toc-likelihood-profile" class="nav-link" data-scroll-target="#likelihood-profile"><span class="header-section-number">2.6</span> Likelihood profile</a></li>
+  <li><a href="#fit-vs-data" id="toc-fit-vs-data" class="nav-link" data-scroll-target="#fit-vs-data"><span class="header-section-number">2.7</span> Fit vs data</a></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="header-section-number">2.8</span> Confidence intervals</a></li>
+  <li><a href="#residuals" id="toc-residuals" class="nav-link" data-scroll-target="#residuals"><span class="header-section-number">2.9</span> Residuals</a></li>
+  <li><a href="#leave-out-runs" id="toc-leave-out-runs" class="nav-link" data-scroll-target="#leave-out-runs"><span class="header-section-number">2.10</span> Leave-out runs</a></li>
+  <li><a href="#simulation-test" id="toc-simulation-test" class="nav-link" data-scroll-target="#simulation-test"><span class="header-section-number">2.11</span> Simulation test</a></li>
   </ul></li>
   </ul>
 </nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Model convergence and diagnostics for non-linear models</h1>
+<h1 class="title d-none d-lg-block">Model convergence and diagnostics for non-linear models</h1>
 </div>
 
 
 
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta column-page-right">
 
     
   
@@ -198,39 +218,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).</p>
-<section id="checklist" class="level2">
-<h2 class="anchored" data-anchor-id="checklist">Checklist:</h2>
+<section id="checklist" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="checklist"><span class="header-section-number">1</span> Checklist:</h2>
 <p>This is a checklist of convergence checks and diagnostics that should be conducted at minimum to verify a model:</p>
-<ul>
-<li><input type="checkbox" unchecked=""> Model is executable (i.e., check objective function and gradients) </li>
-<li><input type="checkbox" unchecked=""> The convergence message from RTMB indicates that the diagnostics are consistent with convergence (<code>= 0</code>) </li>
-<li><input type="checkbox" unchecked=""> The Hessian matrix is positive definite </li>
-<li><input type="checkbox" unchecked=""> Standard errors for model estimates are reasonable </li>
-<li><input type="checkbox" unchecked=""> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </li>
-<li><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.: 
-<ul>
-<li><input type="checkbox" unchecked=""> Initial abundance </li>
-<li><input type="checkbox" unchecked=""> Recruitment </li>
-<li><input type="checkbox" unchecked=""> Selectivity </li>
-</ul></li>
-</ul>
+<p><label><input type="checkbox" unchecked=""> Model is executable (i.e., check objective function and gradients) </label><br>
+<label><input type="checkbox" unchecked=""> The convergence message from RTMB indicates that the diagnostics are consistent with convergence (<code>= 0</code>) </label><br>
+<label><input type="checkbox" unchecked=""> The Hessian matrix is positive definite </label><br>
+<label><input type="checkbox" unchecked=""> Standard errors for model estimates are reasonable </label><br>
+<label><input type="checkbox" unchecked=""> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </label><br>
+<label><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.: </label><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" unchecked=""> Initial abundance </label><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" unchecked=""> Recruitment </label></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" unchecked=""> Selectivity </label><br>
+&nbsp;</p>
 <p>If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. However, these checks are not sufficient for accepting model results. There are additional model diagnostics that should be checked to determine your final model:</p>
-<section id="additional-things-to-check" class="level3">
-<h3 class="anchored" data-anchor-id="additional-things-to-check">Additional things to check:</h3>
-<ul>
-<li><input type="checkbox" unchecked=""> Fit vs data </li>
-<li><input type="checkbox" unchecked=""> Confidence intervals </li>
-<li><input type="checkbox" unchecked=""> Residuals </li>
-<li><input type="checkbox" unchecked=""> Retrospective analysis </li>
-<li><input type="checkbox" unchecked=""> Leave-out/jack knife runs </li>
-<li><input type="checkbox" unchecked=""> Simulation test </li>
-</ul>
+<section id="additional-things-to-check" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="additional-things-to-check"><span class="header-section-number">1.1</span> Additional things to check:</h3>
+<p><label><input type="checkbox" unchecked="">Fit vs data</label></p>
+<p><label><input type="checkbox" unchecked=""> Confidence intervals </label></p>
+<p><label><input type="checkbox" unchecked=""> Residuals </label></p>
+<p><label><input type="checkbox" unchecked=""> Retrospective analysis </label></p>
+<p><label><input type="checkbox" unchecked=""> Leave-out/jack knife runs </label></p>
+<p><label><input type="checkbox" unchecked=""> Simulation test </label></p>
 </section>
 </section>
-<section id="additional-information" class="level2">
-<h2 class="anchored" data-anchor-id="additional-information">Additional information:</h2>
-<section id="creating-the-objective-function-in-rtmb" class="level3">
-<h3 class="anchored" data-anchor-id="creating-the-objective-function-in-rtmb">Creating the objective function in RTMB</h3>
+<section id="additional-information" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="additional-information"><span class="header-section-number">2</span> Additional information:</h2>
+<section id="creating-the-objective-function-in-rtmb" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="creating-the-objective-function-in-rtmb"><span class="header-section-number">2.1</span> Creating the objective function in RTMB</h3>
 <p>Say you construct an objective function called <code>obj</code> using <code>f</code> as the model function and <code>par</code> as a list of initial parameter values. Using <code>RTMB::MakeADFun</code>, you can create the objective function:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> RTMB<span class="sc">::</span><span class="fu">MakeADFun</span>(f, par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -265,8 +280,8 @@ What are gradients
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> <span class="fu">nlminb</span>(obj<span class="sc">$</span>par, obj<span class="sc">$</span>fn, obj<span class="sc">$</span>gr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="convergence-message" class="level3">
-<h3 class="anchored" data-anchor-id="convergence-message">Convergence message</h3>
+<section id="convergence-message" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="convergence-message"><span class="header-section-number">2.2</span> Convergence message</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the model is converged</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>opt<span class="sc">$</span>convergence</span>
@@ -280,14 +295,14 @@ What are gradients
 </ul>
 <p>You may encounter messages like these:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Warning messages<span class="sc">:</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span> In <span class="fu">nlminb</span>(<span class="at">start =</span> par, <span class="at">objective =</span> fn, <span class="at">gradient =</span> gr) <span class="sc">:</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NA</span><span class="sc">/</span><span class="cn">NaN</span> <span class="cf">function</span> evaluation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Warning</span> messages:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">1:</span> In nlminb<span class="er">(</span><span class="ex">start</span> = par, objective = fn, gradient = gr<span class="kw">)</span> <span class="bu">:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">NA/NaN</span> function evaluation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution.</p>
 </section>
-<section id="hessian-matrix" class="level3">
-<h3 class="anchored" data-anchor-id="hessian-matrix">Hessian matrix</h3>
+<section id="hessian-matrix" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="hessian-matrix"><span class="header-section-number">2.3</span> Hessian matrix</h3>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -312,8 +327,8 @@ What is a Hessian matrix?
 </div>
 <p>The Hessian matrix will not be invertible if the negative log likelihood is not a true minimum. This usually occurs when the model is mis-specified, which could either mean that the model has been written incorrectly so the objective function is not differentiable/estimable with respect to all the parameters. Or the estimated parameters are confounded or overparameterized (i.e., too complex for the data). RTMB will warn you about a non-positive definite Hessian matrix.</p>
 </section>
-<section id="standard-errors" class="level3">
-<h3 class="anchored" data-anchor-id="standard-errors">Standard errors</h3>
+<section id="standard-errors" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="standard-errors"><span class="header-section-number">2.4</span> Standard errors</h3>
 <p>If the standard errors for the parameter estimates are high, this suggests that the model is not fully converged. This can mean:</p>
 <ul>
 <li>low precision: there is a wide range of plausible values for the parameters</li>
@@ -326,26 +341,26 @@ What is a Hessian matrix?
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sdrep</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="jitter-test" class="level3">
-<h3 class="anchored" data-anchor-id="jitter-test">Jitter test</h3>
+<section id="jitter-test" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="jitter-test"><span class="header-section-number">2.5</span> Jitter test</h3>
 </section>
-<section id="likelihood-profile" class="level3">
-<h3 class="anchored" data-anchor-id="likelihood-profile">Likelihood profile</h3>
+<section id="likelihood-profile" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="likelihood-profile"><span class="header-section-number">2.6</span> Likelihood profile</h3>
 </section>
-<section id="fit-vs-data" class="level3">
-<h3 class="anchored" data-anchor-id="fit-vs-data">Fit vs data</h3>
+<section id="fit-vs-data" class="level3" data-number="2.7">
+<h3 data-number="2.7" class="anchored" data-anchor-id="fit-vs-data"><span class="header-section-number">2.7</span> Fit vs data</h3>
 </section>
-<section id="confidence-intervals" class="level3">
-<h3 class="anchored" data-anchor-id="confidence-intervals">Confidence intervals</h3>
+<section id="confidence-intervals" class="level3" data-number="2.8">
+<h3 data-number="2.8" class="anchored" data-anchor-id="confidence-intervals"><span class="header-section-number">2.8</span> Confidence intervals</h3>
 </section>
-<section id="residuals" class="level3">
-<h3 class="anchored" data-anchor-id="residuals">Residuals</h3>
+<section id="residuals" class="level3" data-number="2.9">
+<h3 data-number="2.9" class="anchored" data-anchor-id="residuals"><span class="header-section-number">2.9</span> Residuals</h3>
 </section>
-<section id="leave-out-runs" class="level3">
-<h3 class="anchored" data-anchor-id="leave-out-runs">Leave-out runs</h3>
+<section id="leave-out-runs" class="level3" data-number="2.10">
+<h3 data-number="2.10" class="anchored" data-anchor-id="leave-out-runs"><span class="header-section-number">2.10</span> Leave-out runs</h3>
 </section>
-<section id="simulation-test" class="level3">
-<h3 class="anchored" data-anchor-id="simulation-test">Simulation test</h3>
+<section id="simulation-test" class="level3" data-number="2.11">
+<h3 data-number="2.11" class="anchored" data-anchor-id="simulation-test"><span class="header-section-number">2.11</span> Simulation test</h3>
 
 
 </section>
@@ -387,18 +402,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -430,7 +434,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -438,7 +464,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

@@ -1,11 +1,5 @@
 ---
 title: "Model convergence and diagnostics for non-linear models"
-format:
-  html:
-    toc: true
-    page-layout: full
-    css: styles.css
-editor: visual
 ---
 
 This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).
@@ -14,26 +8,33 @@ This tutorial discusses what to check to make sure your model is consistent with
 
 This is a checklist of convergence checks and diagnostics that should be conducted at minimum to verify a model:
 
--   <input type="checkbox" unchecked> Model is executable (i.e., check objective function and gradients) </input>
--   <input type="checkbox" unchecked> The convergence message from RTMB indicates that the diagnostics are consistent with convergence (`= 0`) </input>
--   <input type="checkbox" unchecked> The Hessian matrix is positive definite </input>
--   <input type="checkbox" unchecked> Standard errors for model estimates are reasonable </input>
--   <input type="checkbox" unchecked> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </input>
--   <input type="checkbox" unchecked> Likelihood profiles for important parameters are reasonable, e.g.: </input>
-    -   <input type="checkbox" unchecked> Initial abundance </input>
-    -   <input type="checkbox" unchecked> Recruitment </input>
-    -   <input type="checkbox" unchecked> Selectivity </input>
+<label><input type="checkbox" unchecked/> Model is executable (i.e., check objective function and gradients) </label>\
+<label><input type="checkbox" unchecked/> The convergence message from RTMB indicates that the diagnostics are consistent with convergence (`= 0`) </label>\
+<label><input type="checkbox" unchecked/> The Hessian matrix is positive definite </label>\
+<label><input type="checkbox" unchecked/> Standard errors for model estimates are reasonable </label>\
+<label><input type="checkbox" unchecked/> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </label>\
+<label><input type="checkbox" unchecked/> Likelihood profiles for important parameters are reasonable, e.g.: </label>\
+        <label><input type="checkbox" unchecked/> Initial abundance </label>\
+        <label><input type="checkbox" unchecked/> Recruitment </label>
+
+        <label><input type="checkbox" unchecked/> Selectivity </label>\
+ 
 
 If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. However, these checks are not sufficient for accepting model results. There are additional model diagnostics that should be checked to determine your final model:
 
 ### Additional things to check:
 
--   <input type="checkbox" unchecked> Fit vs data </input>
--   <input type="checkbox" unchecked> Confidence intervals </input>
--   <input type="checkbox" unchecked> Residuals </input>
--   <input type="checkbox" unchecked> Retrospective analysis </input>
--   <input type="checkbox" unchecked> Leave-out/jack knife runs </input>
--   <input type="checkbox" unchecked> Simulation test </input>
+<label><input type="checkbox" unchecked/>Fit vs data</label>
+
+<label><input type="checkbox" unchecked/> Confidence intervals </label>
+
+<label><input type="checkbox" unchecked/> Residuals </label>
+
+<label><input type="checkbox" unchecked/> Retrospective analysis </label>
+
+<label><input type="checkbox" unchecked/> Leave-out/jack knife runs </label>
+
+<label><input type="checkbox" unchecked/> Simulation test </label>
 
 ## Additional information:
 
@@ -56,11 +57,9 @@ obj$gr()
 ```
 
 ::: {.callout-note collapse="true"}
-
 ## What are gradients
 
 **Gradients** are the partial derivatives of the objective function with respect to the model parameters (goes into one vector - `obj$gr()`). These partial derivatives indicate how the objective function changes (direction and magnitude) as each parameter varies. This provides information for optimization algorithms to adjust the parameters iteratively to minimize or maximize the objective function.
-
 :::
 
 If the model is estimable, it will calculate a likelihood based on the initial parameters. Each parameter should also provide a gradient value. If the gradient of a parameter = 0 or NA, this means that the model is not able to estimate that parameter or the parameter is not being used in the model.
@@ -87,7 +86,7 @@ If the diagnostics are consistent with convergence, then `opt$convergence = 0`. 
 
 You may encounter messages like these:
 
-```{r, eval = FALSE}
+```{bash, eval=FALSE, highlight=FALSE}
 Warning messages:
 1: In nlminb(start = par, objective = fn, gradient = gr) :
   NA/NaN function evaluation
@@ -98,7 +97,6 @@ This does not necessarily mean the model is not converged. This means that the o
 ### Hessian matrix
 
 ::: {.callout-note collapse="true"}
-
 ## What is a Hessian matrix?
 
 A Hessian matrix is a square matrix of second-order partial derivatives of the objective function. In other words, it contains information about how the rate of change of each parameter with respect to every other parameter changes.
@@ -108,7 +106,6 @@ This represents the curvature of the likelihood surface and is used to calculate
 -   Inverting the negative Hessian gives us the covariance matrix, which provides a measure of parameter uncertainty.
 -   The diagonal elements of the covariance matrix (i.e., inverse of the Hessian matrix) represent the variance of individual parameters.
 -   The square root of the diagonal elements (i.e., variance) gives standard errors of the parameter estimates.
-
 :::
 
 The Hessian matrix will not be invertible if the negative log likelihood is not a true minimum. This usually occurs when the model is mis-specified, which could either mean that the model has been written incorrectly so the objective function is not differentiable/estimable with respect to all the parameters. Or the estimated parameters are confounded or overparameterized (i.e., too complex for the data). RTMB will warn you about a non-positive definite Hessian matrix.

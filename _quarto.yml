@@ -4,16 +4,25 @@ project:
 
 website:
   title: "Stock assessment tutorials"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - text: Guides
-        menu:
+  bread-crumbs: false
+  sidebar: 
+    contents:
+      - text: Home
+        file: index.qmd
+      - section: Guides
+        contents:
+        - text: Model convergence and diagnostics
+          href: guides/diagnostics.qmd
+#  navbar:
+ #   left:
+  #    - href: index.qmd
+   #     text: Home
+    #  - text: Guides
+     #   menu:
           # - text: Introduction to RTMB
           #   href: guides/rtmb_intro.qmd
-          - text: Model convergence and diagnostics
-            href: guides/diagnostics.qmd
+      #    - text: Model convergence and diagnostics
+       #     href: guides/diagnostics.qmd
       # - text: Concepts
       #   menu: 
       #     - text: Selectivity
@@ -21,9 +30,22 @@ website:
 
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    page-layout: full
+  #  theme: cosmo
+    css: "https://qfcatmsu.github.io/assets/quarto/qfc_styles.css"
     toc: true
+    toc-title: Contents
+    toc-location: left
+    fig-align: left
+    theme: default
+    fontsize: 15px
+    number-sections: true
+    grid: 
+      body-width: 1000px
+    include-in-header:
+      - text: |
+          <script>mod=true;</script>
+          <script src="https://qfcatmsu.github.io/assets/quarto/qfc_styles.js"></script>
 
 
 
