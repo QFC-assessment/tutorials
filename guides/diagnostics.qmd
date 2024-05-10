@@ -1,8 +1,8 @@
 ---
-title: "Model convergence and diagnostics for non-linear models"
+title: "Model convergence diagnostics for non-linear models"
 ---
 
-This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and that the model is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).
+This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).
 
 ## Checklist:
 
@@ -16,23 +16,7 @@ This is a checklist of convergence checks and diagnostics that should be conduct
 <label><input type="checkbox" unchecked/> Likelihood profiles for important parameters are reasonable, e.g. (initial abundance, recruitment, natural mortality, selectivity): </label>\
  
 
-If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. Overall, the ideal is to apply as many diagnostic analyses as possible, along with running sensitivity analyses even if the model does not exhibit obvious problems. However, it is important to note that most of these diagnostics will indicate that they are consistent with convergence, not necessarily that this is the final model that should be selected.
-
- 
-
-There are additional model diagnostics that should be checked to determine your final model:
-
-<label><input type="checkbox" unchecked/>Fit vs data</label>
-
-<label><input type="checkbox" unchecked/> Confidence intervals </label>
-
-<label><input type="checkbox" unchecked/> Residuals </label>
-
-<label><input type="checkbox" unchecked/> Retrospective analysis </label>
-
-<label><input type="checkbox" unchecked/> Leave-out/jack knife runs </label>
-
-<label><input type="checkbox" unchecked/> Simulation test </label>
+If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. If one of these checks fail, then the model is not consistent with convergence.
 
 ## Additional information:
 
@@ -158,23 +142,3 @@ A likelihood profile shows how the negative log likelihood changes as one of the
 ![](figs/likelihood.png){fig-align="center"}
 
 This does not have to be done on all parameters, but select important parameters. This typically includes initial abundance (e.g., R0, initial abundance at age vector), recruitment (e.g., steepness or compensation ratio), natural mortality, selectivity, etc. The goal is to identify if there are any conflicting information in the data about abundance.
-
-### Fit vs data
-
-The model estimates should match (or smooth over) the data. Systematic misfit to data is a sign of model misspecification. Any data observations that are included in the negative log likelihood should be compared to the estimates of the model. Plotting the fits vs data is a good visual tool for checking.
-
-### Confidence intervals
-
-(in progress)
-
-### Residuals
-
-(in progress)
-
-### Leave-out runs
-
-(in progress)
-
-### Simulation test
-
-(in progress)

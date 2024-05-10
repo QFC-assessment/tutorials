@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Stock assessment tutorials - Model convergence and diagnostics for non-linear models</title>
+<title>Stock assessment tutorials - Model convergence diagnostics for non-linear models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Model convergence and diagnostics for non-linear models</h1>
+          <h1 class="quarto-secondary-nav-title">Model convergence diagnostics for non-linear models</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -179,11 +179,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors"><span class="header-section-number">2.4</span> Standard errors</a></li>
   <li><a href="#jitter-test" id="toc-jitter-test" class="nav-link" data-scroll-target="#jitter-test"><span class="header-section-number">2.5</span> Jitter test</a></li>
   <li><a href="#likelihood-profile" id="toc-likelihood-profile" class="nav-link" data-scroll-target="#likelihood-profile"><span class="header-section-number">2.6</span> Likelihood profile</a></li>
-  <li><a href="#fit-vs-data" id="toc-fit-vs-data" class="nav-link" data-scroll-target="#fit-vs-data"><span class="header-section-number">2.7</span> Fit vs data</a></li>
-  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="header-section-number">2.8</span> Confidence intervals</a></li>
-  <li><a href="#residuals" id="toc-residuals" class="nav-link" data-scroll-target="#residuals"><span class="header-section-number">2.9</span> Residuals</a></li>
-  <li><a href="#leave-out-runs" id="toc-leave-out-runs" class="nav-link" data-scroll-target="#leave-out-runs"><span class="header-section-number">2.10</span> Leave-out runs</a></li>
-  <li><a href="#simulation-test" id="toc-simulation-test" class="nav-link" data-scroll-target="#simulation-test"><span class="header-section-number">2.11</span> Simulation test</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -197,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Model convergence and diagnostics for non-linear models</h1>
+<h1 class="title d-none d-lg-block">Model convergence diagnostics for non-linear models</h1>
 </div>
 
 
@@ -214,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics and that the model is estimable. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).</p>
+<p>This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).</p>
 <section id="checklist" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="checklist"><span class="header-section-number">1</span> Checklist:</h2>
 <p>This is a checklist of convergence checks and diagnostics that should be conducted at minimum to verify a model:</p>
@@ -225,15 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <label><input type="checkbox" unchecked=""> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </label><br>
 <label><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.&nbsp;(initial abundance, recruitment, natural mortality, selectivity): </label><br>
 &nbsp;</p>
-<p>If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. Overall, the ideal is to apply as many diagnostic analyses as possible, along with running sensitivity analyses even if the model does not exhibit obvious problems. However, it is important to note that most of these diagnostics will indicate that they are consistent with convergence, not necessarily that this is the final model that should be selected.</p>
-<p>&nbsp;</p>
-<p>There are additional model diagnostics that should be checked to determine your final model:</p>
-<p><label><input type="checkbox" unchecked="">Fit vs data</label></p>
-<p><label><input type="checkbox" unchecked=""> Confidence intervals </label></p>
-<p><label><input type="checkbox" unchecked=""> Residuals </label></p>
-<p><label><input type="checkbox" unchecked=""> Retrospective analysis </label></p>
-<p><label><input type="checkbox" unchecked=""> Leave-out/jack knife runs </label></p>
-<p><label><input type="checkbox" unchecked=""> Simulation test </label></p>
+<p>If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. If one of these checks fail, then the model is not consistent with convergence.</p>
 </section>
 <section id="additional-information" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="additional-information"><span class="header-section-number">2</span> Additional information:</h2>
@@ -367,26 +354,6 @@ What is a Hessian matrix?
 </figure>
 </div>
 <p>This does not have to be done on all parameters, but select important parameters. This typically includes initial abundance (e.g., R0, initial abundance at age vector), recruitment (e.g., steepness or compensation ratio), natural mortality, selectivity, etc. The goal is to identify if there are any conflicting information in the data about abundance.</p>
-</section>
-<section id="fit-vs-data" class="level3" data-number="2.7">
-<h3 data-number="2.7" class="anchored" data-anchor-id="fit-vs-data"><span class="header-section-number">2.7</span> Fit vs data</h3>
-<p>The model estimates should match (or smooth over) the data. Systematic misfit to data is a sign of model misspecification. Any data observations that are included in the negative log likelihood should be compared to the estimates of the model. Plotting the fits vs data is a good visual tool for checking.</p>
-</section>
-<section id="confidence-intervals" class="level3" data-number="2.8">
-<h3 data-number="2.8" class="anchored" data-anchor-id="confidence-intervals"><span class="header-section-number">2.8</span> Confidence intervals</h3>
-<p>(in progress)</p>
-</section>
-<section id="residuals" class="level3" data-number="2.9">
-<h3 data-number="2.9" class="anchored" data-anchor-id="residuals"><span class="header-section-number">2.9</span> Residuals</h3>
-<p>(in progress)</p>
-</section>
-<section id="leave-out-runs" class="level3" data-number="2.10">
-<h3 data-number="2.10" class="anchored" data-anchor-id="leave-out-runs"><span class="header-section-number">2.10</span> Leave-out runs</h3>
-<p>(in progress)</p>
-</section>
-<section id="simulation-test" class="level3" data-number="2.11">
-<h3 data-number="2.11" class="anchored" data-anchor-id="simulation-test"><span class="header-section-number">2.11</span> Simulation test</h3>
-<p>(in progress)</p>
 
 
 </section>
