@@ -159,9 +159,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../guides/diagnostics.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Model convergence and diagnostics</span></a>
+ <span class="menu-text">Model convergence diagnostics</span></a>
   </div>
 </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">ADMB</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jitter test</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Likelihood profile</span>
+  </li>
+      </ul>
+  </li>
       </ul>
   </li>
     </ul>
@@ -171,15 +191,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist"><span class="header-section-number">1</span> Checklist:</a></li>
-  <li><a href="#additional-information" id="toc-additional-information" class="nav-link" data-scroll-target="#additional-information"><span class="header-section-number">2</span> Additional information:</a>
-  <ul class="collapse">
-  <li><a href="#creating-the-objective-function-in-rtmb" id="toc-creating-the-objective-function-in-rtmb" class="nav-link" data-scroll-target="#creating-the-objective-function-in-rtmb"><span class="header-section-number">2.1</span> Creating the objective function in RTMB</a></li>
-  <li><a href="#convergence-message" id="toc-convergence-message" class="nav-link" data-scroll-target="#convergence-message"><span class="header-section-number">2.2</span> Convergence message</a></li>
-  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix"><span class="header-section-number">2.3</span> Hessian matrix</a></li>
-  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors"><span class="header-section-number">2.4</span> Standard errors</a></li>
-  <li><a href="#jitter-test" id="toc-jitter-test" class="nav-link" data-scroll-target="#jitter-test"><span class="header-section-number">2.5</span> Jitter test</a></li>
-  <li><a href="#likelihood-profile" id="toc-likelihood-profile" class="nav-link" data-scroll-target="#likelihood-profile"><span class="header-section-number">2.6</span> Likelihood profile</a></li>
-  </ul></li>
+  <li><a href="#creating-the-objective-function-in-rtmb" id="toc-creating-the-objective-function-in-rtmb" class="nav-link" data-scroll-target="#creating-the-objective-function-in-rtmb"><span class="header-section-number">2</span> Creating the objective function in RTMB</a></li>
+  <li><a href="#convergence-message" id="toc-convergence-message" class="nav-link" data-scroll-target="#convergence-message"><span class="header-section-number">3</span> Convergence message</a></li>
+  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix"><span class="header-section-number">4</span> Hessian matrix</a></li>
+  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors"><span class="header-section-number">5</span> Standard errors</a></li>
+  <li><a href="#jitter-test" id="toc-jitter-test" class="nav-link" data-scroll-target="#jitter-test"><span class="header-section-number">6</span> Jitter test</a></li>
+  <li><a href="#likelihood-profile" id="toc-likelihood-profile" class="nav-link" data-scroll-target="#likelihood-profile"><span class="header-section-number">7</span> Likelihood profile</a></li>
   </ul>
 </nav>
 </nav>
@@ -220,12 +237,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <label><input type="checkbox" unchecked=""> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </label><br>
 <label><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.&nbsp;(initial abundance, recruitment, natural mortality, selectivity): </label><br>
 &nbsp;</p>
-<p>If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. If one of these checks fail, then the model is not consistent with convergence.</p>
+<p>It is recommended to do these checks in this order. If all of these checks pass, this indicates that the model is consistent with convergence and is estimable. It is necessary for the model to pass all these checks. If one of these checks fail, then the model is not consistent with convergence.</p>
 </section>
-<section id="additional-information" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="additional-information"><span class="header-section-number">2</span> Additional information:</h2>
-<section id="creating-the-objective-function-in-rtmb" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="creating-the-objective-function-in-rtmb"><span class="header-section-number">2.1</span> Creating the objective function in RTMB</h3>
+<section id="creating-the-objective-function-in-rtmb" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="creating-the-objective-function-in-rtmb"><span class="header-section-number">2</span> Creating the objective function in RTMB</h2>
 <p>Say you construct an objective function called <code>obj</code> using <code>f</code> as the model function and <code>par</code> as a list of initial parameter values. Using <code>RTMB::MakeADFun</code>, you can create the objective function:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> RTMB<span class="sc">::</span><span class="fu">MakeADFun</span>(f, par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -260,8 +275,8 @@ What are gradients
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> <span class="fu">nlminb</span>(obj<span class="sc">$</span>par, obj<span class="sc">$</span>fn, obj<span class="sc">$</span>gr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="convergence-message" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="convergence-message"><span class="header-section-number">2.2</span> Convergence message</h3>
+<section id="convergence-message" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="convergence-message"><span class="header-section-number">3</span> Convergence message</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the model is converged</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>opt<span class="sc">$</span>convergence</span>
@@ -283,8 +298,8 @@ What are gradients
 </div>
 <p>This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution, it can sometimes mean that the parameterization or model equations are not correct. Ideally, you do not want a model that is able to wander off into a bad region.</p>
 </section>
-<section id="hessian-matrix" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="hessian-matrix"><span class="header-section-number">2.3</span> Hessian matrix</h3>
+<section id="hessian-matrix" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="hessian-matrix"><span class="header-section-number">4</span> Hessian matrix</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -309,8 +324,8 @@ What is a Hessian matrix?
 </div>
 <p>The Hessian matrix will not be invertible if the negative log likelihood is not a true minimum. This usually occurs when the model is mis-specified, which could either mean that the model has been written incorrectly so the objective function is not differentiable/estimable with respect to all the parameters. Or the estimated parameters are confounded or overparameterized (i.e., too complex for the data). RTMB will warn you about a non-positive definite Hessian matrix.</p>
 </section>
-<section id="standard-errors" class="level3" data-number="2.4">
-<h3 data-number="2.4" class="anchored" data-anchor-id="standard-errors"><span class="header-section-number">2.4</span> Standard errors</h3>
+<section id="standard-errors" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="standard-errors"><span class="header-section-number">5</span> Standard errors</h2>
 <p>If the standard errors for the parameter estimates are high, this suggests that the model is not fully converged. This can mean:</p>
 <ul>
 <li>low precision: there is a wide range of plausible values for the parameters</li>
@@ -323,8 +338,8 @@ What is a Hessian matrix?
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sdrep</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="jitter-test" class="level3" data-number="2.5">
-<h3 data-number="2.5" class="anchored" data-anchor-id="jitter-test"><span class="header-section-number">2.5</span> Jitter test</h3>
+<section id="jitter-test" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="jitter-test"><span class="header-section-number">6</span> Jitter test</h2>
 <p>A jitter test is used to evaluate whether a model has actually converged to a global solution rather than a local minimum. This should check that none of the randomly generated starting values of the parameters results in a solution that has a smaller negative log likelihood than the reference model. A jitter test is conducted by changing the starting parameter values and rerunning the model several times. This should be done with multiple (if not all) the parameters.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this function runs the optimizer with the new parameters (opt$par + randomization)</span></span>
@@ -345,8 +360,8 @@ What is a Hessian matrix?
 </div>
 <p>Note: the magnitude of the jittering should be done within reason (e.g., 10% CV) as extreme jitters could start the model search in an unrealistic place and then the model would not be able to detect gradients that point towards reasonable solutions.</p>
 </section>
-<section id="likelihood-profile" class="level3" data-number="2.6">
-<h3 data-number="2.6" class="anchored" data-anchor-id="likelihood-profile"><span class="header-section-number">2.6</span> Likelihood profile</h3>
+<section id="likelihood-profile" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="likelihood-profile"><span class="header-section-number">7</span> Likelihood profile</h2>
 <p>A likelihood profile shows how the negative log likelihood changes as one of the parameters is fixed while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. The shape of the likelihood profile for a parameter should look like a U:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -356,7 +371,6 @@ What is a Hessian matrix?
 <p>This does not have to be done on all parameters, but select important parameters. This typically includes initial abundance (e.g., R0, initial abundance at age vector), recruitment (e.g., steepness or compensation ratio), natural mortality, selectivity, etc. The goal is to identify if there are any conflicting information in the data about abundance.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

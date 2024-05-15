@@ -8,30 +8,20 @@ website:
   sidebar: 
     contents:
       - text: Home
-        file: index.qmd
+        href: index.qmd
       - section: Guides
         contents:
-        - text: Model convergence and diagnostics
+        - text: Model convergence diagnostics
           href: guides/diagnostics.qmd
-#  navbar:
- #   left:
-  #    - href: index.qmd
-   #     text: Home
-    #  - text: Guides
-     #   menu:
-          # - text: Introduction to RTMB
-          #   href: guides/rtmb_intro.qmd
-      #    - text: Model convergence and diagnostics
-       #     href: guides/diagnostics.qmd
-      # - text: Concepts
-      #   menu: 
-      #     - text: Selectivity
-      #       href: notes/selectivity.qmd
+        - section: ADMB
+          contents:
+          - text: Jitter test
+            href: guides/ADMB_jitter.qmd
+          - text: Likelihood profile
 
 format:
   html:
     page-layout: full
-  #  theme: cosmo
     css: "https://qfcatmsu.github.io/assets/quarto/qfc_styles.css"
     toc: true
     toc-title: Contents

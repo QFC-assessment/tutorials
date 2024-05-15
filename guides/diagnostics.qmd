@@ -16,11 +16,9 @@ This is a checklist of convergence checks and diagnostics that should be conduct
 <label><input type="checkbox" unchecked/> Likelihood profiles for important parameters are reasonable, e.g. (initial abundance, recruitment, natural mortality, selectivity): </label>\
  
 
-If all of these checks pass, this indicates that the model is consistent with convergence diagnostics and is estimable. It is necessary for the model to pass all these checks. If one of these checks fail, then the model is not consistent with convergence.
+It is recommended to do these checks in this order. If all of these checks pass, this indicates that the model is consistent with convergence and is estimable. It is necessary for the model to pass all these checks. If one of these checks fail, then the model is not consistent with convergence.
 
-## Additional information:
-
-### Creating the objective function in RTMB
+## Creating the objective function in RTMB
 
 Say you construct an objective function called `obj` using `f` as the model function and `par` as a list of initial parameter values. Using `RTMB::MakeADFun`, you can create the objective function:
 
@@ -52,7 +50,7 @@ If the checks on the objective function are successful, you can run the objectiv
 opt <- nlminb(obj$par, obj$fn, obj$gr)
 ```
 
-### Convergence message
+## Convergence message
 
 ```{r, eval = FALSE}
 # check if the model is converged
@@ -80,7 +78,7 @@ Warning messages:
 
 This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution, it can sometimes mean that the parameterization or model equations are not correct. Ideally, you do not want a model that is able to wander off into a bad region.
 
-### Hessian matrix
+## Hessian matrix
 
 ::: {.callout-note collapse="true"}
 ## What is a Hessian matrix?
@@ -96,7 +94,7 @@ This represents the curvature of the likelihood surface and is used to calculate
 
 The Hessian matrix will not be invertible if the negative log likelihood is not a true minimum. This usually occurs when the model is mis-specified, which could either mean that the model has been written incorrectly so the objective function is not differentiable/estimable with respect to all the parameters. Or the estimated parameters are confounded or overparameterized (i.e., too complex for the data). RTMB will warn you about a non-positive definite Hessian matrix.
 
-### Standard errors
+## Standard errors
 
 If the standard errors for the parameter estimates are high, this suggests that the model is not fully converged. This can mean:
 
@@ -111,7 +109,7 @@ sdrep <- sdreport(obj)
 sdrep
 ```
 
-### Jitter test
+## Jitter test
 
 A jitter test is used to evaluate whether a model has actually converged to a global solution rather than a local minimum. This should check that none of the randomly generated starting values of the parameters results in a solution that has a smaller negative log likelihood than the reference model. A jitter test is conducted by changing the starting parameter values and rerunning the model several times. This should be done with multiple (if not all) the parameters.
 
@@ -135,7 +133,7 @@ boxplot(t(jit))
 
 Note: the magnitude of the jittering should be done within reason (e.g., 10% CV) as extreme jitters could start the model search in an unrealistic place and then the model would not be able to detect gradients that point towards reasonable solutions.
 
-### Likelihood profile
+## Likelihood profile
 
 A likelihood profile shows how the negative log likelihood changes as one of the parameters is fixed while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. The shape of the likelihood profile for a parameter should look like a U:
 
