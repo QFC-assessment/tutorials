@@ -476,7 +476,7 @@ The next step is to set up a R script to run the jitter test.
 
 You will need these helper files to run ADMB through R:
 
--   [base_funs.r](https://github.com/lidach/addtools/blob/main/R/base_funs.r) - this contains three functions to read and compile a ADMB executable and run the ADMB model
+-   [base_funs.r](https://github.com/lidach/addtools/blob/main/R/clean_admb.r) - this contains three functions to read and compile a ADMB executable and run the ADMB model
 
     -   `compile_admb()`
 
@@ -487,6 +487,13 @@ You will need these helper files to run ADMB through R:
 -   [clean_admb.r](https://github.com/lidach/addtools/blob/main/R/clean_admb.r) - after you are done running your model, this will clean all the additional ADMB files in your directory.
 
  
+
+You can also run this in R to download these files directly to your local directory:
+
+```{r, eval = FALSE}
+download.file("https://raw.githubusercontent.com/lidach/addtools/main/R/base_funs.r", destfile = "base_funs.r")
+download.file("https://raw.githubusercontent.com/lidach/addtools/main/R/clean_admb.r", destfile = "clean_admb.r")
+```
 
 Note that these functions only work for Windows (*Mac and Linux instructions are in progress*).
 
@@ -513,7 +520,7 @@ We will include `verbose=TRUE`, which will print out the compile messages from A
 
  
 
-![](images/clipboard-1943540904.png){width="1100"}
+![](figs/compile_ADMB.png){width="1100"}
 
  
 
@@ -530,7 +537,7 @@ This will create four .dat files (`log_r.dat`,`log_q_dat`, `log_K.dat`, and `log
 
  
 
-![](images/clipboard-4267604269.png){fig-align="center"}
+![](figs/dat_files.png){fig-align="center"}
 
  
 
@@ -554,7 +561,7 @@ run_admb(fn = tpl_name, verbose = TRUE)
 
 What prints out in the R console should look exactly like what prints out in the ADMB command prompt:
 
-![](images/clipboard-3631222671.png){width="870"}
+![](figs/run_admb.png){width="840"}
 
 This should produce a result of the surplus production model (check the ".par" file).
 
@@ -571,7 +578,7 @@ if (file.exists("estpars.dat")) {
 
  
 
-![](images/clipboard-31559888.png){width="870"}
+![](figs/dat.png){width="870"}
 
  
 
@@ -590,7 +597,7 @@ This is what the `estpars.dat` file should look like:
 
  
 
-![](images/clipboard-2355991714.png){width="790"}
+![](figs/estpars.png){width="790"}
 
  
 
@@ -605,15 +612,15 @@ st_log_K <- dat$log_K + rnorm(nrun, sd = 0.1)
 st_log_sd_cpue <- dat$log_sd_cpue + rnorm(nrun, sd = 0.1)
 ```
 
-You should get different initial parameter values (this is what `st_log_r` looks like):
+You should get different initial parameter values for $r$, $q$, $K$, and $sd_{cpue}$ (this is what `st_log_r` looks like):
 
  
 
-![](images/clipboard-1341424250.png){width="1100"}
+![](figs/st_log_r.png){width="1100"}
 
  
 
-This is where ADMB will run 50 times in a for loop, with each iteration reading different values of $r$, $q$, $K$, and $sd_{cpue}$ from the objects ``` st_log_r,``st_log_q ```, `st_log_K`, and `st_log_sd_cpue` . We will use the `system()` function to rerun the ADMB model from the executable file (`.exe`):
+This is where ADMB will run 50 times in a for loop, with each iteration reading different values of $r$, $q$, $K$, and $sd_{cpue}$ from the objects `st_log_r`, `st_log_q`, `st_log_K`, and `st_log_sd_cpue` . We will use the `system()` function to rerun the ADMB model from the executable file (`.exe`):
 
 ```{r, eval = FALSE}
 # Write out each value of the parameters and run ADMB program for each in loop
@@ -642,7 +649,7 @@ When you look at the `jit_res` object, it should look like this:
 
  
 
-![](images/clipboard-1880361287.png){width="900"}
+![](figs/jit_res.png){width="900"}
 
  
 
@@ -663,7 +670,7 @@ We can also visualize the jitter test using a box plot:
 boxplot(jit_res[, c(2, 4, 6, 8, 9)])
 ```
 
-![](images/clipboard-2261044788.png){fig-align="center" width="600"}
+![](figs/jit_boxplot.png){fig-align="center" width="600"}
 
  
 
@@ -755,7 +762,7 @@ There should not be any outliers or weird shapes in the box plots (this is an ex
 
  
 
-![](images/clipboard-3263973957.png){fig-align="center" width="600"}
+![](figs/bad_jit.png){fig-align="center" width="600"}
 
 A failed jitter test is indicative that there is something wrong with the model:
 

@@ -708,7 +708,7 @@ window.Quarto = {
 <h3 data-number="3.1" class="anchored" data-anchor-id="r-helper-functions"><span class="header-section-number">3.1</span> R helper functions</h3>
 <p>You will need these helper files to run ADMB through R:</p>
 <ul>
-<li><p><a href="https://github.com/lidach/addtools/blob/main/R/base_funs.r">base_funs.r</a> - this contains three functions to read and compile a ADMB executable and run the ADMB model</p>
+<li><p><a href="https://github.com/lidach/addtools/blob/main/R/clean_admb.r">base_funs.r</a> - this contains three functions to read and compile a ADMB executable and run the ADMB model</p>
 <ul>
 <li><p><code>compile_admb()</code></p></li>
 <li><p><code>read_admb()</code></p></li>
@@ -717,38 +717,43 @@ window.Quarto = {
 <li><p><a href="https://github.com/lidach/addtools/blob/main/R/clean_admb.r">clean_admb.r</a> - after you are done running your model, this will clean all the additional ADMB files in your directory.</p></li>
 </ul>
 <p>&nbsp;</p>
+<p>You can also run this in R to download these files directly to your local directory:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">"https://raw.githubusercontent.com/lidach/addtools/main/R/base_funs.r"</span>, <span class="at">destfile =</span> <span class="st">"base_funs.r"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">"https://raw.githubusercontent.com/lidach/addtools/main/R/clean_admb.r"</span>, <span class="at">destfile =</span> <span class="st">"clean_admb.r"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Note that these functions only work for Windows (<em>Mac and Linux instructions are in progress</em>).</p>
 <p>&nbsp;</p>
 <p>These helper functions will be loaded in R using the <code>source()</code> function (make sure these are in the same directory as the .tpl and .dat files):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"base_funs.r"</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"clean_admb.r"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"base_funs.r"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"clean_admb.r"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="compile-and-run-admb-in-r" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="compile-and-run-admb-in-r"><span class="header-section-number">3.2</span> Compile and run ADMB in R</h3>
 <p>The R helper functions (<code>base_funs.r</code>) has a function (<code>compile_admb.r</code>), which will compile ADMB using a R command. The .tpl name in this tutorial is called “surp_prod_jitter”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"surp_prod_jitter"</span> <span class="co"># name of the .tpl file</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"surp_prod_jitter"</span> <span class="co"># name of the .tpl file</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We will include <code>verbose=TRUE</code>, which will print out the compile messages from ADMB in the R console (should be the same as running the ADMB command prompt):</p>
 <p>&nbsp;</p>
-<p><img src="images/clipboard-1943540904.png" class="img-fluid" width="1100"></p>
+<p><img src="figs/compile_ADMB.png" class="img-fluid" width="1100"></p>
 <p>&nbsp;</p>
 <p>Next we will create new .dat files, which will contain the starting parameter values that will be read into ADMB.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-0.6"</span>, <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-3"</span>, <span class="at">file =</span> <span class="st">"log_q.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"8"</span>, <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-1"</span>, <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-0.6"</span>, <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-3"</span>, <span class="at">file =</span> <span class="st">"log_q.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"8"</span>, <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-1"</span>, <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This will create four .dat files (<code>log_r.dat</code>,<code>log_q_dat</code>, <code>log_K.dat</code>, and <code>log_sd_cpue.dat</code>). You should see this in your local directory:</p>
 <p>&nbsp;</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/clipboard-4267604269.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<p><img src="figs/dat_files.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 <p>&nbsp;</p>
@@ -762,60 +767,60 @@ window.Quarto = {
 <p>&nbsp;</p>
 <p>Next, we will run the ADMB model using the command <code>run_admb()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>What prints out in the R console should look exactly like what prints out in the ADMB command prompt:</p>
-<p><img src="images/clipboard-3631222671.png" class="img-fluid" width="870"></p>
+<p><img src="figs/run_admb.png" class="img-fluid" width="840"></p>
 <p>This should produce a result of the surplus production model (check the “.par” file).</p>
 </section>
 <section id="set-up-the-jitter-test" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="set-up-the-jitter-test"><span class="header-section-number">3.3</span> Set up the jitter test</h3>
 <p>Next, we will create an object called <code>dat</code>, which will show what is being read into <code>estpars.dat</code>. This <code>dat</code> object is just a check to make sure the file contains the correct values (initial starting values from R, parameter estimates from ADMB, and the objective function from ADMB).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) {</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"inlog_r"</span>, <span class="st">"log_r"</span>, <span class="st">"inlog_q"</span>, <span class="st">"log_q"</span>, <span class="st">"inlog_K"</span>, <span class="st">"log_K"</span>, <span class="st">"inlog_sd_cpue"</span>, <span class="st">"log_sd_cpue"</span>, <span class="st">"objn"</span>)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"inlog_r"</span>, <span class="st">"log_r"</span>, <span class="st">"inlog_q"</span>, <span class="st">"log_q"</span>, <span class="st">"inlog_K"</span>, <span class="st">"log_K"</span>, <span class="st">"inlog_sd_cpue"</span>, <span class="st">"log_sd_cpue"</span>, <span class="st">"objn"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>&nbsp;</p>
-<p><img src="images/clipboard-31559888.png" class="img-fluid" width="870"></p>
+<p><img src="figs/dat.png" class="img-fluid" width="870"></p>
 <p>&nbsp;</p>
 <p>We will then delete <code>estpars.dat</code> as this contains the initial run of the surplus production model. We will also create a replacement file that will have the same column names as <code>dat</code> object in R (and the same as the one created in the <code>FINAL_SECTION</code> of ADMB). We will use the <code>estpars.dat</code> file to store each iteration of the jitter test:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete any existing version of estpars.dat</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create header for file so we know the variables.</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># sep ["\n" needed for line feed]</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"inlog_r log_r inlogq log_q inlogK log_K inlog_sd_cpue log_sd_cpue objn"</span>, <span class="at">file =</span> <span class="st">"estpars.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete any existing version of estpars.dat</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create header for file so we know the variables.</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># sep ["\n" needed for line feed]</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"inlog_r log_r inlogq log_q inlogK log_K inlog_sd_cpue log_sd_cpue objn"</span>, <span class="at">file =</span> <span class="st">"estpars.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is what the <code>estpars.dat</code> file should look like:</p>
 <p>&nbsp;</p>
-<p><img src="images/clipboard-2355991714.png" class="img-fluid" width="790"></p>
+<p><img src="figs/estpars.png" class="img-fluid" width="790"></p>
 <p>&nbsp;</p>
 <p>Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (<code>nrun &lt;- # number of iterations</code>). We will randomize a set of starting values for <span class="math inline">\(r\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(sd_{cpue}\)</span> using the <code>rnorm()</code> function, and it will be randomized with a CV = 10%:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a set of starting values</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>nrun <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># number of reruns with new values</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>st_log_r <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_r <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>st_log_q <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_q <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>st_log_K <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_K <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>st_log_sd_cpue <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_sd_cpue <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a set of starting values</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>nrun <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># number of reruns with new values</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>st_log_r <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_r <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>st_log_q <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_q <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>st_log_K <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_K <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>st_log_sd_cpue <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_sd_cpue <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You should get different initial parameter values (this is what <code>st_log_r</code> looks like):</p>
+<p>You should get different initial parameter values for <span class="math inline">\(r\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(sd_{cpue}\)</span> (this is what <code>st_log_r</code> looks like):</p>
 <p>&nbsp;</p>
-<p><img src="images/clipboard-1341424250.png" class="img-fluid" width="1100"></p>
+<p><img src="figs/st_log_r.png" class="img-fluid" width="1100"></p>
 <p>&nbsp;</p>
-<p>This is where ADMB will run 50 times in a for loop, with each iteration reading different values of <span class="math inline">\(r\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(sd_{cpue}\)</span> from the objects <code>st_log_r,``st_log_q</code>, <code>st_log_K</code>, and <code>st_log_sd_cpue</code> . We will use the <code>system()</code> function to rerun the ADMB model from the executable file (<code>.exe</code>):</p>
+<p>This is where ADMB will run 50 times in a for loop, with each iteration reading different values of <span class="math inline">\(r\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(sd_{cpue}\)</span> from the objects <code>st_log_r</code>, <code>st_log_q</code>, <code>st_log_K</code>, and <code>st_log_sd_cpue</code> . We will use the <code>system()</code> function to rerun the ADMB model from the executable file (<code>.exe</code>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write out each value of the parameters and run ADMB program for each in loop</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(st_log_r)) {</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_r[i], <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_q[i], <span class="at">file =</span> <span class="st">"log_q.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_K[i], <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_sd_cpue[i], <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">system</span>(<span class="fu">paste0</span>(tpl_name, <span class="st">".exe"</span>)) <span class="co"># running ADMB executable (no need to recompile)</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write out each value of the parameters and run ADMB program for each in loop</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(st_log_r)) {</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_r[i], <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_q[i], <span class="at">file =</span> <span class="st">"log_q.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_K[i], <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_sd_cpue[i], <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">system</span>(<span class="fu">paste0</span>(tpl_name, <span class="st">".exe"</span>)) <span class="co"># running ADMB executable (no need to recompile)</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that we do not need to manually recompile the model from the ADMB command prompt or use the <code>admb</code> command to rerun the model. This will work on Windows computers (<em>Mac and Linux instructions in progress</em>).</p>
 </section>
@@ -823,13 +828,13 @@ window.Quarto = {
 <h3 data-number="3.4" class="anchored" data-anchor-id="jitter-test-results"><span class="header-section-number">3.4</span> Jitter test results</h3>
 <p>Now we will read in the <code>estpars.dat</code> file, which should contain all the iterations of the jitter test with different starting values of each parameter:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in and print results to console</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>jit_res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>, <span class="at">header =</span> T)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>jit_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in and print results to console</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>jit_res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>, <span class="at">header =</span> T)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>jit_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>When you look at the <code>jit_res</code> object, it should look like this:</p>
 <p>&nbsp;</p>
-<p><img src="images/clipboard-1880361287.png" class="img-fluid" width="900"></p>
+<p><img src="figs/jit_res.png" class="img-fluid" width="900"></p>
 <p>&nbsp;</p>
 <p>There are some things to look out for in the <code>jit_res</code> object:</p>
 <ul>
@@ -840,93 +845,93 @@ window.Quarto = {
 <p>&nbsp;</p>
 <p>We can also visualize the jitter test using a box plot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplots - are there any weird shapes/outliers?</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(jit_res[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplots - are there any weird shapes/outliers?</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(jit_res[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/clipboard-2261044788.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="600"></p>
+<p><img src="figs/jit_boxplot.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="600"></p>
 </figure>
 </div>
 <p>&nbsp;</p>
 <p>After conducting the jitter test, we can run these functions that will clean the extra ADMB files that were compiled throughout the process:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clean extra files </span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_admb</span>(<span class="at">fn =</span> tpl_name) </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>) </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"out.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"out.rdat"</span>) </span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"hessian.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"hessian.rdat"</span>) </span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_K.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_K.dat"</span>) </span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_r.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_r.dat"</span>) </span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_q.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_q.dat"</span>) </span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_sd_cpue.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_sd_cpue.dat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clean extra files </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_admb</span>(<span class="at">fn =</span> tpl_name) </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>) </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"out.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"out.rdat"</span>) </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"hessian.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"hessian.rdat"</span>) </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_K.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_K.dat"</span>) </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_r.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_r.dat"</span>) </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_q.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_q.dat"</span>) </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_sd_cpue.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_sd_cpue.dat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="entire-r-script-for-the-jitter-test-of-the-surplus-production-model" class="level3" data-number="3.5">
 <h3 data-number="3.5" class="anchored" data-anchor-id="entire-r-script-for-the-jitter-test-of-the-surplus-production-model"><span class="header-section-number">3.5</span> Entire R script for the jitter test of the surplus production model</h3>
 <p>Here is the entire R script for an example of conducting a jitter test with the surplus production model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"base_funs.r"</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"clean_admb.r"</span>)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"surp_prod_jitter"</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># set initial values and source from external files</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-0.6"</span>, <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-3"</span>, <span class="at">file =</span> <span class="st">"log_q.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"8"</span>, <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-1"</span>, <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co"># run ADMB</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="fu">run_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co"># get parameter estimates (used for jittering)</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) {</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>)</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"inlog_r"</span>, <span class="st">"log_r"</span>, <span class="st">"inlog_q"</span>, <span class="st">"log_q"</span>, <span class="st">"inlog_K"</span>, <span class="st">"log_K"</span>, <span class="st">"inlog_sd_cpue"</span>, <span class="st">"log_sd_cpue"</span>, <span class="st">"objn"</span>)</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete any existing version of estpars.dat</span></span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Create header for file so we know the variables.</span></span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a><span class="co"># sep ["\n" needed for line feed]</span></span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"inlog_r log_r inlogq log_q inlogK log_K inlog_sd_cpue log_sd_cpue objn"</span>, <span class="at">file =</span> <span class="st">"estpars.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a set of starting values</span></span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>nrun <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># number of reruns with new values</span></span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>st_log_r <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_r <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>st_log_q <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_q <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>st_log_K <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_K <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>st_log_sd_cpue <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_sd_cpue <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Write out each value of the parameters and run ADMB program for each in loop</span></span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(st_log_r)) {</span>
-<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_r[i], <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
-<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_q[i], <span class="at">file =</span> <span class="st">"log_q.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
-<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_K[i], <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
-<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_sd_cpue[i], <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
-<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">system</span>(<span class="fu">paste0</span>(tpl_name, <span class="st">".exe"</span>))<span class="co"># running ADMB executable (no need to recompile)</span></span>
-<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a><span class="co"># read in and print results to console</span></span>
-<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>jit_res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>, <span class="at">header =</span> T)</span>
-<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>jit_res</span>
-<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplots - are there any weird shapes/outliers?</span></span>
-<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(jit_res[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>)])</span>
-<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a><span class="co"># clean extra files</span></span>
-<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_admb</span>(<span class="at">fn =</span> tpl_name)</span>
-<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
-<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"out.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"out.rdat"</span>)</span>
-<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"hessian.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"hessian.rdat"</span>)</span>
-<span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_K.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_K.dat"</span>)</span>
-<span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_r.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_r.dat"</span>)</span>
-<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_q.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_q.dat"</span>)</span>
-<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_sd_cpue.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_sd_cpue.dat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"base_funs.r"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"clean_admb.r"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"surp_prod_jitter"</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># set initial values and source from external files</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-0.6"</span>, <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-3"</span>, <span class="at">file =</span> <span class="st">"log_q.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"8"</span>, <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-1"</span>, <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># run ADMB</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="fu">run_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co"># get parameter estimates (used for jittering)</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) {</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"inlog_r"</span>, <span class="st">"log_r"</span>, <span class="st">"inlog_q"</span>, <span class="st">"log_q"</span>, <span class="st">"inlog_K"</span>, <span class="st">"log_K"</span>, <span class="st">"inlog_sd_cpue"</span>, <span class="st">"log_sd_cpue"</span>, <span class="st">"objn"</span>)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete any existing version of estpars.dat</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Create header for file so we know the variables.</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="co"># sep ["\n" needed for line feed]</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"inlog_r log_r inlogq log_q inlogK log_K inlog_sd_cpue log_sd_cpue objn"</span>, <span class="at">file =</span> <span class="st">"estpars.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a set of starting values</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>nrun <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># number of reruns with new values</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>st_log_r <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_r <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>st_log_q <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_q <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>st_log_K <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_K <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>st_log_sd_cpue <span class="ot">&lt;-</span> dat<span class="sc">$</span>log_sd_cpue <span class="sc">+</span> <span class="fu">rnorm</span>(nrun, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Write out each value of the parameters and run ADMB program for each in loop</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(st_log_r)) {</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_r[i], <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_q[i], <span class="at">file =</span> <span class="st">"log_q.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_K[i], <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_sd_cpue[i], <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">system</span>(<span class="fu">paste0</span>(tpl_name, <span class="st">".exe"</span>))<span class="co"># running ADMB executable (no need to recompile)</span></span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a><span class="co"># read in and print results to console</span></span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>jit_res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>, <span class="at">header =</span> T)</span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>jit_res</span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplots - are there any weird shapes/outliers?</span></span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(jit_res[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>)])</span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a><span class="co"># clean extra files</span></span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_admb</span>(<span class="at">fn =</span> tpl_name)</span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"out.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"out.rdat"</span>)</span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"hessian.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"hessian.rdat"</span>)</span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_K.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_K.dat"</span>)</span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_r.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_r.dat"</span>)</span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_q.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_q.dat"</span>)</span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_sd_cpue.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_sd_cpue.dat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -936,7 +941,7 @@ window.Quarto = {
 <p>&nbsp;</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/clipboard-3263973957.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="600"></p>
+<p><img src="figs/bad_jit.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="600"></p>
 </figure>
 </div>
 <p>A failed jitter test is indicative that there is something wrong with the model:</p>
