@@ -1,0 +1,15 @@
+Tutorials:
+  Guides
+    ✔ model convergence diagnostics @done(24-05-16 12:12)
+    ☐ ADMB jitter test @high
+      ☐ Linux and Mac instructions
+    ☐ ADMB likelihood profile @high
+    ☐ Introduction to optimization (TMB/RTMB)
+    ☐ RTMB introduction
+    ☐ Stock assessment naming convention
+    ☐ Stock assessment RTMB script setup
+  
+  Notes
+    ☐ equilibrium recruitment
+    ☐ selectivity
+

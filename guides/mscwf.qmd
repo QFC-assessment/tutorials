@@ -1,9 +1,0 @@
----
-title: "Lake whitefish model description"
-format:
-  html:
-    toc: true
-    page-layout: full
-    css: styles.css
-editor: visual
----

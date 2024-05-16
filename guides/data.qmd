@@ -1,9 +1,0 @@
----
-title: "Data for Stock Assessment"
-format:
-  html:
-    toc: true
-    page-layout: full
-    css: styles.css
-editor: visual
----
