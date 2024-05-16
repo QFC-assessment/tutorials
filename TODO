@@ -4,7 +4,6 @@ Tutorials:
     ☐ ADMB jitter test @high
       ☐ Linux and Mac instructions
     ☐ ADMB likelihood profile @high
-    ☐ Introduction to optimization (TMB/RTMB)
     ☐ RTMB introduction
     ☐ Stock assessment naming convention
     ☐ Stock assessment RTMB script setup
@@ -12,4 +11,5 @@ Tutorials:
   Notes
     ☐ equilibrium recruitment
     ☐ selectivity
+    ☐ Introduction to optimization (TMB/RTMB)
 

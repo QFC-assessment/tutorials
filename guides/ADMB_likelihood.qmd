@@ -1,10 +1,6 @@
 ---
-title: "Jitter test in ADMB using R"
+title: "Likelihood profiling in ADMB using R"
 ---
-
-A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function.
-
- 
 
 This tutorial will walk through how to conduct a jitter test in ADMB. The fastest way to run a jitter test in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some extra steps to set up your code in both ADMB and R.
 
@@ -22,7 +18,7 @@ These are instructions for using admb2r.cpp permanently. Copy admb2r.cpp to both
 
  
 
-A copy of admb2r.cpp is [here](https://github.com/admb-project/admb/blob/main/contrib/admb2r/admb2r.cpp). Once this is done you do not need to add "admb2r.cpp" to every project folder. This has been tested on Linux Mint, Windows, and Mac.
+A copy of admb2r.cpp is [here](https://github.com/admb-project/admb/blob/main/contrib/admb2r/admb2r.cpp). Once this is done you will not need to add admb2r.cpp to every project folder. This has been tested on Linux Mint, Windows, and Mac.
 
 ## Set up ADMB
 
@@ -30,7 +26,7 @@ If possible, you should download the most recent ADMB version [here](https://www
 
 ### Surplus production model - .tpl and .dat files
 
-In this tutorial, we will look at a surplus production model. The .dat file name is called "surp_prod1.dat". You can name the .tpl file anything, but in this tutorial, it will be called "surp_prod_jitter.tpl".
+In this tutorial, we will look at a surplus production model. The .dat file name is called `surp_prod1.dat`. You can name the .tpl file anything, but in this tutorial, it will be called `surp_prod_jitter.tpl`.
 
 ```{r, eval = FALSE}
 DATA_SECTION
@@ -133,7 +129,7 @@ FINAL_SECTION
   close_r_file();
 ```
 
-This tutorial will not go through the surplus production model in details, but the leading parameters are $r$, $K$, $q$, $F$, and $sd_{cpue}$. Note that there is a standard deviation for the catch observations, but that is fixed in this model ($sd_{catch}$ = 0.05) The objective function (`jnll`) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, both of which follow a log normal distribution.
+This tutorial will not go through the surplus production model in details, but the leading parameters are $r$, $K$, $q$, $F$, and $sd_{cpue}$. Note that there is a standard deviation for the catch observations, but that is fixed in this model ($sd_{catch}$ = 0.05) The objective function (`jnll`) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, which follow a log normal distribution.
 
  
 
@@ -143,11 +139,11 @@ The default data file name is different than the .tpl file name. This is done us
 !! ad_com::change_datafile_name("surp_prod1.dat");
 ```
 
-The data will be read from "surp_prod1.dat". This is useful when you have many variants of the model that use the same data. This trick will be useful for the jitter test.
+The data will be read from `surp_prod1.dat`. This is useful when you have many variants of the model that use the same data. This trick will be useful for the jitter test.
 
  
 
-You can copy and paste the data "surp_prod1.dat" here:
+You can copy and paste the `surp_prod1.dat` here:
 
 ```{r, eval = FALSE}
 # first year
@@ -227,11 +223,11 @@ In the surplus production example, we will jitter the following parameters: $r$,
   init_number inlog_sd_cpue;
 ```
 
-This is similar to the previous command, but here the `!! ad_com::change_datafile_name("log_r.dat")` command is reading parameter values (`inlog_r`, `inlog_q`, `inlog_K`, `inlog_sd_cpue`) from separate .dat files. This will be important in the R script as you can rewrite this .dat file to produce different starting values that will be read in ADMB one at a time. Note that the parameter name that is being read in (e.g., `inlog_r`) should be different than the one in the PARAMETER_SECTION (the ones being used in the estimation; e.g., `log_r`).
+This is similar to the previous command, but here the `!! ad_com::change_datafile_name("param_name.dat")` command is reading parameter values (`param_name`) from separate .dat files. This will be important in the R script as you can rewrite this .dat file in R to produce multiple starting values that will be read in ADMB. Note that the parameter name that is being read in should be different than the one in the PARAMETER_SECTION (the ones being used in the estimation).
 
  
 
-The entire DATA_SECTION will look like this:
+The DATA_SECTION will look like this:
 
 ```{r, eval = FALSE}
 DATA_SECTION
@@ -256,7 +252,7 @@ DATA_SECTION
 
 ### PARAMETER_SECTION
 
-In this section, we will be overriding the starting parameter values declared in the INITIALIZATION_SECTION. This is why the parameter names above (e.g., `inlog_r`) needs to be different than the ones (e.g., `log_r`) being declared.
+In this section, we will be overriding the starting parameter values declared in the INITIALIZATION_SECTION. This is why the parameter names above (`inparam_name`) needs to be different than the ones (`param_name`) being declared.
 
 ```{r, eval = FALSE}
 !! log_r = inlog_r;
@@ -265,11 +261,11 @@ In this section, we will be overriding the starting parameter values declared in
 !! log_sd_cpue = inlog_sd_cpue;
 ```
 
-This will now read what was stored in the respective .dat files as the starting value of the parameter.
+This will now read what was stored in the respective .dat files as the starting value of the parameter, which will be created in R.
 
  
 
-The entire PARAMETER_SECTION will look like this:
+For the surplus production model, it will look like this:
 
 ```{r, eval = FALSE}
 PARAMETER_SECTION
@@ -303,7 +299,7 @@ PARAMETER_SECTION
 
 ### INITIALIZATION_SECTION
 
-This section should either be commented out or empty as the .dat file for each parameters will override the starting value for that parameter. This is important for the jitter test to work. It will look like this for the surplus production model:
+This section should either be commented out or empty as the `param_name.dat` file will override the starting value for that parameter. This is important for the jitter test to work. It will look like this for the surplus production model:
 
 ```{r, eval = FALSE}
 INITIALIZATION_SECTION
@@ -315,7 +311,7 @@ INITIALIZATION_SECTION
  log_F 1
 ```
 
-The next sections (PROCEDURE_SECTION, GLOBALS_SECTION, and REPORT_SECTION) should be the same as the original model.
+The next few sections (`PROCEDURE_SECTION`, `GLOBALS_SECTION`, and `REPORT_SECTION`) should be the same as the original model.
 
 ### FINAL_SECTION
 
@@ -327,11 +323,11 @@ In the final section, you will need to add a command to define an output file st
   myout.close();
 ```
 
-The "estpars.dat" file will eventually contain all the input starting values from R, estimated parameters from ADMB, and the objective function from ADMB. This is important as it will contain all the iterations and results of the jitter test and will be read into R as a table.
+The `estpars.dat` file will eventually contain all the input starting values from R (`inparam_name`), estimated parameters from ADMB (`param_name`), and the objective function (`objective_function`) from ADMB. This is important as it will contain all the iterations and results of the jitter test and will be read into R as a table.
 
  
 
-The entire FINAL_SECTION will look like this:
+The `FINAL_SECTION` will look like this:
 
 ```{r, eval = FALSE}
 FINAL_SECTION
@@ -350,7 +346,7 @@ FINAL_SECTION
 
 ### Entire ADMB example of the surplus production model
 
-Here is the entire ADMB script for an example of conducting a jitter test with the surplus production model:
+Here is the entire ADMB script for an example of conducting a jitter test with the surplus production model.
 
 ```{r, eval = FALSE}
 DATA_SECTION
@@ -540,7 +536,7 @@ source("clean_admb.r")
 
 ### Compile and run ADMB in R
 
-The R helper functions ("base_funs.r") has a function "compile_admb.r" which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called "surp_prod_jitter".
+The R helper functions (`base_funs.r`) has a function (`compile_admb.r`), which will compile ADMB using a R command. The .tpl name in this tutorial is called "surp_prod_jitter".
 
 ```{r, eval = FALSE}
 tpl_name <- "surp_prod_jitter" # name of the .tpl file
@@ -548,7 +544,7 @@ tpl_name <- "surp_prod_jitter" # name of the .tpl file
 compile_admb(fn = tpl_name, verbose = TRUE)
 ```
 
-We will include `verbose = TRUE`, which will print out the compile messages from ADMB in the R console (should be the same as running the ADMB command prompt):
+We will include `verbose=TRUE`, which will print out the compile messages from ADMB in the R console (should be the same as running the ADMB command prompt):
 
  
 
@@ -565,7 +561,7 @@ cat("8", file = "log_K.dat", sep = "\n")
 cat("-1", file = "log_sd_cpue.dat", sep = "\n")
 ```
 
-This will create four .dat files ("log_r.dat","log_q_dat", "log_K.dat", and "log_sd_cpue.dat"). You should see this in your local directory:
+This will create four .dat files (`log_r.dat`,`log_q_dat`, `log_K.dat`, and `log_sd_cpue.dat`). You should see this in your local directory:
 
  
 
@@ -593,17 +589,13 @@ run_admb(fn = tpl_name, verbose = TRUE)
 
 What prints out in the R console should look exactly like what prints out in the ADMB command prompt:
 
- 
-
 ![](figs/run_admb.png){width="840"}
 
- 
-
-This should produce a model result of the surplus production model (check the ".par" file).
+This should produce a result of the surplus production model (check the ".par" file).
 
 ### Set up the jitter test
 
-Next, we will create an object called `dat`, which will show what is being read into "estpars.dat". This `dat` object is just a check to make sure the file contains the correct values (initial starting values from R, parameter estimates from ADMB, and the objective function from ADMB).
+Next, we will create an object called `dat`, which will show what is being read into `estpars.dat`. This `dat` object is just a check to make sure the file contains the correct values (initial starting values from R, parameter estimates from ADMB, and the objective function from ADMB).
 
 ```{r, eval = FALSE}
 if (file.exists("estpars.dat")) {
@@ -618,7 +610,7 @@ if (file.exists("estpars.dat")) {
 
  
 
-We will then delete "estpars.dat" as this contains the first run of the surplus production model. We will also create a replacement file (same name - "estpars.dat") that will have the same column names as `dat` object in R (and the same as the ones created in the FINAL_SECTION of ADMB). We will use the "estpars.dat" file to store each iteration of the jitter test:
+We will then delete `estpars.dat` as this contains the initial run of the surplus production model. We will also create a replacement file that will have the same column names as `dat` object in R (and the same as the one created in the `FINAL_SECTION` of ADMB). We will use the `estpars.dat` file to store each iteration of the jitter test:
 
 ```{r, eval = FALSE}
 # Delete any existing version of estpars.dat
@@ -629,7 +621,7 @@ if (file.exists("estpars.dat")) file.remove("estpars.dat")
 cat("inlog_r log_r inlogq log_q inlogK log_K inlog_sd_cpue log_sd_cpue objn", file = "estpars.dat", sep = "\n")
 ```
 
-This is what the "estpars.dat" file should look like:
+This is what the `estpars.dat` file should look like:
 
  
 
@@ -637,7 +629,7 @@ This is what the "estpars.dat" file should look like:
 
  
 
-Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (`nrun <- # number of iterations`). We will randomize a set of starting values for $r$, $q$, $K$, and $sd_{cpue}$ using the `rnorm()` function, and it will be randomized with a CV = 10% (you can test different CV/sd values, but make sure the value still make sense for the parameters):
+Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (`nrun <- # number of iterations`). We will randomize a set of starting values for $r$, $q$, $K$, and $sd_{cpue}$ using the `rnorm()` function, and it will be randomized with a CV = 10%:
 
 ```{r, eval = FALSE}
 # Define a set of starting values
@@ -677,7 +669,7 @@ These lines of code will automatically detect the system you are using (`Sys.inf
 
 ### Jitter test results
 
-Now we will read in the "estpars.dat" file, which should contain all the iterations of the jitter test with different starting values of each parameter:
+Now we will read in the `estpars.dat` file, which should contain all the iterations of the jitter test with different starting values of each parameter:
 
 ```{r, eval = FALSE}
 # read in and print results to console
@@ -695,15 +687,15 @@ When you look at the `jit_res` object, it should look like this:
 
 There are some things to look out for in the `jit_res` object:
 
--   The initial starting parameter values are different across the 50 iterations (`st_log_r`, `st_log_q`, `st_log_K`, and `st_log_sd_cpue)`
+-   The initial starting parameter values are different across the iterations
 
--   Make sure that the parameter estimates across the 50 iterations are the same (`log_r`, `log_q`, `log_K`, and `log_sd_cpue`) (note: there may be some rounding differences, but the estimates should not be significantly different)
+-   Make sure that the parameter estimates across the iterations are the same (note: there may be some rounding differences, but the estimates should not be significantly different)
 
--   The objective function (joint negative log likelihood in this tutorial) are the same across the 50 iterations (`objn`).
+-   The objective function (joint negative log likelihood in this tutorial) are the same across the iterations
 
  
 
-We can also visualize the jitter test using a box plot. The box plot will show if there are any odd shapes in the box plot or any outliers. A jitter test that passes a convergence check will show no odd shapes in the box plot (no quartiles) and will not have any outliers (as shown below):
+We can also visualize the jitter test using a box plot:
 
 ```{r, eval = FALSE}
 # boxplots - are there any weird shapes/outliers?
@@ -822,4 +814,4 @@ A failed jitter test is indicative that there is something wrong with the model:
 
  
 
-This should be done for every parameter. In this tutorial, the jitter test was not conducted on $F$ and $sd_{catch}$. However, to fully check the convergence of this model, the jitter test should also be conducted for $F$ and sensitivity analysis should be conducted on the impacts of fixing $sd_{catch}$.
+This should be done for every parameter. In this tutorial, the jitter test was not conducted on $F$. However, to fully check the convergence of this model, the jitter test should also be conducted for $F$.

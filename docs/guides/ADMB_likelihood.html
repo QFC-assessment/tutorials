@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Stock assessment tutorials - Jitter test in ADMB using R</title>
+<title>Stock assessment tutorials - Likelihood profiling in ADMB using R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -146,7 +146,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Jitter test in ADMB using R</h1>
+          <h1 class="quarto-secondary-nav-title">Likelihood profiling in ADMB using R</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -193,16 +193,16 @@ window.Quarto = {
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
  <span class="menu-text">ADMB</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../guides/ADMB_jitter.html" class="sidebar-item-text sidebar-link active">
+  <a href="../guides/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jitter test</span></a>
   </div>
 </li>
@@ -251,7 +251,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Jitter test in ADMB using R</h1>
+<h1 class="title d-none d-lg-block">Likelihood profiling in ADMB using R</h1>
 </div>
 
 
@@ -268,8 +268,6 @@ window.Quarto = {
 </header>
 
 
-<p>A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function.</p>
-<p>&nbsp;</p>
 <p>This tutorial will walk through how to conduct a jitter test in ADMB. The fastest way to run a jitter test in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some extra steps to set up your code in both ADMB and R.</p>
 <section id="admb2r.cpp-instructions" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="admb2r.cpp-instructions"><span class="header-section-number">1</span> admb2r.cpp instructions</h2>
@@ -281,14 +279,14 @@ window.Quarto = {
 <li><p>admb/include/contrib</p></li>
 </ul>
 <p>&nbsp;</p>
-<p>A copy of admb2r.cpp is <a href="https://github.com/admb-project/admb/blob/main/contrib/admb2r/admb2r.cpp">here</a>. Once this is done you do not need to add “admb2r.cpp” to every project folder.&nbsp;This has been tested on Linux Mint, Windows, and Mac.</p>
+<p>A copy of admb2r.cpp is <a href="https://github.com/admb-project/admb/blob/main/contrib/admb2r/admb2r.cpp">here</a>. Once this is done you will not need to add admb2r.cpp to every project folder.&nbsp;This has been tested on Linux Mint, Windows, and Mac.</p>
 </section>
 <section id="set-up-admb" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="set-up-admb"><span class="header-section-number">2</span> Set up ADMB</h2>
 <p>If possible, you should download the most recent ADMB version <a href="https://www.admb-project.org/">here</a>. This recent version will print out additional error messages and allow you to run additional functions (like <code>get_hessian()</code>).</p>
 <section id="surplus-production-model---.tpl-and-.dat-files" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="surplus-production-model---.tpl-and-.dat-files"><span class="header-section-number">2.1</span> Surplus production model - .tpl and .dat files</h3>
-<p>In this tutorial, we will look at a surplus production model. The .dat file name is called “surp_prod1.dat”. You can name the .tpl file anything, but in this tutorial, it will be called “surp_prod_jitter.tpl”.</p>
+<p>In this tutorial, we will look at a surplus production model. The .dat file name is called <code>surp_prod1.dat</code>. You can name the .tpl file anything, but in this tutorial, it will be called <code>surp_prod_jitter.tpl</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>DATA_SECTION</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -389,15 +387,15 @@ window.Quarto = {
 <span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    <span class="fu">close_r_matrix</span>();</span>
 <span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">close_r_file</span>();</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This tutorial will not go through the surplus production model in details, but the leading parameters are <span class="math inline">\(r\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(F\)</span>, and <span class="math inline">\(sd_{cpue}\)</span>. Note that there is a standard deviation for the catch observations, but that is fixed in this model (<span class="math inline">\(sd_{catch}\)</span> = 0.05) The objective function (<code>jnll</code>) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, both of which follow a log normal distribution.</p>
+<p>This tutorial will not go through the surplus production model in details, but the leading parameters are <span class="math inline">\(r\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(F\)</span>, and <span class="math inline">\(sd_{cpue}\)</span>. Note that there is a standard deviation for the catch observations, but that is fixed in this model (<span class="math inline">\(sd_{catch}\)</span> = 0.05) The objective function (<code>jnll</code>) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, which follow a log normal distribution.</p>
 <p>&nbsp;</p>
 <p>The default data file name is different than the .tpl file name. This is done using this command:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_com<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"surp_prod1.dat"</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The data will be read from “surp_prod1.dat”. This is useful when you have many variants of the model that use the same data. This trick will be useful for the jitter test.</p>
+<p>The data will be read from <code>surp_prod1.dat</code>. This is useful when you have many variants of the model that use the same data. This trick will be useful for the jitter test.</p>
 <p>&nbsp;</p>
-<p>You can copy and paste the data “surp_prod1.dat” here:</p>
+<p>You can copy and paste the <code>surp_prod1.dat</code> here:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first year</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1965</span></span>
@@ -474,9 +472,9 @@ window.Quarto = {
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_sd_cpue.dat"</span>);</span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  init_number inlog_sd_cpue;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This is similar to the previous command, but here the <code>!! ad_com::change_datafile_name("log_r.dat")</code> command is reading parameter values (<code>inlog_r</code>, <code>inlog_q</code>, <code>inlog_K</code>, <code>inlog_sd_cpue</code>) from separate .dat files. This will be important in the R script as you can rewrite this .dat file to produce different starting values that will be read in ADMB one at a time. Note that the parameter name that is being read in (e.g., <code>inlog_r</code>) should be different than the one in the PARAMETER_SECTION (the ones being used in the estimation; e.g., <code>log_r</code>).</p>
+<p>This is similar to the previous command, but here the <code>!! ad_com::change_datafile_name("param_name.dat")</code> command is reading parameter values (<code>param_name</code>) from separate .dat files. This will be important in the R script as you can rewrite this .dat file in R to produce multiple starting values that will be read in ADMB. Note that the parameter name that is being read in should be different than the one in the PARAMETER_SECTION (the ones being used in the estimation).</p>
 <p>&nbsp;</p>
-<p>The entire DATA_SECTION will look like this:</p>
+<p>The DATA_SECTION will look like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>DATA_SECTION</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_r.dat"</span>);</span>
@@ -500,16 +498,16 @@ window.Quarto = {
 </section>
 <section id="parameter_section" class="level3" data-number="2.3">
 <h3 data-number="2.3" class="anchored" data-anchor-id="parameter_section"><span class="header-section-number">2.3</span> PARAMETER_SECTION</h3>
-<p>In this section, we will be overriding the starting parameter values declared in the INITIALIZATION_SECTION. This is why the parameter names above (e.g., <code>inlog_r</code>) needs to be different than the ones (e.g., <code>log_r</code>) being declared.</p>
+<p>In this section, we will be overriding the starting parameter values declared in the INITIALIZATION_SECTION. This is why the parameter names above (<code>inparam_name</code>) needs to be different than the ones (<code>param_name</code>) being declared.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> log_r <span class="ot">=</span> inlog_r;</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> log_K <span class="ot">=</span> inlog_K;</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> log_q <span class="ot">=</span> inlog_q;</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> log_sd_cpue <span class="ot">=</span> inlog_sd_cpue;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This will now read what was stored in the respective .dat files as the starting value of the parameter.</p>
+<p>This will now read what was stored in the respective .dat files as the starting value of the parameter, which will be created in R.</p>
 <p>&nbsp;</p>
-<p>The entire PARAMETER_SECTION will look like this:</p>
+<p>For the surplus production model, it will look like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>PARAMETER_SECTION</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -542,7 +540,7 @@ window.Quarto = {
 </section>
 <section id="initialization_section" class="level3" data-number="2.4">
 <h3 data-number="2.4" class="anchored" data-anchor-id="initialization_section"><span class="header-section-number">2.4</span> INITIALIZATION_SECTION</h3>
-<p>This section should either be commented out or empty as the .dat file for each parameters will override the starting value for that parameter. This is important for the jitter test to work. It will look like this for the surplus production model:</p>
+<p>This section should either be commented out or empty as the <code>param_name.dat</code> file will override the starting value for that parameter. This is important for the jitter test to work. It will look like this for the surplus production model:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>INITIALIZATION_SECTION</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -552,7 +550,7 @@ window.Quarto = {
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a> <span class="sc">/</span><span class="er">/</span> log_sd_cpue <span class="sc">-</span><span class="dv">1</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a> log_F <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The next sections (PROCEDURE_SECTION, GLOBALS_SECTION, and REPORT_SECTION) should be the same as the original model.</p>
+<p>The next few sections (<code>PROCEDURE_SECTION</code>, <code>GLOBALS_SECTION</code>, and <code>REPORT_SECTION</code>) should be the same as the original model.</p>
 </section>
 <section id="final_section" class="level3" data-number="2.5">
 <h3 data-number="2.5" class="anchored" data-anchor-id="final_section"><span class="header-section-number">2.5</span> FINAL_SECTION</h3>
@@ -562,9 +560,9 @@ window.Quarto = {
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    myout<span class="sc">&lt;</span><span class="er">&lt;</span> inlog_r <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_r <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> inlog_q <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_q <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> inlog_K <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_K <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> inlog_sd_cpue <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_sd_cpue <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> jnll <span class="sc">&lt;</span><span class="er">&lt;</span> endl;</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">myout.close</span>();</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The “estpars.dat” file will eventually contain all the input starting values from R, estimated parameters from ADMB, and the objective function from ADMB. This is important as it will contain all the iterations and results of the jitter test and will be read into R as a table.</p>
+<p>The <code>estpars.dat</code> file will eventually contain all the input starting values from R (<code>inparam_name</code>), estimated parameters from ADMB (<code>param_name</code>), and the objective function (<code>objective_function</code>) from ADMB. This is important as it will contain all the iterations and results of the jitter test and will be read into R as a table.</p>
 <p>&nbsp;</p>
-<p>The entire FINAL_SECTION will look like this:</p>
+<p>The <code>FINAL_SECTION</code> will look like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>FINAL_SECTION</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -582,7 +580,7 @@ window.Quarto = {
 </section>
 <section id="entire-admb-example-of-the-surplus-production-model" class="level3" data-number="2.6">
 <h3 data-number="2.6" class="anchored" data-anchor-id="entire-admb-example-of-the-surplus-production-model"><span class="header-section-number">2.6</span> Entire ADMB example of the surplus production model</h3>
-<p>Here is the entire ADMB script for an example of conducting a jitter test with the surplus production model:</p>
+<p>Here is the entire ADMB script for an example of conducting a jitter test with the surplus production model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DATA_SECTION</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -759,13 +757,13 @@ window.Quarto = {
 </section>
 <section id="compile-and-run-admb-in-r" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="compile-and-run-admb-in-r"><span class="header-section-number">3.3</span> Compile and run ADMB in R</h3>
-<p>The R helper functions (“base_funs.r”) has a function “compile_admb.r” which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called “surp_prod_jitter”.</p>
+<p>The R helper functions (<code>base_funs.r</code>) has a function (<code>compile_admb.r</code>), which will compile ADMB using a R command. The .tpl name in this tutorial is called “surp_prod_jitter”.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"surp_prod_jitter"</span> <span class="co"># name of the .tpl file</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We will include <code>verbose = TRUE</code>, which will print out the compile messages from ADMB in the R console (should be the same as running the ADMB command prompt):</p>
+<p>We will include <code>verbose=TRUE</code>, which will print out the compile messages from ADMB in the R console (should be the same as running the ADMB command prompt):</p>
 <p>&nbsp;</p>
 <p><img src="figs/compile_ADMB.png" class="img-fluid" width="1100"></p>
 <p>&nbsp;</p>
@@ -776,7 +774,7 @@ window.Quarto = {
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"8"</span>, <span class="at">file =</span> <span class="st">"log_K.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-1"</span>, <span class="at">file =</span> <span class="st">"log_sd_cpue.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This will create four .dat files (“log_r.dat”,“log_q_dat”, “log_K.dat”, and “log_sd_cpue.dat”). You should see this in your local directory:</p>
+<p>This will create four .dat files (<code>log_r.dat</code>,<code>log_q_dat</code>, <code>log_K.dat</code>, and <code>log_sd_cpue.dat</code>). You should see this in your local directory:</p>
 <p>&nbsp;</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -797,14 +795,12 @@ window.Quarto = {
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>What prints out in the R console should look exactly like what prints out in the ADMB command prompt:</p>
-<p>&nbsp;</p>
 <p><img src="figs/run_admb.png" class="img-fluid" width="840"></p>
-<p>&nbsp;</p>
-<p>This should produce a model result of the surplus production model (check the “.par” file).</p>
+<p>This should produce a result of the surplus production model (check the “.par” file).</p>
 </section>
 <section id="set-up-the-jitter-test" class="level3" data-number="3.4">
 <h3 data-number="3.4" class="anchored" data-anchor-id="set-up-the-jitter-test"><span class="header-section-number">3.4</span> Set up the jitter test</h3>
-<p>Next, we will create an object called <code>dat</code>, which will show what is being read into “estpars.dat”. This <code>dat</code> object is just a check to make sure the file contains the correct values (initial starting values from R, parameter estimates from ADMB, and the objective function from ADMB).</p>
+<p>Next, we will create an object called <code>dat</code>, which will show what is being read into <code>estpars.dat</code>. This <code>dat</code> object is just a check to make sure the file contains the correct values (initial starting values from R, parameter estimates from ADMB, and the objective function from ADMB).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) {</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>)</span>
@@ -814,7 +810,7 @@ window.Quarto = {
 <p>&nbsp;</p>
 <p><img src="figs/dat.png" class="img-fluid" width="870"></p>
 <p>&nbsp;</p>
-<p>We will then delete “estpars.dat” as this contains the first run of the surplus production model. We will also create a replacement file (same name - “estpars.dat”) that will have the same column names as <code>dat</code> object in R (and the same as the ones created in the FINAL_SECTION of ADMB). We will use the “estpars.dat” file to store each iteration of the jitter test:</p>
+<p>We will then delete <code>estpars.dat</code> as this contains the initial run of the surplus production model. We will also create a replacement file that will have the same column names as <code>dat</code> object in R (and the same as the one created in the <code>FINAL_SECTION</code> of ADMB). We will use the <code>estpars.dat</code> file to store each iteration of the jitter test:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Delete any existing version of estpars.dat</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
@@ -823,11 +819,11 @@ window.Quarto = {
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># sep ["\n" needed for line feed]</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"inlog_r log_r inlogq log_q inlogK log_K inlog_sd_cpue log_sd_cpue objn"</span>, <span class="at">file =</span> <span class="st">"estpars.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This is what the “estpars.dat” file should look like:</p>
+<p>This is what the <code>estpars.dat</code> file should look like:</p>
 <p>&nbsp;</p>
 <p><img src="figs/estpars.png" class="img-fluid" width="790"></p>
 <p>&nbsp;</p>
-<p>Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (<code>nrun &lt;- # number of iterations</code>). We will randomize a set of starting values for <span class="math inline">\(r\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(sd_{cpue}\)</span> using the <code>rnorm()</code> function, and it will be randomized with a CV = 10% (you can test different CV/sd values, but make sure the value still make sense for the parameters):</p>
+<p>Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (<code>nrun &lt;- # number of iterations</code>). We will randomize a set of starting values for <span class="math inline">\(r\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(sd_{cpue}\)</span> using the <code>rnorm()</code> function, and it will be randomized with a CV = 10%:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a set of starting values</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>nrun <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># number of reruns with new values</span></span>
@@ -859,7 +855,7 @@ window.Quarto = {
 </section>
 <section id="jitter-test-results" class="level3" data-number="3.5">
 <h3 data-number="3.5" class="anchored" data-anchor-id="jitter-test-results"><span class="header-section-number">3.5</span> Jitter test results</h3>
-<p>Now we will read in the “estpars.dat” file, which should contain all the iterations of the jitter test with different starting values of each parameter:</p>
+<p>Now we will read in the <code>estpars.dat</code> file, which should contain all the iterations of the jitter test with different starting values of each parameter:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in and print results to console</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>jit_res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>, <span class="at">header =</span> T)</span>
@@ -871,12 +867,12 @@ window.Quarto = {
 <p>&nbsp;</p>
 <p>There are some things to look out for in the <code>jit_res</code> object:</p>
 <ul>
-<li><p>The initial starting parameter values are different across the 50 iterations (<code>st_log_r</code>, <code>st_log_q</code>, <code>st_log_K</code>, and <code>st_log_sd_cpue)</code></p></li>
-<li><p>Make sure that the parameter estimates across the 50 iterations are the same (<code>log_r</code>, <code>log_q</code>, <code>log_K</code>, and <code>log_sd_cpue</code>) (note: there may be some rounding differences, but the estimates should not be significantly different)</p></li>
-<li><p>The objective function (joint negative log likelihood in this tutorial) are the same across the 50 iterations (<code>objn</code>).</p></li>
+<li><p>The initial starting parameter values are different across the iterations</p></li>
+<li><p>Make sure that the parameter estimates across the iterations are the same (note: there may be some rounding differences, but the estimates should not be significantly different)</p></li>
+<li><p>The objective function (joint negative log likelihood in this tutorial) are the same across the iterations</p></li>
 </ul>
 <p>&nbsp;</p>
-<p>We can also visualize the jitter test using a box plot. The box plot will show if there are any odd shapes in the box plot or any outliers. A jitter test that passes a convergence check will show no odd shapes in the box plot (no quartiles) and will not have any outliers (as shown below):</p>
+<p>We can also visualize the jitter test using a box plot:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># boxplots - are there any weird shapes/outliers?</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(jit_res[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">9</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -990,7 +986,7 @@ window.Quarto = {
 <li><p>Data is not informative enough to estimate the parameter</p></li>
 </ul>
 <p>&nbsp;</p>
-<p>This should be done for every parameter. In this tutorial, the jitter test was not conducted on <span class="math inline">\(F\)</span> and <span class="math inline">\(sd_{catch}\)</span>. However, to fully check the convergence of this model, the jitter test should also be conducted for <span class="math inline">\(F\)</span> and sensitivity analysis should be conducted on the impacts of fixing <span class="math inline">\(sd_{catch}\)</span>.</p>
+<p>This should be done for every parameter. In this tutorial, the jitter test was not conducted on <span class="math inline">\(F\)</span>. However, to fully check the convergence of this model, the jitter test should also be conducted for <span class="math inline">\(F\)</span>.</p>
 
 
 </section>
