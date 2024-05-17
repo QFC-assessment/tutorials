@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.552">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Likelihood profiling in ADMB using R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>mod=true;</script>
+<script src="https://qfcatmsu.github.io/assets/quarto/qfc_styles.js"></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="https://qfcatmsu.github.io/assets/quarto/qfc_styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Likelihood profiling in ADMB using R</h1>
+        </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Stock assessment tutorials</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../assessment/diagnostics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model convergence diagnostics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">ADMB</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../assessment/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jitter test</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Likelihood profile</span>
+  </li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#admb2r.cpp-instructions" id="toc-admb2r.cpp-instructions" class="nav-link active" data-scroll-target="#admb2r.cpp-instructions"><span class="header-section-number">1</span> admb2r.cpp instructions</a></li>
+  <li><a href="#set-up-admb" id="toc-set-up-admb" class="nav-link" data-scroll-target="#set-up-admb"><span class="header-section-number">2</span> Set up ADMB</a>
+  <ul class="collapse">
+  <li><a href="#surplus-production-model---.tpl-and-.dat-files" id="toc-surplus-production-model---.tpl-and-.dat-files" class="nav-link" data-scroll-target="#surplus-production-model---.tpl-and-.dat-files"><span class="header-section-number">2.1</span> Surplus production model - .tpl and .dat files</a></li>
+  <li><a href="#data_section" id="toc-data_section" class="nav-link" data-scroll-target="#data_section"><span class="header-section-number">2.2</span> DATA_SECTION</a></li>
+  <li><a href="#parameter_section" id="toc-parameter_section" class="nav-link" data-scroll-target="#parameter_section"><span class="header-section-number">2.3</span> PARAMETER_SECTION</a></li>
+  <li><a href="#initialization_section" id="toc-initialization_section" class="nav-link" data-scroll-target="#initialization_section"><span class="header-section-number">2.4</span> INITIALIZATION_SECTION</a></li>
+  <li><a href="#final_section" id="toc-final_section" class="nav-link" data-scroll-target="#final_section"><span class="header-section-number">2.5</span> FINAL_SECTION</a></li>
+  <li><a href="#entire-admb-example-of-the-surplus-production-model" id="toc-entire-admb-example-of-the-surplus-production-model" class="nav-link" data-scroll-target="#entire-admb-example-of-the-surplus-production-model"><span class="header-section-number">2.6</span> Entire ADMB example of the surplus production model</a></li>
+  </ul></li>
+  <li><a href="#set-up-r" id="toc-set-up-r" class="nav-link" data-scroll-target="#set-up-r"><span class="header-section-number">3</span> Set up R</a>
+  <ul class="collapse">
+  <li><a href="#add-admb-to-your-environment" id="toc-add-admb-to-your-environment" class="nav-link" data-scroll-target="#add-admb-to-your-environment"><span class="header-section-number">3.1</span> Add ADMB to your environment</a></li>
+  <li><a href="#r-helper-functions" id="toc-r-helper-functions" class="nav-link" data-scroll-target="#r-helper-functions"><span class="header-section-number">3.2</span> R helper functions</a></li>
+  <li><a href="#compile-and-run-admb-in-r" id="toc-compile-and-run-admb-in-r" class="nav-link" data-scroll-target="#compile-and-run-admb-in-r"><span class="header-section-number">3.3</span> Compile and run ADMB in R</a></li>
+  <li><a href="#set-up-the-likelihood-profile" id="toc-set-up-the-likelihood-profile" class="nav-link" data-scroll-target="#set-up-the-likelihood-profile"><span class="header-section-number">3.4</span> Set up the likelihood profile</a></li>
+  <li><a href="#likelihood-profile-results" id="toc-likelihood-profile-results" class="nav-link" data-scroll-target="#likelihood-profile-results"><span class="header-section-number">3.5</span> Likelihood profile results</a></li>
+  <li><a href="#entire-r-script-for-the-likelihood-profile-of-the-surplus-production-model" id="toc-entire-r-script-for-the-likelihood-profile-of-the-surplus-production-model" class="nav-link" data-scroll-target="#entire-r-script-for-the-likelihood-profile-of-the-surplus-production-model"><span class="header-section-number">3.6</span> Entire R script for the likelihood profile of the surplus production model</a></li>
+  </ul></li>
+  <li><a href="#likelihood-profile-interpretation" id="toc-likelihood-profile-interpretation" class="nav-link" data-scroll-target="#likelihood-profile-interpretation"><span class="header-section-number">4</span> Likelihood profile interpretation</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Likelihood profiling in ADMB using R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>A likelihood profile will show how the objective function changes as one of the parameters is fixed across a range of values while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. This does not need to be conducted on all model parameters, but this should be done on important leading parameters at minimum.</p>
+<p>&nbsp;</p>
+<p>This tutorial will walk through how to conduct a likelihood profile with ADMB models. The fastest way to run a likelihood in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some extra steps to set up your code in both ADMB and R.</p>
+<section id="admb2r.cpp-instructions" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="admb2r.cpp-instructions"><span class="header-section-number">1</span> admb2r.cpp instructions</h2>
+<p>This tutorial requires this package called “admb2r”. This is a collection of AD Model Builder routines for saving complex data structures into a file that can be read into R. This cannot be automatically downloaded in the newer ADMB versions. You can keep a “admb2r.cpp” file where your .tpl and .dat files are, however that requires copying and pasting it every time you want to run a ADMB model.</p>
+<p>&nbsp;</p>
+<p>These are instructions for using admb2r.cpp permanently. Copy admb2r.cpp to both the following folders:</p>
+<ul>
+<li><p>admb/include</p></li>
+<li><p>admb/include/contrib</p></li>
+</ul>
+<p>&nbsp;</p>
+<p>A copy of admb2r.cpp is <a href="https://github.com/admb-project/admb/blob/main/contrib/admb2r/admb2r.cpp">here</a>. Once this is done you will not need to add admb2r.cpp to every project folder.&nbsp;This has been tested on Linux Mint, Windows, and Mac.</p>
+</section>
+<section id="set-up-admb" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="set-up-admb"><span class="header-section-number">2</span> Set up ADMB</h2>
+<p>If possible, you should download the most recent ADMB version <a href="https://www.admb-project.org/">here</a>. This recent version will print out additional error messages and allow you to run additional functions (like <code>get_hessian()</code>).</p>
+<section id="surplus-production-model---.tpl-and-.dat-files" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="surplus-production-model---.tpl-and-.dat-files"><span class="header-section-number">2.1</span> Surplus production model - .tpl and .dat files</h3>
+<p>In this tutorial, we will look at a surplus production model. The .dat file name is called <code>surp_prod1.dat</code>. You can name the .tpl file anything, but in this tutorial, it will be called <code>surp_prod_jitter.tpl</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>DATA_SECTION</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"surp_prod1.dat"</span>);</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> init_int fyear;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> init_int lyear;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">cat</span>(fyear,lyear);</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">cpue</span>(fyear,lyear);</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>PARAMETER_SECTION</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a> init_number log_r;</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a> init_number log_q;</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a> init_number log_K;</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a> init_number log_sd_cpue;</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">log_F</span>(fyear,lyear);</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a> number r;</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a> number q;</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a> number K;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a> number sd_cat;</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a> number sd_cpue;</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">bio</span>(fyear,lyear<span class="sc">+</span><span class="dv">1</span>);</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">cat_hat</span>(fyear,lyear);</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">cpue_hat</span>(fyear,lyear);</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">expl_out</span>(fyear,lyear);</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">F</span>(fyear,lyear);</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a> objective_function_value jnll;</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>INITIALIZATION_SECTION</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a> log_r <span class="sc">-</span><span class="fl">0.6</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a> log_q <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a> log_K <span class="fl">8.5</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a> log_sd_cpue <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a> log_F <span class="dv">1</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>PROCEDURE_SECTION</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a> int t;</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a> dvariable expl;</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a> <span class="sc">/</span><span class="er">/</span> Convert from log to normal space</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a> r <span class="ot">=</span> <span class="fu">mfexp</span>(log_r);</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a> q <span class="ot">=</span> <span class="fu">mfexp</span>(log_q);</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a> K <span class="ot">=</span> <span class="fu">mfexp</span>(log_K);</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a> F <span class="ot">=</span> <span class="fu">mfexp</span>(log_F);</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a> sd_cat <span class="ot">=</span> <span class="fl">0.05</span>;</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a> sd_cpue <span class="ot">=</span> <span class="fu">mfexp</span>(log_sd_cpue);</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a> <span class="sc">/</span><span class="er">/</span> Project the model forward</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a> <span class="fu">bio</span>(fyear) <span class="ot">=</span> K;</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span> (<span class="at">t=</span>fyear; t<span class="sc">&lt;=</span>lyear; t<span class="sc">++</span>) {</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>   expl <span class="ot">=</span> <span class="fl">1.0</span><span class="sc">/</span>(<span class="fl">1.0</span><span class="sc">+</span><span class="fu">F</span>(t));</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>   <span class="fu">bio</span>(t<span class="sc">+</span><span class="dv">1</span>) <span class="ot">=</span> <span class="fu">bio</span>(t) <span class="sc">+</span> r<span class="sc">*</span><span class="fu">bio</span>(t)<span class="sc">*</span>(<span class="fl">1.0</span><span class="sc">-</span><span class="fu">bio</span>(t)<span class="sc">/</span>K) <span class="sc">-</span> expl<span class="sc">*</span><span class="fu">bio</span>(t);</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>   <span class="fu">cat_hat</span>(t) <span class="ot">=</span> expl <span class="sc">*</span> <span class="fu">bio</span>(t);</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>   <span class="fu">expl_out</span>(t) <span class="ot">=</span> expl;</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>   <span class="fu">cpue_hat</span>(t) <span class="ot">=</span> q <span class="sc">*</span> <span class="fu">bio</span>(t);</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>  } </span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a> <span class="sc">/</span><span class="er">/</span> Compute the likelihoods  </span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a> jnll <span class="ot">=</span> <span class="dv">0</span>;</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span> (<span class="at">t=</span>fyear; t<span class="sc">&lt;=</span>lyear; t<span class="sc">++</span>) {</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>  jnll <span class="sc">+</span><span class="er">=</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">square</span>(<span class="fu">log</span>(<span class="fu">cat</span>(t)<span class="sc">/</span><span class="fu">cat_hat</span>(t)) <span class="sc">/</span> sd_cat) <span class="sc">+</span> <span class="fu">log</span>(sd_cat);</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>  jnll <span class="sc">+</span><span class="er">=</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">square</span>(<span class="fu">log</span>(<span class="fu">cpue</span>(t)<span class="sc">/</span><span class="fu">cpue_hat</span>(t)) <span class="sc">/</span> sd_cpue) <span class="sc">+</span> <span class="fu">log</span>(sd_cpue);</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>GLOBALS_SECTION</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>  <span class="co">#include &lt;admodel.h&gt;</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>  <span class="co">#include &lt;admb2r.cpp&gt;</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>REPORT_SECTION</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a> <span class="fu">open_r_file</span>(<span class="st">"out.rdat"</span>, <span class="dv">6</span>, <span class="sc">-</span><span class="dv">999</span>);</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"obs_cat"</span>, cat);</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"obs_cpue"</span>, cpue);</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"est_bio"</span>, bio);</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"est_cat"</span>, cat_hat);</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"est_cpue"</span>, cpue_hat);</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"est_expl"</span>, expl_out);</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_item</span>(<span class="st">"jnll"</span>, jnll);</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a> <span class="fu">close_r_file</span>();</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>FINAL_SECTION</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span> extract Hessian matrix</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">open_r_file</span>(<span class="st">"hessian.rdat"</span>);</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    <span class="fu">open_r_matrix</span>(<span class="st">"hessian"</span>);</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>      <span class="fu">wrt_r_matrix</span>(<span class="fu">get_hessian</span>(),<span class="dv">1</span>,<span class="dv">1</span>);</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    <span class="fu">close_r_matrix</span>();</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">close_r_file</span>();</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This tutorial will not go through the surplus production model in details, but the leading parameters are <span class="math inline">\(r\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(F\)</span>, and <span class="math inline">\(sd_{cpue}\)</span>. Note that there is a standard deviation for the catch observations, but that is fixed in this model (<span class="math inline">\(sd_{catch}\)</span> = 0.05) The objective function (<code>jnll</code>) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, which follow a log normal distribution.</p>
+<p>&nbsp;</p>
+<p>The default data file name is different than the .tpl file name. This is done using this command:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_com<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"surp_prod1.dat"</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data will be read from <code>surp_prod1.dat</code>. This is useful when you have many variants of the model that use the same data. This trick will be useful for the jitter test.</p>
+<p>&nbsp;</p>
+<p>You can copy and paste the <code>surp_prod1.dat</code> here:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first year</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1965</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># last year</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1988</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Catch</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fl">93.51</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fl">212.444</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fl">195.032</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fl">382.712</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fl">320.43</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fl">402.467</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fl">365.557</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fl">606.084</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fl">377.642</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fl">318.836</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fl">309.374</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fl">389.02</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="fl">276.901</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="fl">254.251</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fl">170.006</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fl">97.181</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fl">90.523</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="fl">176.532</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fl">216.181</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="fl">228.672</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="fl">212.177</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fl">231.179</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="fl">136.942</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="dv">212</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Index</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="fl">1.78</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="fl">1.31</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="fl">0.91</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="fl">0.96</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="fl">0.88</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="fl">0.9</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="fl">0.87</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="fl">0.72</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="fl">0.57</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="fl">0.45</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="fl">0.42</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="fl">0.42</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="fl">0.49</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="fl">0.43</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="fl">0.4</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="fl">0.45</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="fl">0.55</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="fl">0.53</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="fl">0.58</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="fl">0.64</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="fl">0.66</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="fl">0.65</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="fl">0.61</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="fl">0.63</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data_section" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="data_section"><span class="header-section-number">2.2</span> DATA_SECTION</h3>
+<p>In the surplus production example, we will do a likelihood profile on <span class="math inline">\(r\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_r.dat"</span>);</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  init_number inlog_r;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is similar to the previous command, but here the <code>!! ad_com::change_datafile_name("log_r.dat")</code> command is reading the value of <span class="math inline">\(r\)</span> (<code>inlog_r</code>) from separate .dat files. This will be important in the R script as you can rewrite this .dat file to produce different starting values that will be read in ADMB one at a time. Note that the parameter name that is being read in (<code>inlog_r</code>) should be different than the one in the PARAMETER_SECTION (the ones being used in the estimation; <code>log_r</code>).</p>
+<p>&nbsp;</p>
+<p>The entire DATA_SECTION will look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>DATA_SECTION</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_r.dat"</span>);</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  init_number inlog_r;</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_K.dat"</span>);</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>   init_number inlog_K;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_q.dat"</span>);</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>   init_number inlog_q;</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_sd_cpue.dat"</span>);</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>   init_number inlog_sd_cpue;</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"surp_prod1.dat"</span>);</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a> init_int fyear;</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a> init_int lyear;</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">cat</span>(fyear,lyear);</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">cpue</span>(fyear,lyear);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that the code to read in other parameter values from a .dat file (<span class="math inline">\(K\)</span>, <span class="math inline">\(q\)</span>, and <span class="math inline">\(sd_{cpue}\)</span>) are commented out, but if you want to conduct a likelihood profile for those parameters, then those lines of code will need to be uncommented. However, you can only conduct a likelihood profile on one parameter at a time so be aware of which parameter is being read in here.</p>
+</section>
+<section id="parameter_section" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="parameter_section"><span class="header-section-number">2.3</span> PARAMETER_SECTION</h3>
+<p>In this section, we will be fixing <code>log_r</code> so that ADMB will not estimate it, but use the value that is being read in from the “log_r.dat” file. Usually, we would write <code>init_number log_r;</code> to estimate <code>log_r</code>, however this will be commented out:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>  init_number log_r; <span class="sc">/</span><span class="er">/</span> fixing log_r</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a> init_number log_q;</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> init_number log_K;</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a> init_number log_sd_cpue;</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">log_F</span>(fyear,lyear);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The other parameters (<span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(sd_{cpue}\)</span>, and <span class="math inline">\(F\)</span>) will still be estimated. We will also rewrite the starting parameter values declared in the INITIALIZATION_SECTION. This is why the parameter names above (<code>inlog_r</code>) needs to be different than the ones (<code>log_r</code>) being declared:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> log_r <span class="ot">=</span> inlog_r;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will now read what was stored in the respective .dat files as the starting value of the parameter.</p>
+<p>&nbsp;</p>
+<p>The entire PARAMETER_SECTION will look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>PARAMETER_SECTION</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>  init_number log_r;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a> init_number log_q;</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a> init_number log_K;</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a> init_number log_sd_cpue;</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">log_F</span>(fyear,lyear);</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a> number log_r; <span class="sc">/</span><span class="er">/</span> fixed parameter here</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a> number r;</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a> number q;</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a> number K;</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a> number sd_cat;</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a> number sd_cpue;</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">bio</span>(fyear,lyear<span class="sc">+</span><span class="dv">1</span>);</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">cat_hat</span>(fyear,lyear);</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">cpue_hat</span>(fyear,lyear);</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">expl_out</span>(fyear,lyear);</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">F</span>(fyear,lyear);</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a> objective_function_value jnll;</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> log_r <span class="ot">=</span> inlog_r;</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> log_K <span class="ot">=</span> inlog_K;</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> log_q <span class="ot">=</span> inlog_q;</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> log_sd_cpue <span class="ot">=</span> inlog_sd_cpue;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="initialization_section" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="initialization_section"><span class="header-section-number">2.4</span> INITIALIZATION_SECTION</h3>
+<p>The parameter you are profiling should not be in this section (either commented out or deleted) as the .dat file for each parameters will override the starting value for that parameter. This is important for the likelihood profile to work, so the entire INTIALIZATION_SECTION will look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>INITIALIZATION_SECTION</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>  log_r <span class="sc">-</span><span class="fl">0.6</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a> log_q <span class="sc">-</span><span class="dv">9</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a> log_K <span class="fl">8.5</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a> log_F <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The next sections (PROCEDURE_SECTION, GLOBALS_SECTION, and REPORT_SECTION) should be the same as the original model.</p>
+</section>
+<section id="final_section" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="final_section"><span class="header-section-number">2.5</span> FINAL_SECTION</h3>
+<p>In the final section, you will need to add a command to define an output file stream, write the output, and close the output file. This is using the functionality of “admb2r”. The entire FINAL_SECTION will look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>FINAL_SECTION</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  ofstream <span class="fu">myout</span>(<span class="st">"estpars.dat"</span>,ios<span class="sc">::</span>app);</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    myout<span class="sc">&lt;</span><span class="er">&lt;</span> inlog_r <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_r <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_q <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_K <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> jnll <span class="sc">&lt;</span><span class="er">&lt;</span> endl;</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">myout.close</span>();</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The “estpars.dat” file will eventually contain all the starting values of <span class="math inline">\(r\)</span> from R, estimated parameters from ADMB, and the objective function from ADMB. This is important as it will contain all the iterations and results of the jitter test and will be read into R as a table. Note that the value of <code>inlog_r</code> should be the same as <code>log_r</code> as <span class="math inline">\(r\)</span> is being fixed in the model.</p>
+</section>
+<section id="entire-admb-example-of-the-surplus-production-model" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="entire-admb-example-of-the-surplus-production-model"><span class="header-section-number">2.6</span> Entire ADMB example of the surplus production model</h3>
+<p>Here is the entire ADMB script for an example of conducting a likelihood profile with the surplus production model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DATA_SECTION</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_r.dat"</span>);</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  init_number inlog_r;</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_K.dat"</span>);</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>   init_number inlog_K;</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_q.dat"</span>);</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>   init_number inlog_q;</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"log_sd_cpue.dat"</span>);</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>   init_number inlog_sd_cpue;</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> ad_comm<span class="sc">::</span><span class="fu">change_datafile_name</span>(<span class="st">"surp_prod1.dat"</span>);</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a> init_int fyear;</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a> init_int lyear;</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">cat</span>(fyear,lyear);</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">cpue</span>(fyear,lyear);</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>PARAMETER_SECTION</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>  init_number log_r;</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a> init_number log_q;</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a> init_number log_K;</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a> init_number log_sd_cpue;</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a> init_vector <span class="fu">log_F</span>(fyear,lyear);</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a> number log_r; <span class="sc">/</span><span class="er">/</span> fixed parameter here</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a> number r;</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a> number q;</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a> number K;</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a> number sd_cat;</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a> number sd_cpue;</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">bio</span>(fyear,lyear<span class="sc">+</span><span class="dv">1</span>);</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">cat_hat</span>(fyear,lyear);</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">cpue_hat</span>(fyear,lyear);</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">expl_out</span>(fyear,lyear);</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a> vector <span class="fu">F</span>(fyear,lyear);</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a> objective_function_value jnll;</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="sc">!!</span> log_r <span class="ot">=</span> inlog_r;</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> log_K <span class="ot">=</span> inlog_K;</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> log_q <span class="ot">=</span> inlog_q;</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> <span class="sc">!!</span> log_sd_cpue <span class="ot">=</span> inlog_sd_cpue;</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>INITIALIZATION_SECTION</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span>  log_r <span class="sc">-</span><span class="fl">0.6</span></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a> log_q <span class="sc">-</span><span class="dv">9</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a> log_K <span class="fl">8.5</span> </span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a> log_F <span class="dv">1</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>PROCEDURE_SECTION</span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a> int t;</span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a> dvariable expl;</span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a> dvariable sum_sq;</span>
+<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a> <span class="sc">/</span><span class="er">/</span> Convert from log to normal space</span>
+<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a> r <span class="ot">=</span> <span class="fu">mfexp</span>(log_r);</span>
+<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a> q <span class="ot">=</span> <span class="fu">mfexp</span>(log_q);</span>
+<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a> K <span class="ot">=</span> <span class="fu">mfexp</span>(log_K);</span>
+<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a> F <span class="ot">=</span> <span class="fu">mfexp</span>(log_F);</span>
+<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a> sd_cat <span class="ot">=</span> <span class="fl">0.05</span>;</span>
+<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a> sd_cpue <span class="ot">=</span> <span class="fu">mfexp</span>(log_sd_cpue);</span>
+<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a> <span class="sc">/</span><span class="er">/</span> Project the model forward</span>
+<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a> <span class="fu">bio</span>(fyear) <span class="ot">=</span> K;</span>
+<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span> (<span class="at">t=</span>fyear; t<span class="sc">&lt;=</span>lyear; t<span class="sc">++</span>) {</span>
+<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a>   expl <span class="ot">=</span> <span class="fl">1.0</span><span class="sc">/</span>(<span class="fl">1.0</span><span class="sc">+</span><span class="fu">F</span>(t));</span>
+<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>   <span class="fu">bio</span>(t<span class="sc">+</span><span class="dv">1</span>) <span class="ot">=</span> <span class="fu">bio</span>(t) <span class="sc">+</span> r<span class="sc">*</span><span class="fu">bio</span>(t)<span class="sc">*</span>(<span class="fl">1.0</span><span class="sc">-</span><span class="fu">bio</span>(t)<span class="sc">/</span>K) <span class="sc">-</span> expl<span class="sc">*</span><span class="fu">bio</span>(t);</span>
+<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a>   <span class="fu">cat_hat</span>(t) <span class="ot">=</span> expl <span class="sc">*</span> <span class="fu">bio</span>(t);</span>
+<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>   <span class="fu">expl_out</span>(t) <span class="ot">=</span> expl;</span>
+<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a>   <span class="fu">cpue_hat</span>(t) <span class="ot">=</span> q <span class="sc">*</span> <span class="fu">bio</span>(t);</span>
+<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a>  } </span>
+<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a> <span class="sc">/</span><span class="er">/</span> Compute the likelihoods  </span>
+<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a> jnll <span class="ot">=</span> <span class="dv">0</span>;</span>
+<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span> (<span class="at">t=</span>fyear; t<span class="sc">&lt;=</span>lyear; t<span class="sc">++</span>) {</span>
+<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>  jnll <span class="sc">+</span><span class="er">=</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">square</span>(<span class="fu">log</span>(<span class="fu">cat</span>(t)<span class="sc">/</span><span class="fu">cat_hat</span>(t)) <span class="sc">/</span> sd_cat) <span class="sc">+</span> <span class="fu">log</span>(sd_cat);</span>
+<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>  jnll <span class="sc">+</span><span class="er">=</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">square</span>(<span class="fu">log</span>(<span class="fu">cpue</span>(t)<span class="sc">/</span><span class="fu">cpue_hat</span>(t)) <span class="sc">/</span> sd_cpue) <span class="sc">+</span> <span class="fu">log</span>(sd_cpue);</span>
+<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a>GLOBALS_SECTION</span>
+<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a>  <span class="co">#include &lt;admodel.h&gt;</span></span>
+<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a>  <span class="co">#include &lt;admb2r.cpp&gt;</span></span>
+<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>REPORT_SECTION</span>
+<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a> <span class="fu">open_r_file</span>(<span class="st">"out.rdat"</span>, <span class="dv">6</span>, <span class="sc">-</span><span class="dv">999</span>);</span>
+<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"obs_cat"</span>, cat);</span>
+<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"obs_cpue"</span>, cpue);</span>
+<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"est_bio"</span>, bio);</span>
+<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"est_cat"</span>, cat_hat);</span>
+<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"est_cpue"</span>, cpue_hat);</span>
+<span id="cb11-106"><a href="#cb11-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_complete_vector</span>(<span class="st">"est_expl"</span>, expl_out);</span>
+<span id="cb11-107"><a href="#cb11-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrt_r_item</span>(<span class="st">"jnll"</span>, jnll);</span>
+<span id="cb11-108"><a href="#cb11-108" aria-hidden="true" tabindex="-1"></a> <span class="fu">close_r_file</span>();</span>
+<span id="cb11-109"><a href="#cb11-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a>FINAL_SECTION</span>
+<span id="cb11-112"><a href="#cb11-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-113"><a href="#cb11-113" aria-hidden="true" tabindex="-1"></a>  ofstream <span class="fu">myout</span>(<span class="st">"estpars.dat"</span>,ios<span class="sc">::</span>app);</span>
+<span id="cb11-114"><a href="#cb11-114" aria-hidden="true" tabindex="-1"></a>    myout<span class="sc">&lt;</span><span class="er">&lt;</span> inlog_r <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_r <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_q <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> log_K <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> jnll <span class="sc">&lt;</span><span class="er">&lt;</span> endl;</span>
+<span id="cb11-115"><a href="#cb11-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">myout.close</span>();</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The next step is to set up a R script to run the likelihood profile.</p>
+</section>
+</section>
+<section id="set-up-r" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="set-up-r"><span class="header-section-number">3</span> Set up R</h2>
+<section id="add-admb-to-your-environment" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="add-admb-to-your-environment"><span class="header-section-number">3.1</span> Add ADMB to your environment</h3>
+<p>The R script should work on all computer environments (Windows, Mac, Linux) as long as ADMB is properly setup. These are the instructions for each system:</p>
+<p>&nbsp;</p>
+<p>Linux Mint (probably most other Linux):</p>
+<ul>
+<li>add this line to the end of .profile in Home directory:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span>~/admb:<span class="va">$PATH</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+<p>Mac</p>
+<ul>
+<li>add this line right before “export PATH” at end of .zprofile in Home directory:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="va">PATH</span><span class="op">=</span><span class="st">"~/admb:</span><span class="va">${PATH}</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+<p>Windows:</p>
+<ul>
+<li>In System Environment Variables, add <code>C:\ADMB-13.2\\bin</code> to Path</li>
+</ul>
+</section>
+<section id="r-helper-functions" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="r-helper-functions"><span class="header-section-number">3.2</span> R helper functions</h3>
+<p>You will need these helper files to run ADMB through R:</p>
+<ul>
+<li><p><a href="https://github.com/lidach/addtools/blob/main/R/clean_admb.r">base_funs.r</a> - this contains three functions to read and compile a ADMB executable and run the ADMB model</p>
+<ul>
+<li><p><code>compile_admb()</code></p></li>
+<li><p><code>read_admb()</code></p></li>
+<li><p><code>run_admb()</code></p></li>
+</ul></li>
+<li><p><a href="https://github.com/lidach/addtools/blob/main/R/clean_admb.r">clean_admb.r</a> - after you are done running your model, this will clean all the additional ADMB files in your directory.</p></li>
+</ul>
+<p>&nbsp;</p>
+<p>You can also run this in R to download these files directly to your local directory:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">"https://raw.githubusercontent.com/lidach/addtools/main/R/base_funs.r"</span>, <span class="at">destfile =</span> <span class="st">"base_funs.r"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">"https://raw.githubusercontent.com/lidach/addtools/main/R/clean_admb.r"</span>, <span class="at">destfile =</span> <span class="st">"clean_admb.r"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+<p>These helper functions will be loaded in R using the <code>source()</code> function (make sure these are in the same directory as the .tpl and .dat files):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"base_funs.r"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"clean_admb.r"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="compile-and-run-admb-in-r" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="compile-and-run-admb-in-r"><span class="header-section-number">3.3</span> Compile and run ADMB in R</h3>
+<p>The R helper functions (<code>base_funs.r</code>) has a function (<code>compile_admb.r</code>), which will compile ADMB using a R command. The .tpl name in this tutorial is called “surp_prod_lp”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"3_surp_prod_lp"</span> <span class="co"># name of the .tpl file</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We will include <code>verbose=TRUE</code>, which will print out the compile messages from ADMB in the R console (should be the same as running the ADMB command prompt):</p>
+<pre data-tab="Console"><code>&gt; compile_admb(fn = tpl_name, verbose = TRUE)
+compiling with args: '  ' ...
+compile output:
+  *** Parse: 3_surp_prod_lp.tpl xxglobal.tmp xxhtop.tmp header.tmp xxalloc.tmp xxtopm.tmp
+  1 file(s) copied. tpl2cpp   3_surp_prod_lp  *** Compile: 3_surp_prod_lp.cpp g++ -c 
+-std=c++17 -O2 -D_FILE_OFFSET_BITS=64 -DUSE_ADMB_CONTRIBS -D_USE_MATH_DEFINES -I. -I"c
+:\ADMB-13.1\include" -I"c:\ADMB-13.1\include\contrib" -o 3_surp_prod_lp.obj 3_surp_prod_lp
+.cpp  *** Linking: 3_surp_prod_lp.obj  g++ -static -o 3_surp_prod_lp.exe 3_surp_prod_lp.obj
+"c:\ADMB-13.1\lib\libadmb-contrib-mingw64-g++12.a"  Successfully built '3_surp_prod_lp.exe'. 
+compile log:</code></pre>
+<p>Next we will create new .dat files, which will contain the starting parameter values that will be read into ADMB.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-0.994883"</span>, <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will create one .dat files (“log_r.dat”). You should see this in your local directory:</p>
+<p>&nbsp;</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/dat_files_lp.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
+</figure>
+</div>
+<p>&nbsp;</p>
+<p>The .dat files should contain each initial value that is specified (open each file and check):</p>
+<ul>
+<li><code>-0.994883</code> for <code>log_r</code></li>
+</ul>
+<p>&nbsp;</p>
+<p>Next, we will run the ADMB model using the command <code>run_admb()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What prints out in the R console should look exactly like what prints out in the ADMB command prompt:</p>
+<pre data-tab="Console"><code>&gt; run_admb(fn = tpl_name, verbose = TRUE)
+running compiled executable with args: '  '...
+Run output:
+
+
+
+
+Starting optimization of '3_surp_prod_lp' in phase 1 of 1 at Fri May 17 13:55:16 2024
+phase= 1 | nvar= 27 | iter=  0 | nll=4.33e+03 | mag=7.29e+03 | par[  2]=log_K
+phase= 1 | nvar= 27 | iter= 20 | nll=-7.16e+01 | mag=7.39e+01 | par[  2]=log_K
+phase= 1 | nvar= 27 | iter= 40 | nll=-8.78e+01 | mag=1.13e+02 | par[  2]=log_K
+phase= 1 | nvar= 27 | iter= 59 | nll=-1.10e+02 | mag=3.83e-05 | par[  1]=log_q
+Optimization completed after 0.002 s with final statistics:
+  nll=-110.045262 | mag=3.83214e-05 | par[  1]=log_q
+
+Calculating Hessian (27 variables): 20%, 40%, 60%, 80%, 100% done (0.002 s) 
+Inverting Hessian (27 variables): 20%, 40%, 60%, 80%, 100% done (0.018 s) 
+Starting standard error calculations...  done (0.013 s) 
+
+Finished running model '3_surp_prod_lp' after 0.04 s.</code></pre>
+<p>This should produce a model result of the surplus production model (check the “.par” file).</p>
+</section>
+<section id="set-up-the-likelihood-profile" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="set-up-the-likelihood-profile"><span class="header-section-number">3.4</span> Set up the likelihood profile</h3>
+<p>Next, we will create an object called <code>dat</code>, which will show what is being read into “estpars.dat”. This <code>dat</code> object is just a check to make sure the file contains the correct values (initial starting values from R, parameter estimates from ADMB, and the objective function from ADMB).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"inlog_r"</span>, <span class="st">"log_r"</span>, <span class="st">"log_q"</span>, <span class="st">"log_K"</span>, <span class="st">"objn"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre data-tab="Console"><code>&gt;  dat
+    inlog_r     log_r    log_q   log_K     objn
+1 -0.994883 -0.994883 -7.75587 7.94535 -110.045</code></pre>
+<p>We will then delete “estpars.dat” as this contains the first run of the surplus production model. We will also create a replacement file (same name - “estpars.dat”) that will have the same column names as <code>dat</code> object in R (and the same as the ones created in the FINAL_SECTION of ADMB). We will use the “estpars.dat” file to store each iteration of the likelihood profiling:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First delete any existing version of estpars.dat</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create header for file so we know the variables.</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># sep ["\n" needed for line feed]</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"inlog_r log_r log_q log_K objn"</span>, <span class="at">file =</span> <span class="st">"estpars.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is what the “estpars.dat” file should look like:</p>
+<p>&nbsp;</p>
+<p><img src="figs/estpars_lp.png" class="img-fluid" width="555"></p>
+<p>&nbsp;</p>
+<p>Next we will create a set of starting values for <span class="math inline">\(r\)</span>. We will declare how many iterations of the jitter test we would like to conduct (<code>nrun &lt;- # number of iterations</code>). We will randomize a set of starting values for <span class="math inline">\(r\)</span> using the <code>rnorm()</code> function, and it will be randomized across a range of <code>log_r</code> values:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>st_log_r <span class="ot">&lt;-</span> <span class="fu">seq</span>(dat<span class="sc">$</span>log_r <span class="sc">-</span> <span class="fl">0.5</span>, dat<span class="sc">$</span>log_r <span class="sc">+</span> <span class="fl">0.5</span>, <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You should get a sequence of <code>log_r</code> values in the <code>st_log_r</code> object:</p>
+<pre data-tab="Console"><code>&gt; st_log_r
+ [1] -1.494883 -1.444883 -1.394883 -1.344883 -1.294883 -1.244883 -1.194883 -1.144883 -1.094883 -1.044883
+[11] -0.994883 -0.944883 -0.894883 -0.844883 -0.794883 -0.744883 -0.694883 -0.644883 -0.594883 -0.544883
+[21] -0.494883</code></pre>
+<p>This is where ADMB will run 21 times across the range of initial starting values for <span class="math inline">\(r\)</span>. We will use the <code>system()</code> function to rerun the ADMB model from the executable file (<code>.exe</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(st_log_r)) {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_r[i], <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">Sys.info</span>()[<span class="st">"sysname"</span>] <span class="sc">==</span> <span class="st">"Windows"</span>) { <span class="co"># windows</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">paste0</span>(tpl_name, <span class="st">".exe"</span>)) </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> { <span class="co"># most Mac's and Linux</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">paste0</span>(<span class="st">"./"</span>, tpl_name)) </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>These lines of code will automatically detect the system you are using (<code>Sys.info()</code> command), so this will work on all computer systems. Note that we do not need to manually recompile the model from the ADMB command prompt or use the <code>admb</code> command to rerun the model.</p>
+</section>
+<section id="likelihood-profile-results" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="likelihood-profile-results"><span class="header-section-number">3.5</span> Likelihood profile results</h3>
+<p>Now we will read in the “estpars.dat” file, which should contain all the iterations of the jitter test with different starting values of <span class="math inline">\(r\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>lp_res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>, <span class="at">header =</span> T)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>lp_res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When you look at the <code>lp_res</code> object, it should look like this:</p>
+<pre data-tab="Console"><code>&gt; head(lp_res)
+   inlog_r    log_r    log_q   log_K     objn
+1 -1.49488 -1.49488 -8.17839 8.29314 -103.948
+2 -1.44488 -1.44488 -8.13719 8.25959 -104.725
+3 -1.39488 -1.39488 -8.09564 8.22574 -105.517
+4 -1.34488 -1.34488 -8.05377 8.19162 -106.315
+5 -1.29488 -1.29488 -8.01163 8.15723 -107.100
+6 -1.24488 -1.24488 -7.96927 8.12257 -107.853</code></pre>
+<p>There are some things to look out for in the <code>lp_res</code> object:</p>
+<ul>
+<li><p>The initial starting parameter values for <code>inlog_r</code> are the same as <code>log_r</code> across the 21 iterations. This means that <code>log_r</code> is properly fixed in the model.</p></li>
+<li><p>Make sure that the other parameter estimates across the 21 iterations are different (<code>log_q</code>, <code>log_K</code>, and <code>log_sd_cpue</code>).</p></li>
+<li><p>The objective function (joint negative log likelihood in this tutorial) are different across the 21 iterations (<code>objn</code>).</p></li>
+</ul>
+<p>&nbsp;</p>
+<p>We then can visualize the likelihood profile of the parameter <span class="math inline">\(r\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lp_res<span class="sc">$</span>log_r, lp_res<span class="sc">$</span>objn, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">ylab =</span> <span class="st">"NLL"</span>, <span class="at">xlab =</span> <span class="st">"log_r"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="sc">-</span><span class="fl">0.994883</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="co"># value estimated from base run</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>&nbsp;</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/lp_res.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="571"></p>
+</figure>
+</div>
+<p>&nbsp;</p>
+<p>After conducting the likelihood profile, we can run these functions that will clean the extra ADMB files that were compiled throughout the process:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># clean extra files </span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_admb</span>(<span class="at">fn =</span> tpl_name) </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>) </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"out.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"out.rdat"</span>) </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"hessian.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"hessian.rdat"</span>) </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_K.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_K.dat"</span>) </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_r.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_r.dat"</span>) </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_q.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_q.dat"</span>) </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_sd_cpue.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_sd_cpue.dat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="entire-r-script-for-the-likelihood-profile-of-the-surplus-production-model" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="entire-r-script-for-the-likelihood-profile-of-the-surplus-production-model"><span class="header-section-number">3.6</span> Entire R script for the likelihood profile of the surplus production model</h3>
+<p>Here is the entire R script for an example of conducting a likelihood profile with the surplus production model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"base_funs.r"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"clean_admb.r"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"3_surp_prod_lp"</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co"># set initial values and source from external files</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"-0.994883"</span>, <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># cat("-7.73871", file = "log_q.dat", sep = "\n")</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co"># cat("7.94027", file = "log_K.dat", sep = "\n")</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co"># cat("-2.09553", file = "log_sd_cpue.dat", sep = "\n")</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="co"># run ADMB</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="fu">run_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) {</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(dat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"inlog_r"</span>, <span class="st">"log_r"</span>, <span class="st">"log_q"</span>, <span class="st">"log_K"</span>, <span class="st">"objn"</span>)</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="co"># First delete any existing version of estpars.dat</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a><span class="co"># create header for file so we know the variables.</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a><span class="co"># sep ["\n" needed for line feed]</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"inlog_r log_r log_q log_K objn"</span>, <span class="at">file =</span> <span class="st">"estpars.dat"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a set of starting values - range around "mean" parameter value</span></span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>st_log_r <span class="ot">&lt;-</span> <span class="fu">seq</span>(dat<span class="sc">$</span>log_r <span class="sc">-</span> <span class="fl">0.5</span>, dat<span class="sc">$</span>log_r <span class="sc">+</span> <span class="fl">0.5</span>, <span class="fl">0.05</span>)</span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Write out each value of log_r and run ADMB program for each in loop</span></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(st_log_r)) {</span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(st_log_r[i], <span class="at">file =</span> <span class="st">"log_r.dat"</span>, <span class="at">sep =</span> <span class="st">""</span>) <span class="co"># write one st value to file</span></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">Sys.info</span>()[<span class="st">"sysname"</span>] <span class="sc">==</span> <span class="st">"Windows"</span>) { <span class="co"># windows</span></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">paste0</span>(tpl_name, <span class="st">".exe"</span>)) </span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> { <span class="co"># most Mac's and Linux</span></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">system</span>(<span class="fu">paste0</span>(<span class="st">"./"</span>, tpl_name)) </span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a><span class="co"># read in and print results to console</span></span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>lp_res <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"estpars.dat"</span>, <span class="at">header =</span> T)</span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>lp_res</span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a><span class="co"># look at profile across fixed parameter values</span></span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lp_res<span class="sc">$</span>log_r, lp_res<span class="sc">$</span>objn, </span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a>     <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">ylab =</span> <span class="st">"NLL"</span>, <span class="at">xlab =</span> <span class="st">"log_r"</span>)</span>
+<span id="cb31-49"><a href="#cb31-49" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="sc">-</span><span class="fl">0.994883</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="co"># value estimated from base run</span></span>
+<span id="cb31-50"><a href="#cb31-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-51"><a href="#cb31-51" aria-hidden="true" tabindex="-1"></a><span class="co"># clean extra files</span></span>
+<span id="cb31-52"><a href="#cb31-52" aria-hidden="true" tabindex="-1"></a><span class="fu">clean_admb</span>(<span class="at">fn =</span> tpl_name)</span>
+<span id="cb31-53"><a href="#cb31-53" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"estpars.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"estpars.dat"</span>)</span>
+<span id="cb31-54"><a href="#cb31-54" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"out.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"out.rdat"</span>)</span>
+<span id="cb31-55"><a href="#cb31-55" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"hessian.rdat"</span>)) <span class="fu">file.remove</span>(<span class="st">"hessian.rdat"</span>)</span>
+<span id="cb31-56"><a href="#cb31-56" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_K.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_K.dat"</span>)</span>
+<span id="cb31-57"><a href="#cb31-57" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_r.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_r.dat"</span>)</span>
+<span id="cb31-58"><a href="#cb31-58" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_q.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_q.dat"</span>)</span>
+<span id="cb31-59"><a href="#cb31-59" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"log_sd_cpue.dat"</span>)) <span class="fu">file.remove</span>(<span class="st">"log_sd_cpue.dat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="likelihood-profile-interpretation" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="likelihood-profile-interpretation"><span class="header-section-number">4</span> Likelihood profile interpretation</h2>
+<p>The shape of the likelihood profile should look like a “U”:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/likelihood.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>Say that the y axis is the objective function (likely negative log likelihood) and the x axis is the range of parameter values. Think about the meaning of the “Bad” and “Ugly” shapes above.</p>
+<p>&nbsp;</p>
+<p>In the “Bad” situation, there is one maxima, however the optimizer will not perform well when it attempts to search at different starting values. If the starting values are lower than the maxima (right side of the curve), then the model indicates that a range of parameter values will produce the same negative log likelihood, which means it will be difficult for the optimizer to find the global solution. On the other side (left side of the curve), any high estimates of the parameters will produce vastly different negative log likelihoods and the optimization may blow up.</p>
+<p>&nbsp;</p>
+<p>In the “Ugly” situation, there are multiple maximas, which means that different parameter values will have similar likelihood values, so the model will have multiple solutions for a certain parameter. This means it is not a global solution, which is necessary for maximum likelihood estimation and for the model to be consistent with convergence.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

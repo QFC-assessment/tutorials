@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Stock assessment tutorials - Naming convention - data and parameters</title>
+<title>RTMB Introduction</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -84,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Naming convention - data and parameters</h1>
+          <h1 class="quarto-secondary-nav-title">RTMB Introduction</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -96,11 +96,6 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../">Stock assessment tutorials</a> 
-    </div>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -117,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Guides</span></a>
+ <span class="menu-text">Stock assessment tutorials</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -125,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../guides/diagnostics.html" class="sidebar-item-text sidebar-link">
+  <a href="../assessment/diagnostics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Model convergence diagnostics</span></a>
   </div>
 </li>
@@ -140,7 +135,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../guides/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
+  <a href="../assessment/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jitter test</span></a>
   </div>
 </li>
@@ -157,9 +152,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#data" id="toc-data" class="nav-link active" data-scroll-target="#data"><span class="header-section-number">1</span> Data</a></li>
-  <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters"><span class="header-section-number">2</span> Parameters</a></li>
-  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model"><span class="header-section-number">3</span> Model</a></li>
+  <li><a href="#what-is-rtmb" id="toc-what-is-rtmb" class="nav-link active" data-scroll-target="#what-is-rtmb"><span class="header-section-number">1</span> What is RTMB?</a></li>
   </ul>
 </nav>
 </nav>
@@ -172,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Naming convention - data and parameters</h1>
+<h1 class="title d-none d-lg-block">RTMB Introduction</h1>
 </div>
 
 
@@ -189,50 +182,18 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="data" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="data"><span class="header-section-number">1</span> Data</h2>
+<section id="what-is-rtmb" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-rtmb"><span class="header-section-number">1</span> What is RTMB?</h2>
 <ul>
-<li><code>obs_xx</code> observed data</li>
-<li><code>n_year</code></li>
-<li><code>years</code></li>
-<li><code>n_age</code></li>
-<li><code>ages</code></li>
-<li><code>linf</code></li>
-<li><code>vbk</code></li>
-<li><code>to</code></li>
-<li><code>la</code></li>
-<li><code>wa</code></li>
-<li><code>mat</code></li>
-<li><code>fec</code></li>
-<li><code>M</code></li>
-<li><code>obs_ct</code></li>
-<li><code>obs_eff</code></li>
-<li><code>obs_comp</code></li>
-<li><code>neff</code></li>
-</ul>
-</section>
-<section id="parameters" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="parameters"><span class="header-section-number">2</span> Parameters</h2>
+<li>RTMB is a new package that provides a native R interface for a subset of TMB so you can avoid coding in C++</li>
+<li>Developed by Kasper Kristensen (DTU-Aqua)
 <ul>
-<li><code>log_xx</code> log space data/parameters</li>
-<li><code>r_init</code></li>
-<li><code>ar</code></li>
-<li><code>br</code></li>
-<li><code>sig</code></li>
-<li><code>sel_p1</code></li>
-<li><code>sel_p2</code></li>
-<li><code>q</code></li>
-<li><code>sdr</code></li>
-<li><code>sdc</code></li>
-</ul>
-</section>
-<section id="model" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="model"><span class="header-section-number">3</span> Model</h2>
-<ul>
-<li><code>F</code></li>
-<li><code>ssb</code></li>
-<li><code>ct</code></li>
-<li><code>jnll</code></li>
+<li>See <a href="https://kaskr.r-universe.dev/RTMB" class="uri">https://kaskr.r-universe.dev/RTMB</a></li>
+</ul></li>
+<li>Because code is all in R, both easier to code and for others to read that code - a game changer!</li>
+<li>A game changer <em>if</em> you know how to code in R, create an objective f(x) for your model</li>
+<li>No compiling or compiling errors! (.dll files)</li>
+<li>Bottom line: less time developing and testing models, more intuitive code</li>
 </ul>
 
 

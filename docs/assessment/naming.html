@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Stock assessment tutorials - Model convergence diagnostics for non-linear models</title>
+<title>Naming convention - data and parameters</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -105,6 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="https://qfcatmsu.github.io/assets/quarto/qfc_styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating">
@@ -117,7 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Model convergence diagnostics for non-linear models</h1>
+          <h1 class="quarto-secondary-nav-title">Naming convention - data and parameters</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -129,11 +96,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../">Stock assessment tutorials</a> 
-    </div>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -150,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Guides</span></a>
+ <span class="menu-text">Stock assessment tutorials</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -158,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../guides/diagnostics.html" class="sidebar-item-text sidebar-link active">
+  <a href="../assessment/diagnostics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Model convergence diagnostics</span></a>
   </div>
 </li>
@@ -173,7 +135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../guides/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
+  <a href="../assessment/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jitter test</span></a>
   </div>
 </li>
@@ -190,13 +152,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist"><span class="header-section-number">1</span> Checklist:</a></li>
-  <li><a href="#creating-the-objective-function-in-rtmb" id="toc-creating-the-objective-function-in-rtmb" class="nav-link" data-scroll-target="#creating-the-objective-function-in-rtmb"><span class="header-section-number">2</span> Creating the objective function in RTMB</a></li>
-  <li><a href="#convergence-message" id="toc-convergence-message" class="nav-link" data-scroll-target="#convergence-message"><span class="header-section-number">3</span> Convergence message</a></li>
-  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix"><span class="header-section-number">4</span> Hessian matrix</a></li>
-  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors"><span class="header-section-number">5</span> Standard errors</a></li>
-  <li><a href="#jitter-test" id="toc-jitter-test" class="nav-link" data-scroll-target="#jitter-test"><span class="header-section-number">6</span> Jitter test</a></li>
-  <li><a href="#likelihood-profile" id="toc-likelihood-profile" class="nav-link" data-scroll-target="#likelihood-profile"><span class="header-section-number">7</span> Likelihood profile</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link active" data-scroll-target="#data"><span class="header-section-number">1</span> Data</a></li>
+  <li><a href="#parameters" id="toc-parameters" class="nav-link" data-scroll-target="#parameters"><span class="header-section-number">2</span> Parameters</a></li>
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model"><span class="header-section-number">3</span> Model</a></li>
   </ul>
 </nav>
 </nav>
@@ -209,7 +167,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Model convergence diagnostics for non-linear models</h1>
+<h1 class="title d-none d-lg-block">Naming convention - data and parameters</h1>
 </div>
 
 
@@ -226,149 +184,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).</p>
-<section id="checklist" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="checklist"><span class="header-section-number">1</span> Checklist:</h2>
-<p>This is a checklist of convergence checks and diagnostics that should be conducted at minimum to verify a model:</p>
-<p><label><input type="checkbox" unchecked=""> Model is executable (i.e., check objective function and gradients) </label><br>
-<label><input type="checkbox" unchecked=""> The convergence message from RTMB indicates that the diagnostics are consistent with convergence (<code>= 0</code>) </label><br>
-<label><input type="checkbox" unchecked=""> The Hessian matrix is positive definite </label><br>
-<label><input type="checkbox" unchecked=""> Standard errors for model estimates are reasonable </label><br>
-<label><input type="checkbox" unchecked=""> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </label><br>
-<label><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.&nbsp;(initial abundance, recruitment, natural mortality, selectivity): </label><br>
-&nbsp;</p>
-<p>It is recommended to do these checks in this order. If all of these checks pass, this indicates that the model is consistent with convergence and is estimable. It is necessary for the model to pass all these checks. If one of these checks fail, then the model is not consistent with convergence.</p>
-</section>
-<section id="creating-the-objective-function-in-rtmb" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="creating-the-objective-function-in-rtmb"><span class="header-section-number">2</span> Creating the objective function in RTMB</h2>
-<p>Say you construct an objective function called <code>obj</code> using <code>f</code> as the model function and <code>par</code> as a list of initial parameter values. Using <code>RTMB::MakeADFun</code>, you can create the objective function:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> RTMB<span class="sc">::</span><span class="fu">MakeADFun</span>(f, par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>You need to check if the objective function will run before running an optimizer. You can look at this by checking if the objective function produces a likelihood and if a gradient is calculated for each parameter:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check likelihood</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>obj<span class="sc">$</span><span class="fu">fn</span>()</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># check gradients</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>obj<span class="sc">$</span><span class="fu">gr</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-What are gradients
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><strong>Gradients</strong> are the partial derivatives of the objective function with respect to the model parameters (goes into one vector - <code>obj$gr()</code>). These partial derivatives indicate how the objective function changes (direction and magnitude) as each parameter varies. This provides information for optimization algorithms to adjust the parameters iteratively to minimize or maximize the objective function.</p>
-</div>
-</div>
-</div>
-<p>If the model is estimable, it will calculate a likelihood based on the initial parameters. Each parameter should also provide a gradient value. If the gradient of a parameter = 0 or NA, this means that the model is not able to estimate that parameter or the parameter is not being used in the model.</p>
-<p>If the checks on the objective function are successful, you can run the objective function with an optimizer using the <code>nlminb</code> function and <code>opt</code> is the output:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> <span class="fu">nlminb</span>(obj<span class="sc">$</span>par, obj<span class="sc">$</span>fn, obj<span class="sc">$</span>gr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="convergence-message" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="convergence-message"><span class="header-section-number">3</span> Convergence message</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the model is converged</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>opt<span class="sc">$</span>convergence</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># check type of convergence</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>opt<span class="sc">$</span>message</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>If the diagnostics are consistent with convergence, then <code>opt$convergence = 0</code>. If the model did not converge, <code>opt$convergence = 1</code>. There can be some reasons why the model failed to converge (check <code>opt$message</code> for convergence message):</p>
+<section id="data" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="data"><span class="header-section-number">1</span> Data</h2>
 <ul>
-<li>singular convergence: model is likely overparameterized (too complex for the data, the data does not contain enough information to estimate the parameters reliably)</li>
-<li>false convergence: likelihood may be discontinuous (this could be related to the estimation of the parameters)</li>
+<li><code>obs_xx</code> observed data</li>
+<li><code>n_year</code></li>
+<li><code>years</code></li>
+<li><code>n_age</code></li>
+<li><code>ages</code></li>
+<li><code>linf</code></li>
+<li><code>vbk</code></li>
+<li><code>to</code></li>
+<li><code>la</code></li>
+<li><code>wa</code></li>
+<li><code>mat</code></li>
+<li><code>fec</code></li>
+<li><code>M</code></li>
+<li><code>obs_ct</code></li>
+<li><code>obs_eff</code></li>
+<li><code>obs_comp</code></li>
+<li><code>neff</code></li>
 </ul>
-<p>Ideally, you want the convergence message: “relative convergence”.</p>
-<p>&nbsp;</p>
-<p>You may also encounter messages like these:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Warning</span> messages:</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">1:</span> In nlminb<span class="er">(</span><span class="ex">start</span> = par, objective = fn, gradient = gr<span class="kw">)</span> <span class="bu">:</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">NA/NaN</span> function evaluation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution, it can sometimes mean that the parameterization or model equations are not correct. Ideally, you do not want a model that is able to wander off into a bad region.</p>
 </section>
-<section id="hessian-matrix" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="hessian-matrix"><span class="header-section-number">4</span> Hessian matrix</h2>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-What is a Hessian matrix?
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>A Hessian matrix is a square matrix of second-order partial derivatives of the objective function. In other words, it contains information about how the rate of change of each parameter with respect to every other parameter changes.</p>
-<p>This represents the curvature of the likelihood surface and is used to calculate estimates of uncertainty for all the estimated model parameters and chosen derived quantities.</p>
+<section id="parameters" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="parameters"><span class="header-section-number">2</span> Parameters</h2>
 <ul>
-<li>Inverting the negative Hessian gives us the covariance matrix, which provides a measure of parameter uncertainty.</li>
-<li>The diagonal elements of the covariance matrix (i.e., inverse of the Hessian matrix) represent the variance of individual parameters.</li>
-<li>The square root of the diagonal elements (i.e., variance) gives standard errors of the parameter estimates.</li>
+<li><code>log_xx</code> log space data/parameters</li>
+<li><code>r_init</code></li>
+<li><code>ar</code></li>
+<li><code>br</code></li>
+<li><code>sig</code></li>
+<li><code>sel_p1</code></li>
+<li><code>sel_p2</code></li>
+<li><code>q</code></li>
+<li><code>sdr</code></li>
+<li><code>sdc</code></li>
 </ul>
-</div>
-</div>
-</div>
-<p>The Hessian matrix will not be invertible if the negative log likelihood is not a true minimum. This usually occurs when the model is mis-specified, which could either mean that the model has been written incorrectly so the objective function is not differentiable/estimable with respect to all the parameters. Or the estimated parameters are confounded or overparameterized (i.e., too complex for the data). RTMB will warn you about a non-positive definite Hessian matrix.</p>
 </section>
-<section id="standard-errors" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="standard-errors"><span class="header-section-number">5</span> Standard errors</h2>
-<p>If the standard errors for the parameter estimates are high, this suggests that the model is not fully converged. This can mean:</p>
+<section id="model" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="model"><span class="header-section-number">3</span> Model</h2>
 <ul>
-<li>low precision: there is a wide range of plausible values for the parameters</li>
-<li>lack of stability in the estimation of the parameter</li>
-<li>overfitting: model may be too complex and is capturing noise in the data rather than true underlying patterns</li>
+<li><code>F</code></li>
+<li><code>ssb</code></li>
+<li><code>ct</code></li>
+<li><code>jnll</code></li>
 </ul>
-<p>Considerations to the model formulation and parameter estimates should be made if the standard errors are too high and unreasonable.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sdrep <span class="ot">&lt;-</span> <span class="fu">sdreport</span>(obj)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sdrep</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="jitter-test" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="jitter-test"><span class="header-section-number">6</span> Jitter test</h2>
-<p>A jitter test is used to evaluate whether a model has actually converged to a global solution rather than a local minimum. This should check that none of the randomly generated starting values of the parameters results in a solution that has a smaller negative log likelihood than the reference model. A jitter test is conducted by changing the starting parameter values and rerunning the model several times. This should be done with multiple (if not all) the parameters.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this function runs the optimizer with the new parameters (opt$par + randomization)</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>doone <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">nlminb</span>(opt<span class="sc">$</span>par <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(opt<span class="sc">$</span>par), <span class="at">sd =</span> .<span class="dv">1</span>),</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    obj<span class="sc">$</span>fn, obj<span class="sc">$</span>gr,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">eval.max =</span> <span class="dv">1000</span>, <span class="at">iter.max =</span> <span class="dv">1000</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(fit<span class="sc">$</span>par, <span class="st">"convergence"</span> <span class="ot">=</span> fit<span class="sc">$</span>convergence)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># jitter the parameters 100 times</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>jit <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">100</span>, <span class="fu">doone</span>())</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the convergence are all 0s across the 100 iterations</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># check if there are any outliers or large intervals</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">t</span>(jit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Note: the magnitude of the jittering should be done within reason (e.g., 10% CV) as extreme jitters could start the model search in an unrealistic place and then the model would not be able to detect gradients that point towards reasonable solutions.</p>
-</section>
-<section id="likelihood-profile" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="likelihood-profile"><span class="header-section-number">7</span> Likelihood profile</h2>
-<p>A likelihood profile shows how the negative log likelihood changes as one of the parameters is fixed while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. The shape of the likelihood profile for a parameter should look like a U:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/likelihood.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
-</figure>
-</div>
-<p>This does not have to be done on all parameters, but select important parameters. This typically includes initial abundance (e.g., R0, initial abundance at age vector), recruitment (e.g., steepness or compensation ratio), natural mortality, selectivity, etc. The goal is to identify if there are any conflicting information in the data about abundance.</p>
 
 
 </section>

@@ -2,11 +2,11 @@
 title: "Jitter test in ADMB using R"
 ---
 
-A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function.
+A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function. It is recommended to conduct a jitter test across all model parameters.
 
  
 
-This tutorial will walk through how to conduct a jitter test in ADMB. The fastest way to run a jitter test in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some extra steps to set up your code in both ADMB and R.
+This tutorial will walk through how to conduct a jitter test with ADMB models. The fastest way to run a jitter test in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some extra steps to set up your code in both ADMB and R.
 
 ## admb2r.cpp instructions
 
@@ -303,7 +303,7 @@ PARAMETER_SECTION
 
 ### INITIALIZATION_SECTION
 
-This section should either be commented out or empty as the .dat file for each parameters will override the starting value for that parameter. This is important for the jitter test to work. It will look like this for the surplus production model:
+This section should either be commented out or empty as the .dat file for each parameters will override the starting value for that parameter. This is important for the jitter test to work:
 
 ```{r, eval = FALSE}
 INITIALIZATION_SECTION
@@ -543,18 +543,26 @@ source("clean_admb.r")
 The R helper functions ("base_funs.r") has a function "compile_admb.r" which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called "surp_prod_jitter".
 
 ```{r, eval = FALSE}
-tpl_name <- "surp_prod_jitter" # name of the .tpl file
+tpl_name <- "2_surp_prod_jitter" # name of the .tpl file
 # compile ADMB
 compile_admb(fn = tpl_name, verbose = TRUE)
 ```
 
 We will include `verbose = TRUE`, which will print out the compile messages from ADMB in the R console (should be the same as running the ADMB command prompt):
 
- 
-
-![](figs/compile_ADMB.png){width="1100"}
-
- 
+``` {tab="Console"}
+> compile_admb(fn = tpl_name, verbose = TRUE)
+compiling with args: '  ' ...
+compile output:
+  *** Parse: 2_surp_prod_jitter.tpl xxglobal.tmp xxhtop.tmp header.tmp xxalloc.tmp xxtopm
+.tmp 1 file(s) copied. tpl2cpp   2_surp_prod_jitter  *** Compile: 2_surp_prod_jitter.cpp g
+++ -c -std=c++17 -O2 -D_FILE_OFFSET_BITS=64 -DUSE_ADMB_CONTRIBS -D_USE_MATH_DEFINES -I. 
+-I"c:\ADMB-13.1\include" -I"c:\ADMB-13.1\include\contrib" -o 2_surp_prod_jitter.obj 
+2_surp_prod_jitter.cpp  *** Linking: 2_surp_prod_jitter.obj  g++ -static -o 
+2_surp_prod_jitter.exe 2_surp_prod_jitter.obj "c:\ADMB-13.1\lib\libadmb-contrib-mingw64-g
+++12.a"  Successfully built '2_surp_prod_jitter.exe'. 
+compile log:
+```
 
 Next we will create new .dat files, which will contain the starting parameter values that will be read into ADMB.
 
@@ -593,11 +601,31 @@ run_admb(fn = tpl_name, verbose = TRUE)
 
 What prints out in the R console should look exactly like what prints out in the ADMB command prompt:
 
- 
+``` {tab="Console"}
+> run_admb(fn = tpl_name, verbose = TRUE)
+running compiled executable with args: '  '...
+Run output:
 
-![](figs/run_admb.png){width="840"}
 
- 
+
+
+Starting optimization of '2_surp_prod_jitter' in phase 1 of 1 at Fri May 17 13:46:02 2024
+phase= 1 | nvar= 28 | iter=  0 | nll=5.27e+03 | mag=6.89e+03 | par[  3]=log_K
+phase= 1 | nvar= 28 | iter= 20 | nll=3.49e+01 | mag=1.98e+02 | par[  1]=log_r
+phase= 1 | nvar= 28 | iter= 40 | nll=-7.59e+01 | mag=9.90e+00 | par[  4]=log_sd_cpue
+phase= 1 | nvar= 28 | iter= 60 | nll=-9.49e+01 | mag=2.44e+02 | par[  1]=log_r
+phase= 1 | nvar= 28 | iter= 80 | nll=-1.03e+02 | mag=3.72e+01 | par[  1]=log_r
+phase= 1 | nvar= 28 | iter=100 | nll=-1.10e+02 | mag=2.12e-02 | par[ 18]=log_F[14]
+phase= 1 | nvar= 28 | iter=105 | nll=-1.10e+02 | mag=7.04e-05 | par[  1]=log_r
+Optimization completed after 0.002 s with final statistics:
+  nll=-110.045337 | mag=7.03848e-05 | par[  1]=log_r
+
+Calculating Hessian (28 variables): 20%, 40%, 60%, 80%, 100% done (0.001 s) 
+Inverting Hessian (28 variables): 20%, 40%, 60%, 80%, 100% done (0.021 s) 
+Starting standard error calculations...  done (0.026 s) 
+
+Finished running model '2_surp_prod_jitter' after 0.069 s.
+```
 
 This should produce a model result of the surplus production model (check the ".par" file).
 
@@ -612,11 +640,11 @@ if (file.exists("estpars.dat")) {
 }
 ```
 
- 
-
-![](figs/dat.png){width="870"}
-
- 
+``` {tab="Console"}
+> dat
+  inlog_r     log_r inlog_q    log_q inlog_K   log_K inlog_sd_cpue log_sd_cpue     objn
+1    -0.6 -0.993585      -3 -7.75477       8 7.94441            -1    -2.09553 -110.045
+```
 
 We will then delete "estpars.dat" as this contains the first run of the surplus production model. We will also create a replacement file (same name - "estpars.dat") that will have the same column names as `dat` object in R (and the same as the ones created in the FINAL_SECTION of ADMB). We will use the "estpars.dat" file to store each iteration of the jitter test:
 
@@ -650,11 +678,15 @@ st_log_sd_cpue <- dat$log_sd_cpue + rnorm(nrun, sd = 0.1)
 
 You should get different initial parameter values for $r$, $q$, $K$, and $sd_{cpue}$ (this is what `st_log_r` looks like):
 
- 
-
-![](figs/st_log_r.png){width="1100"}
-
- 
+``` {tab="Console"}
+> st_log_r
+ [1] -0.9228182 -1.0814674 -0.9838309 -1.1326115 -1.0384462 -0.9755354 -0.9474958 -1.0096512 -1.0027850
+[10] -1.0605927 -0.9374780 -1.1490212 -0.9859142 -0.9419287 -1.2039070 -0.9467160 -1.0082140 -0.8845776
+[19] -1.0501845 -1.1293860 -1.1745426 -1.0972523 -1.0876272 -0.6523069 -1.0300151 -0.9892598 -1.0002751
+[28] -1.0470151 -0.8234914 -1.0142313 -0.9383547 -0.7523401 -0.8571388 -1.0204309 -0.5843942 -0.9964475
+[37] -1.1139635 -0.8975815 -1.0615098 -0.9125939 -0.8941080 -1.0473705 -1.1201994 -1.0117377 -0.9563844
+[46] -1.0354310 -0.7548647 -0.9615213 -1.0294900 -1.0297567
+```
 
 This is where ADMB will run 50 times in a for loop, with each iteration reading different values of $r$, $q$, $K$, and $sd_{cpue}$ from the objects `st_log_r`, `st_log_q`, `st_log_K`, and `st_log_sd_cpue` . We will use the `system()` function to rerun the ADMB model from the executable file (`.exe`):
 
@@ -687,11 +719,16 @@ jit_res
 
 When you look at the `jit_res` object, it should look like this:
 
- 
-
-![](figs/jit_res.png){width="900"}
-
- 
+``` {tab="Console"}
+> head(jit_res)
+    inlog_r     log_r   inlogq    log_q  inlogK   log_K inlog_sd_cpue log_sd_cpue     objn
+1 -0.922818 -0.993586 -7.90445 -7.75477 7.86950 7.94441      -2.02155    -2.09553 -110.045
+2 -1.081470 -0.993585 -7.81425 -7.75477 7.72846 7.94441      -2.03412    -2.09553 -110.045
+3 -0.983831 -0.993585 -7.61159 -7.75477 8.04017 7.94441      -2.11698    -2.09553 -110.045
+4 -1.132610 -0.993585 -7.84504 -7.75477 8.01831 7.94441      -2.03281    -2.09553 -110.045
+5 -1.038450 -0.993586 -7.80241 -7.75477 8.09650 7.94441      -2.05765    -2.09553 -110.045
+6 -0.975535 -0.993586 -7.90383 -7.75477 7.93884 7.94441      -1.99051    -2.09553 -110.045
+```
 
 There are some things to look out for in the `jit_res` object:
 
@@ -735,7 +772,7 @@ Here is the entire R script for an example of conducting a jitter test with the 
 ```{r, eval = FALSE}
 source("base_funs.r")
 source("clean_admb.r")
-tpl_name <- "surp_prod_jitter"
+tpl_name <- "2_surp_prod_jitter"
 
 # compile ADMB
 compile_admb(fn = tpl_name, verbose = TRUE)

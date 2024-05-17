@@ -135,7 +135,7 @@ Note: the magnitude of the jittering should be done within reason (e.g., 10% CV)
 
 ## Likelihood profile
 
-A likelihood profile shows how the negative log likelihood changes as one of the parameters is fixed while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. The shape of the likelihood profile for a parameter should look like a U:
+A likelihood profile shows how the negative log likelihood changes as one of the parameters is fixed across a range of values while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. The shape of the likelihood profile for a parameter should look like a U:
 
 ![](figs/likelihood.png){fig-align="center"}
 

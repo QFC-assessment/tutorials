@@ -3,20 +3,19 @@ project:
   output-dir: docs
 
 website:
-  title: "Stock assessment tutorials"
   bread-crumbs: false
   sidebar: 
     contents:
       - text: Home
         href: index.qmd
-      - section: Guides
+      - section: Stock assessment tutorials
         contents:
         - text: Model convergence diagnostics
-          href: guides/diagnostics.qmd
+          href: assessment/diagnostics.qmd
         - section: ADMB
           contents:
           - text: Jitter test
-            href: guides/ADMB_jitter.qmd
+            href: assessment/ADMB_jitter.qmd
           - text: Likelihood profile
 
 format:
