@@ -2,11 +2,11 @@
 title: "Jitter test in ADMB using R"
 ---
 
-A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function. It is recommended to conduct a jitter test across all model parameters.
+The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function. A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. It is recommended to conduct a jitter test across all model parameters.
 
  
 
-This tutorial will walk through how to conduct a jitter test with ADMB models. The fastest way to run a jitter test in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some extra steps to set up your code in both ADMB and R.
+This tutorial will walk through how to conduct a jitter test with ADMB models. The fastest way to run a jitter test in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some additional steps to set up your code in both ADMB and R.
 
 ## admb2r.cpp instructions
 
@@ -30,7 +30,7 @@ If possible, you should download the most recent ADMB version [here](https://www
 
 ### Surplus production model - .tpl and .dat files
 
-In this tutorial, we will look at a surplus production model. The .dat file name is called "surp_prod1.dat". You can name the .tpl file anything, but in this tutorial, it will be called "surp_prod_jitter.tpl".
+In this tutorial, we will look at a surplus production model. The .dat file name is called "surp_prod1.dat". You can name the .tpl file anything, but in this tutorial, it will be called "2_surp_prod_jitter.tpl".
 
 ```{r, eval = FALSE}
 DATA_SECTION
@@ -133,7 +133,7 @@ FINAL_SECTION
   close_r_file();
 ```
 
-This tutorial will not go through the surplus production model in details, but the leading parameters are $r$, $K$, $q$, $F$, and $sd_{cpue}$. Note that there is a standard deviation for the catch observations, but that is fixed in this model ($sd_{catch}$ = 0.05) The objective function (`jnll`) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, both of which follow a log normal distribution.
+This tutorial will not go through the surplus production model in details, but the model parameters are $r$, $K$, $q$, $F$, and $sd_{cpue}$. Note that there is a standard deviation for the catch observations, but that is fixed in this model ($sd_{catch}$ = 0.05) The objective function (`jnll`) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, both of which follow a log normal distribution.
 
  
 
@@ -540,7 +540,7 @@ source("clean_admb.r")
 
 ### Compile and run ADMB in R
 
-The R helper functions ("base_funs.r") has a function "compile_admb.r" which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called "surp_prod_jitter".
+The R helper functions ("base_funs.r") has a function "compile_admb.r" which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called "2_surp_prod_jitter".
 
 ```{r, eval = FALSE}
 tpl_name <- "2_surp_prod_jitter" # name of the .tpl file
@@ -665,7 +665,7 @@ This is what the "estpars.dat" file should look like:
 
  
 
-Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (`nrun <- # number of iterations`). We will randomize a set of starting values for $r$, $q$, $K$, and $sd_{cpue}$ using the `rnorm()` function, and it will be randomized with a CV = 10% (you can test different CV/sd values, but make sure the value still make sense for the parameters):
+Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (`nrun <- # number of iterations`). We will randomize a set of starting values for $r$, $q$, $K$, and $sd_{cpue}$ using the `rnorm()` function, and it will be randomized with a CV = 10% (you can test different CV values, but make sure the value will make sense for the parameters):
 
 ```{r, eval = FALSE}
 # Define a set of starting values
@@ -839,7 +839,7 @@ if (file.exists("log_sd_cpue.dat")) file.remove("log_sd_cpue.dat")
 
 ## Jitter test interpretation
 
-There should not be any outliers or weird shapes in the box plots (this is an example of how the box plot would look like if the jitter test fails):
+There should not be any outliers or weird shapes in the box plots. Below is an example of how the box plot would look like if the jitter test fails:
 
  
 
@@ -859,4 +859,4 @@ A failed jitter test is indicative that there is something wrong with the model:
 
  
 
-This should be done for every parameter. In this tutorial, the jitter test was not conducted on $F$ and $sd_{catch}$. However, to fully check the convergence of this model, the jitter test should also be conducted for $F$ and sensitivity analysis should be conducted on the impacts of fixing $sd_{catch}$.
+This should be done for every parameter. In this tutorial, the jitter test was not conducted on $F$ and $sd_{catch}$. However, to fully check the convergence of this model, the jitter test should also be conducted for all estimated values of $F$ and sensitivity analysis should be conducted on the impacts of fixing $sd_{catch}$.

@@ -2,11 +2,11 @@
 title: "Likelihood profiling in ADMB using R"
 ---
 
-A likelihood profile will show how the objective function changes as one of the parameters is fixed across a range of values while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. This does not need to be conducted on all model parameters, but this should be done on important leading parameters at minimum.
+A likelihood profile will show how the objective function changes as one of the parameters is fixed across a range of values while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. This does not need to be conducted on all model parameters for convergence diagnostics, but this should be done on important leading parameters at minimum.
 
  
 
-This tutorial will walk through how to conduct a likelihood profile with ADMB models. The fastest way to run a likelihood in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some extra steps to set up your code in both ADMB and R.
+This tutorial will walk through how to conduct a likelihood profile with ADMB models. The fastest way to run a likelihood in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some additional steps to set up your code in both ADMB and R.
 
 ## admb2r.cpp instructions
 
@@ -30,7 +30,7 @@ If possible, you should download the most recent ADMB version [here](https://www
 
 ### Surplus production model - .tpl and .dat files
 
-In this tutorial, we will look at a surplus production model. The .dat file name is called `surp_prod1.dat`. You can name the .tpl file anything, but in this tutorial, it will be called `surp_prod_jitter.tpl`.
+In this tutorial, we will look at a surplus production model. The .dat file name is called `surp_prod1.dat`. You can name the .tpl file anything, but in this tutorial, it will be called `3_surp_prod_lp.tpl`.
 
 ```{r, eval = FALSE}
 DATA_SECTION
@@ -133,7 +133,7 @@ FINAL_SECTION
   close_r_file();
 ```
 
-This tutorial will not go through the surplus production model in details, but the leading parameters are $r$, $K$, $q$, $F$, and $sd_{cpue}$. Note that there is a standard deviation for the catch observations, but that is fixed in this model ($sd_{catch}$ = 0.05) The objective function (`jnll`) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, which follow a log normal distribution.
+This tutorial will not go through the surplus production model in details, but the model parameters are $r$, $K$, $q$, $F$, and $sd_{cpue}$. Note that there is a standard deviation for the catch observations, but that is fixed in this model ($sd_{catch}$ = 0.05) The objective function (`jnll`) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, which follow a log normal distribution.
 
  
 
@@ -143,7 +143,7 @@ The default data file name is different than the .tpl file name. This is done us
 !! ad_com::change_datafile_name("surp_prod1.dat");
 ```
 
-The data will be read from `surp_prod1.dat`. This is useful when you have many variants of the model that use the same data. This trick will be useful for the jitter test.
+The data will be read from `surp_prod1.dat`. This is useful when you have many variants of the model that use the same data. This trick will be useful for the likelihood profiling.
 
  
 
@@ -329,7 +329,7 @@ FINAL_SECTION
   myout.close();
 ```
 
-The "estpars.dat" file will eventually contain all the starting values of $r$ from R, estimated parameters from ADMB, and the objective function from ADMB. This is important as it will contain all the iterations and results of the jitter test and will be read into R as a table. Note that the value of `inlog_r` should be the same as `log_r` as $r$ is being fixed in the model.
+The "estpars.dat" file will eventually contain all the starting values of $r$ from R, estimated parameters from ADMB, and the objective function from ADMB. This is important as it will contain all the iterations and results of the likelihood profile test and will be read into R as a table. Note that the value of `inlog_r` should be the same as `log_r` as $r$ is being fixed in the model.
 
 ### Entire ADMB example of the surplus production model
 
@@ -633,7 +633,7 @@ This is what the "estpars.dat" file should look like:
 
  
 
-Next we will create a set of starting values for $r$. We will declare how many iterations of the jitter test we would like to conduct (`nrun <- # number of iterations`). We will randomize a set of starting values for $r$ using the `rnorm()` function, and it will be randomized across a range of `log_r` values:
+Next we will create a set of starting values for $r$. We will create a range of starting values for $r$ using `seq()`:
 
 ```{r, eval = FALSE}
 st_log_r <- seq(dat$log_r - 0.5, dat$log_r + 0.5, 0.05)
@@ -665,7 +665,7 @@ These lines of code will automatically detect the system you are using (`Sys.inf
 
 ### Likelihood profile results
 
-Now we will read in the "estpars.dat" file, which should contain all the iterations of the jitter test with different starting values of $r$:
+Now we will read in the "estpars.dat" file, which should contain all the iterations of the likelihood profile test with different starting values of $r$:
 
 ```{r, eval = FALSE}
 lp_res <- read.table("estpars.dat", header = T)

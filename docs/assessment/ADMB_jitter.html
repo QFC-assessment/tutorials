@@ -174,7 +174,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Stock assessment tutorials</span></a>
+ <span class="menu-text">Stock assessment guides</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -202,8 +202,11 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">Likelihood profile</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../assessment/ADMB_likelihood.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Likelihood profile</span></a>
+  </div>
+</li>
       </ul>
   </li>
       </ul>
@@ -263,9 +266,9 @@ window.Quarto = {
 </header>
 
 
-<p>A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function. It is recommended to conduct a jitter test across all model parameters.</p>
+<p>The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function. A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. It is recommended to conduct a jitter test across all model parameters.</p>
 <p>&nbsp;</p>
-<p>This tutorial will walk through how to conduct a jitter test with ADMB models. The fastest way to run a jitter test in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some extra steps to set up your code in both ADMB and R.</p>
+<p>This tutorial will walk through how to conduct a jitter test with ADMB models. The fastest way to run a jitter test in ADMB is to run it through the R environment, which will create an executable and run ADMB with the executable so you do not need to manually change the initial parameter values each iteration. However, this will require some additional steps to set up your code in both ADMB and R.</p>
 <section id="admb2r.cpp-instructions" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="admb2r.cpp-instructions"><span class="header-section-number">1</span> admb2r.cpp instructions</h2>
 <p>This tutorial requires this package called “admb2r”. This is a collection of AD Model Builder routines for saving complex data structures into a file that can be read into R. This cannot be automatically downloaded in the newer ADMB versions. You can keep a “admb2r.cpp” file where your .tpl and .dat files are, however that requires copying and pasting it every time you want to run a ADMB model.</p>
@@ -283,7 +286,7 @@ window.Quarto = {
 <p>If possible, you should download the most recent ADMB version <a href="https://www.admb-project.org/">here</a>. This recent version will print out additional error messages and allow you to run additional functions (like <code>get_hessian()</code>).</p>
 <section id="surplus-production-model---.tpl-and-.dat-files" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="surplus-production-model---.tpl-and-.dat-files"><span class="header-section-number">2.1</span> Surplus production model - .tpl and .dat files</h3>
-<p>In this tutorial, we will look at a surplus production model. The .dat file name is called “surp_prod1.dat”. You can name the .tpl file anything, but in this tutorial, it will be called “surp_prod_jitter.tpl”.</p>
+<p>In this tutorial, we will look at a surplus production model. The .dat file name is called “surp_prod1.dat”. You can name the .tpl file anything, but in this tutorial, it will be called “2_surp_prod_jitter.tpl”.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>DATA_SECTION</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -384,7 +387,7 @@ window.Quarto = {
 <span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    <span class="fu">close_r_matrix</span>();</span>
 <span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">close_r_file</span>();</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This tutorial will not go through the surplus production model in details, but the leading parameters are <span class="math inline">\(r\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(F\)</span>, and <span class="math inline">\(sd_{cpue}\)</span>. Note that there is a standard deviation for the catch observations, but that is fixed in this model (<span class="math inline">\(sd_{catch}\)</span> = 0.05) The objective function (<code>jnll</code>) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, both of which follow a log normal distribution.</p>
+<p>This tutorial will not go through the surplus production model in details, but the model parameters are <span class="math inline">\(r\)</span>, <span class="math inline">\(K\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(F\)</span>, and <span class="math inline">\(sd_{cpue}\)</span>. Note that there is a standard deviation for the catch observations, but that is fixed in this model (<span class="math inline">\(sd_{catch}\)</span> = 0.05) The objective function (<code>jnll</code>) is the total objective function, which is the sum of the data likelihood for catch and index (CPUE) data, both of which follow a log normal distribution.</p>
 <p>&nbsp;</p>
 <p>The default data file name is different than the .tpl file name. This is done using this command:</p>
 <div class="cell">
@@ -754,7 +757,7 @@ window.Quarto = {
 </section>
 <section id="compile-and-run-admb-in-r" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="compile-and-run-admb-in-r"><span class="header-section-number">3.3</span> Compile and run ADMB in R</h3>
-<p>The R helper functions (“base_funs.r”) has a function “compile_admb.r” which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called “surp_prod_jitter”.</p>
+<p>The R helper functions (“base_funs.r”) has a function “compile_admb.r” which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called “2_surp_prod_jitter”.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"2_surp_prod_jitter"</span> <span class="co"># name of the .tpl file</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
@@ -850,7 +853,7 @@ Finished running model '2_surp_prod_jitter' after 0.069 s.</code></pre>
 <p>&nbsp;</p>
 <p><img src="figs/estpars.png" class="img-fluid" width="790"></p>
 <p>&nbsp;</p>
-<p>Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (<code>nrun &lt;- # number of iterations</code>). We will randomize a set of starting values for <span class="math inline">\(r\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(sd_{cpue}\)</span> using the <code>rnorm()</code> function, and it will be randomized with a CV = 10% (you can test different CV/sd values, but make sure the value still make sense for the parameters):</p>
+<p>Next we will create a set of starting values. We will declare how many iterations of the jitter test we would like to conduct (<code>nrun &lt;- # number of iterations</code>). We will randomize a set of starting values for <span class="math inline">\(r\)</span>, <span class="math inline">\(q\)</span>, <span class="math inline">\(K\)</span>, and <span class="math inline">\(sd_{cpue}\)</span> using the <code>rnorm()</code> function, and it will be randomized with a CV = 10% (you can test different CV values, but make sure the value will make sense for the parameters):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a set of starting values</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>nrun <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="co"># number of reruns with new values</span></span>
@@ -1006,7 +1009,7 @@ Finished running model '2_surp_prod_jitter' after 0.069 s.</code></pre>
 </section>
 <section id="jitter-test-interpretation" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="jitter-test-interpretation"><span class="header-section-number">4</span> Jitter test interpretation</h2>
-<p>There should not be any outliers or weird shapes in the box plots (this is an example of how the box plot would look like if the jitter test fails):</p>
+<p>There should not be any outliers or weird shapes in the box plots. Below is an example of how the box plot would look like if the jitter test fails:</p>
 <p>&nbsp;</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1022,7 +1025,7 @@ Finished running model '2_surp_prod_jitter' after 0.069 s.</code></pre>
 <li><p>Data is not informative enough to estimate the parameter</p></li>
 </ul>
 <p>&nbsp;</p>
-<p>This should be done for every parameter. In this tutorial, the jitter test was not conducted on <span class="math inline">\(F\)</span> and <span class="math inline">\(sd_{catch}\)</span>. However, to fully check the convergence of this model, the jitter test should also be conducted for <span class="math inline">\(F\)</span> and sensitivity analysis should be conducted on the impacts of fixing <span class="math inline">\(sd_{catch}\)</span>.</p>
+<p>This should be done for every parameter. In this tutorial, the jitter test was not conducted on <span class="math inline">\(F\)</span> and <span class="math inline">\(sd_{catch}\)</span>. However, to fully check the convergence of this model, the jitter test should also be conducted for all estimated values of <span class="math inline">\(F\)</span> and sensitivity analysis should be conducted on the impacts of fixing <span class="math inline">\(sd_{catch}\)</span>.</p>
 
 
 </section>

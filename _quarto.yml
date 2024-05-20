@@ -8,7 +8,7 @@ website:
     contents:
       - text: Home
         href: index.qmd
-      - section: Stock assessment tutorials
+      - section: Stock assessment guides
         contents:
         - text: Model convergence diagnostics
           href: assessment/diagnostics.qmd
@@ -17,6 +17,7 @@ website:
           - text: Jitter test
             href: assessment/ADMB_jitter.qmd
           - text: Likelihood profile
+            href: assessment/ADMB_likelihood.qmd
 
 format:
   html:
