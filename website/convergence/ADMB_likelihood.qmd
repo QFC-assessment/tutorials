@@ -30,7 +30,7 @@ If possible, you should download the most recent ADMB version [here](https://www
 
 ### Surplus production model - .tpl and .dat files
 
-In this tutorial, we will look at a surplus production model. The .dat file name is called `surp_prod1.dat`. You can name the .tpl file anything, but in this tutorial, it will be called `3_surp_prod_lp.tpl`.
+In this tutorial, we will look at a surplus production model. The .dat file name is called `surp_prod1.dat`. You can name the .tpl file anything, but in this tutorial, it will be called `surp_prod_lp.tpl`.
 
 ```{r, eval = FALSE}
 DATA_SECTION
@@ -524,7 +524,7 @@ source("clean_admb.r")
 The R helper functions (`base_funs.r`) has a function (`compile_admb.r`), which will compile ADMB using a R command. The .tpl name in this tutorial is called "surp_prod_lp".
 
 ```{r, eval = FALSE}
-tpl_name <- "3_surp_prod_lp" # name of the .tpl file
+tpl_name <- "surp_prod_lp" # name of the .tpl file
 # compile ADMB
 compile_admb(fn = tpl_name, verbose = TRUE)
 ```
@@ -535,12 +535,12 @@ We will include `verbose=TRUE`, which will print out the compile messages from A
 > compile_admb(fn = tpl_name, verbose = TRUE)
 compiling with args: '  ' ...
 compile output:
-  *** Parse: 3_surp_prod_lp.tpl xxglobal.tmp xxhtop.tmp header.tmp xxalloc.tmp xxtopm.tmp
-  1 file(s) copied. tpl2cpp   3_surp_prod_lp  *** Compile: 3_surp_prod_lp.cpp g++ -c 
+  *** Parse: surp_prod_lp.tpl xxglobal.tmp xxhtop.tmp header.tmp xxalloc.tmp xxtopm.tmp
+  1 file(s) copied. tpl2cpp   surp_prod_lp  *** Compile: surp_prod_lp.cpp g++ -c 
 -std=c++17 -O2 -D_FILE_OFFSET_BITS=64 -DUSE_ADMB_CONTRIBS -D_USE_MATH_DEFINES -I. -I"c
-:\ADMB-13.1\include" -I"c:\ADMB-13.1\include\contrib" -o 3_surp_prod_lp.obj 3_surp_prod_lp
-.cpp  *** Linking: 3_surp_prod_lp.obj  g++ -static -o 3_surp_prod_lp.exe 3_surp_prod_lp.obj
-"c:\ADMB-13.1\lib\libadmb-contrib-mingw64-g++12.a"  Successfully built '3_surp_prod_lp.exe'. 
+:\ADMB-13.1\include" -I"c:\ADMB-13.1\include\contrib" -o surp_prod_lp.obj surp_prod_lp
+.cpp  *** Linking: surp_prod_lp.obj  g++ -static -o surp_prod_lp.exe surp_prod_lp.obj
+"c:\ADMB-13.1\lib\libadmb-contrib-mingw64-g++12.a"  Successfully built 'surp_prod_lp.exe'. 
 compile log:
 ```
 
@@ -580,7 +580,7 @@ Run output:
 
 
 
-Starting optimization of '3_surp_prod_lp' in phase 1 of 1 at Fri May 17 13:55:16 2024
+Starting optimization of 'surp_prod_lp' in phase 1 of 1 at Fri May 17 13:55:16 2024
 phase= 1 | nvar= 27 | iter=  0 | nll=4.33e+03 | mag=7.29e+03 | par[  2]=log_K
 phase= 1 | nvar= 27 | iter= 20 | nll=-7.16e+01 | mag=7.39e+01 | par[  2]=log_K
 phase= 1 | nvar= 27 | iter= 40 | nll=-8.78e+01 | mag=1.13e+02 | par[  2]=log_K
@@ -592,7 +592,7 @@ Calculating Hessian (27 variables): 20%, 40%, 60%, 80%, 100% done (0.002 s)
 Inverting Hessian (27 variables): 20%, 40%, 60%, 80%, 100% done (0.018 s) 
 Starting standard error calculations...  done (0.013 s) 
 
-Finished running model '3_surp_prod_lp' after 0.04 s.
+Finished running model 'surp_prod_lp' after 0.04 s.
 ```
 
 This should produce a model result of the surplus production model (check the ".par" file).
@@ -730,7 +730,7 @@ Here is the entire R script for an example of conducting a likelihood profile wi
 ```{r, eval = FALSE}
 source("base_funs.r")
 source("clean_admb.r")
-tpl_name <- "3_surp_prod_lp"
+tpl_name <- "surp_prod_lp"
 
 # compile ADMB
 compile_admb(fn = tpl_name, verbose = TRUE)

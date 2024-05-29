@@ -57,22 +57,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -167,14 +167,14 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Stock assessment guides</span></a>
+ <span class="menu-text">MSC</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -182,7 +182,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../assessment/diagnostics.html" class="sidebar-item-text sidebar-link">
+  <a href="../../website/convergence/conv_diagnostics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Model convergence diagnostics</span></a>
   </div>
 </li>
@@ -197,13 +197,13 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../assessment/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
+  <a href="../../website/convergence/ADMB_jitter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jitter test</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../assessment/ADMB_likelihood.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../website/convergence/ADMB_likelihood.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Likelihood profile</span></a>
   </div>
 </li>
@@ -286,7 +286,7 @@ window.Quarto = {
 <p>If possible, you should download the most recent ADMB version <a href="https://www.admb-project.org/">here</a>. This recent version will print out additional error messages and allow you to run additional functions (like <code>get_hessian()</code>).</p>
 <section id="surplus-production-model---.tpl-and-.dat-files" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="surplus-production-model---.tpl-and-.dat-files"><span class="header-section-number">2.1</span> Surplus production model - .tpl and .dat files</h3>
-<p>In this tutorial, we will look at a surplus production model. The .dat file name is called <code>surp_prod1.dat</code>. You can name the .tpl file anything, but in this tutorial, it will be called <code>3_surp_prod_lp.tpl</code>.</p>
+<p>In this tutorial, we will look at a surplus production model. The .dat file name is called <code>surp_prod1.dat</code>. You can name the .tpl file anything, but in this tutorial, it will be called <code>surp_prod_lp.tpl</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>DATA_SECTION</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -740,7 +740,7 @@ window.Quarto = {
 <h3 data-number="3.3" class="anchored" data-anchor-id="compile-and-run-admb-in-r"><span class="header-section-number">3.3</span> Compile and run ADMB in R</h3>
 <p>The R helper functions (<code>base_funs.r</code>) has a function (<code>compile_admb.r</code>), which will compile ADMB using a R command. The .tpl name in this tutorial is called “surp_prod_lp”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"3_surp_prod_lp"</span> <span class="co"># name of the .tpl file</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"surp_prod_lp"</span> <span class="co"># name of the .tpl file</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -748,12 +748,12 @@ window.Quarto = {
 <pre data-tab="Console"><code>&gt; compile_admb(fn = tpl_name, verbose = TRUE)
 compiling with args: '  ' ...
 compile output:
-  *** Parse: 3_surp_prod_lp.tpl xxglobal.tmp xxhtop.tmp header.tmp xxalloc.tmp xxtopm.tmp
-  1 file(s) copied. tpl2cpp   3_surp_prod_lp  *** Compile: 3_surp_prod_lp.cpp g++ -c 
+  *** Parse: surp_prod_lp.tpl xxglobal.tmp xxhtop.tmp header.tmp xxalloc.tmp xxtopm.tmp
+  1 file(s) copied. tpl2cpp   surp_prod_lp  *** Compile: surp_prod_lp.cpp g++ -c 
 -std=c++17 -O2 -D_FILE_OFFSET_BITS=64 -DUSE_ADMB_CONTRIBS -D_USE_MATH_DEFINES -I. -I"c
-:\ADMB-13.1\include" -I"c:\ADMB-13.1\include\contrib" -o 3_surp_prod_lp.obj 3_surp_prod_lp
-.cpp  *** Linking: 3_surp_prod_lp.obj  g++ -static -o 3_surp_prod_lp.exe 3_surp_prod_lp.obj
-"c:\ADMB-13.1\lib\libadmb-contrib-mingw64-g++12.a"  Successfully built '3_surp_prod_lp.exe'. 
+:\ADMB-13.1\include" -I"c:\ADMB-13.1\include\contrib" -o surp_prod_lp.obj surp_prod_lp
+.cpp  *** Linking: surp_prod_lp.obj  g++ -static -o surp_prod_lp.exe surp_prod_lp.obj
+"c:\ADMB-13.1\lib\libadmb-contrib-mingw64-g++12.a"  Successfully built 'surp_prod_lp.exe'. 
 compile log:</code></pre>
 <p>Next we will create new .dat files, which will contain the starting parameter values that will be read into ADMB.</p>
 <div class="cell">
@@ -784,7 +784,7 @@ Run output:
 
 
 
-Starting optimization of '3_surp_prod_lp' in phase 1 of 1 at Fri May 17 13:55:16 2024
+Starting optimization of 'surp_prod_lp' in phase 1 of 1 at Fri May 17 13:55:16 2024
 phase= 1 | nvar= 27 | iter=  0 | nll=4.33e+03 | mag=7.29e+03 | par[  2]=log_K
 phase= 1 | nvar= 27 | iter= 20 | nll=-7.16e+01 | mag=7.39e+01 | par[  2]=log_K
 phase= 1 | nvar= 27 | iter= 40 | nll=-8.78e+01 | mag=1.13e+02 | par[  2]=log_K
@@ -796,7 +796,7 @@ Calculating Hessian (27 variables): 20%, 40%, 60%, 80%, 100% done (0.002 s)
 Inverting Hessian (27 variables): 20%, 40%, 60%, 80%, 100% done (0.018 s) 
 Starting standard error calculations...  done (0.013 s) 
 
-Finished running model '3_surp_prod_lp' after 0.04 s.</code></pre>
+Finished running model 'surp_prod_lp' after 0.04 s.</code></pre>
 <p>This should produce a model result of the surplus production model (check the “.par” file).</p>
 </section>
 <section id="set-up-the-likelihood-profile" class="level3" data-number="3.4">
@@ -901,7 +901,7 @@ Finished running model '3_surp_prod_lp' after 0.04 s.</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"base_funs.r"</span>)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"clean_admb.r"</span>)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"3_surp_prod_lp"</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>tpl_name <span class="ot">&lt;-</span> <span class="st">"surp_prod_lp"</span></span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># compile ADMB</span></span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">compile_admb</span>(<span class="at">fn =</span> tpl_name, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>

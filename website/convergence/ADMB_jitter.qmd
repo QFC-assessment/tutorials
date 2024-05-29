@@ -30,7 +30,7 @@ If possible, you should download the most recent ADMB version [here](https://www
 
 ### Surplus production model - .tpl and .dat files
 
-In this tutorial, we will look at a surplus production model. The .dat file name is called "surp_prod1.dat". You can name the .tpl file anything, but in this tutorial, it will be called "2_surp_prod_jitter.tpl".
+In this tutorial, we will look at a surplus production model. The .dat file name is called "surp_prod1.dat". You can name the .tpl file anything, but in this tutorial, it will be called "surp_prod_jitter.tpl".
 
 ```{r, eval = FALSE}
 DATA_SECTION
@@ -540,10 +540,10 @@ source("clean_admb.r")
 
 ### Compile and run ADMB in R
 
-The R helper functions ("base_funs.r") has a function "compile_admb.r" which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called "2_surp_prod_jitter".
+The R helper functions ("base_funs.r") has a function "compile_admb.r" which will compile ADMB using a R command and through the R environment. The .tpl name in this tutorial is called "surp_prod_jitter".
 
 ```{r, eval = FALSE}
-tpl_name <- "2_surp_prod_jitter" # name of the .tpl file
+tpl_name <- "surp_prod_jitter" # name of the .tpl file
 # compile ADMB
 compile_admb(fn = tpl_name, verbose = TRUE)
 ```
@@ -554,13 +554,13 @@ We will include `verbose = TRUE`, which will print out the compile messages from
 > compile_admb(fn = tpl_name, verbose = TRUE)
 compiling with args: '  ' ...
 compile output:
-  *** Parse: 2_surp_prod_jitter.tpl xxglobal.tmp xxhtop.tmp header.tmp xxalloc.tmp xxtopm
-.tmp 1 file(s) copied. tpl2cpp   2_surp_prod_jitter  *** Compile: 2_surp_prod_jitter.cpp g
+  *** Parse: surp_prod_jitter.tpl xxglobal.tmp xxhtop.tmp header.tmp xxalloc.tmp xxtopm
+.tmp 1 file(s) copied. tpl2cpp   surp_prod_jitter  *** Compile: surp_prod_jitter.cpp g
 ++ -c -std=c++17 -O2 -D_FILE_OFFSET_BITS=64 -DUSE_ADMB_CONTRIBS -D_USE_MATH_DEFINES -I. 
--I"c:\ADMB-13.1\include" -I"c:\ADMB-13.1\include\contrib" -o 2_surp_prod_jitter.obj 
-2_surp_prod_jitter.cpp  *** Linking: 2_surp_prod_jitter.obj  g++ -static -o 
-2_surp_prod_jitter.exe 2_surp_prod_jitter.obj "c:\ADMB-13.1\lib\libadmb-contrib-mingw64-g
-++12.a"  Successfully built '2_surp_prod_jitter.exe'. 
+-I"c:\ADMB-13.1\include" -I"c:\ADMB-13.1\include\contrib" -o surp_prod_jitter.obj 
+surp_prod_jitter.cpp  *** Linking: surp_prod_jitter.obj  g++ -static -o 
+surp_prod_jitter.exe surp_prod_jitter.obj "c:\ADMB-13.1\lib\libadmb-contrib-mingw64-g
+++12.a"  Successfully built 'surp_prod_jitter.exe'. 
 compile log:
 ```
 
@@ -609,7 +609,7 @@ Run output:
 
 
 
-Starting optimization of '2_surp_prod_jitter' in phase 1 of 1 at Fri May 17 13:46:02 2024
+Starting optimization of 'surp_prod_jitter' in phase 1 of 1 at Fri May 17 13:46:02 2024
 phase= 1 | nvar= 28 | iter=  0 | nll=5.27e+03 | mag=6.89e+03 | par[  3]=log_K
 phase= 1 | nvar= 28 | iter= 20 | nll=3.49e+01 | mag=1.98e+02 | par[  1]=log_r
 phase= 1 | nvar= 28 | iter= 40 | nll=-7.59e+01 | mag=9.90e+00 | par[  4]=log_sd_cpue
@@ -624,7 +624,7 @@ Calculating Hessian (28 variables): 20%, 40%, 60%, 80%, 100% done (0.001 s)
 Inverting Hessian (28 variables): 20%, 40%, 60%, 80%, 100% done (0.021 s) 
 Starting standard error calculations...  done (0.026 s) 
 
-Finished running model '2_surp_prod_jitter' after 0.069 s.
+Finished running model 'surp_prod_jitter' after 0.069 s.
 ```
 
 This should produce a model result of the surplus production model (check the ".par" file).
@@ -772,7 +772,7 @@ Here is the entire R script for an example of conducting a jitter test with the 
 ```{r, eval = FALSE}
 source("base_funs.r")
 source("clean_admb.r")
-tpl_name <- "2_surp_prod_jitter"
+tpl_name <- "surp_prod_jitter"
 
 # compile ADMB
 compile_admb(fn = tpl_name, verbose = TRUE)
