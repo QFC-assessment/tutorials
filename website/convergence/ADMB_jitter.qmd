@@ -2,7 +2,7 @@
 title: "Jitter test in ADMB using R"
 ---
 
-The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function. A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. It is recommended to conduct a jitter test across all model parameters.
+The goal of a jitter test is to check if alternative parameter starting points result in the same final parameter estimates and objective function. A jitter test should be conducted as one of the checks to make sure your model is consistent with convergence. It is recommended to conduct a jitter test across all model parameters. 
 
  
 
