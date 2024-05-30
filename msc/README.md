@@ -12,9 +12,11 @@ some of the examples in this folder.
 
 The `convergence/` folder contains:
 
-- Example of the surplus production model (`convergence/surplus_prod/`)
-  in ADMB
-- Example of running a jitter test on the surplus production model
-  (`convergence/jitter_test`) in ADMB
+- Example of the surplus production model in ADMB
+  (`convergence/surplus_prod/`)
+- Example of running a jitter test on the surplus production model in
+  ADMB (`convergence/jitter_test/`)
 - Example of running a likelihood profile on the surplus production
-  model (`convergence/likelihood_profile`) in ADMB
+  model in ADMB (`convergence/likelihood_profile/`)
+- Example of the surplus production model and running model convergence
+  diagnostics in RTMB (`convergence/RTMB/`)
