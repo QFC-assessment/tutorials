@@ -2,4 +2,4 @@
 title: "tutorials"
 ---
 
-homepage 
+This website will contain tutorials on stock assessment concepts. 

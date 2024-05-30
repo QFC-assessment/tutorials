@@ -8,11 +8,11 @@ website:
     contents:
       - text: Home
         href: index.qmd
-      - section: MSC
+      - section: Model convergence diagnostics
         contents:
-        - text: Model convergence diagnostics
+        - text: Model convergence checklist
           href: website/convergence/conv_diagnostics.qmd
-        - section: ADMB
+        - section: Instructions for ADMB
           contents:
           - text: Jitter test
             href: website/convergence/ADMB_jitter.qmd
