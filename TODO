@@ -1,12 +1,10 @@
 Tutorials:
-  Stock assessment guides
+  Stock assessment guides - MSC
     ✔ model convergence diagnostics @done(24-05-16 12:12)
     ✔ ADMB jitter test @high @done(24-05-17 15:13)
       ✔ Linux and Mac instructions @done(24-05-17 15:13)
     ✔ ADMB likelihood profile @high @done(24-05-17 15:13)
-    ☐ RTMB introduction
-    ☐ Stock assessment naming convention
-    ☐ Stock assessment RTMB script setup
+    ☐ data weighting
   
   Notes
     ☐ equilibrium recruitment
