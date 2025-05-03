@@ -8,6 +8,8 @@ website:
     contents:
       - text: Home
         href: index.qmd
+      - text: Equilibrium reference points
+        href: website/eq_recruitment/equil_recruit.qmd
       - section: Model convergence diagnostics
         contents:
         - text: Model convergence checklist
@@ -22,7 +24,7 @@ website:
 format:
   html:
     page-layout: full
-    css: "https://qfcatmsu.github.io/assets/quarto/qfc_styles.css"
+    # css: "https://qfcatmsu.github.io/assets/quarto/qfc_styles.css"
     toc: true
     toc-title: Contents
     toc-location: left
@@ -32,10 +34,10 @@ format:
     number-sections: true
     grid: 
       body-width: 1000px
-    include-in-header:
-      - text: |
-          <script>mod=true;</script>
-          <script src="https://qfcatmsu.github.io/assets/quarto/qfc_styles.js"></script>
+    # include-in-header:
+    #   - text: |
+    #       <script>mod=true;</script>
+    #       <script src="https://qfcatmsu.github.io/assets/quarto/qfc_styles.js"></script>
 
 
 

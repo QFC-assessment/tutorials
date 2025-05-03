@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Model convergence diagnostics for non-linear models</title>
+<title>Equilibrium Recruitment and Reference Points</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -101,6 +67,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -114,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Model convergence diagnostics for non-linear models</h1>
+          <h1 class="quarto-secondary-nav-title">Equilibrium Recruitment and Reference Points</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -141,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../website/eq_recruitment/equil_recruit.html" class="sidebar-item-text sidebar-link">
+  <a href="../../website/eq_recruitment/equil_recruit.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Equilibrium reference points</span></a>
   </div>
 </li>
@@ -156,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../website/convergence/conv_diagnostics.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../website/convergence/conv_diagnostics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Model convergence checklist</span></a>
   </div>
 </li>
@@ -191,13 +186,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#checklist" id="toc-checklist" class="nav-link active" data-scroll-target="#checklist"><span class="header-section-number">1</span> Checklist:</a></li>
-  <li><a href="#creating-the-objective-function-in-rtmb" id="toc-creating-the-objective-function-in-rtmb" class="nav-link" data-scroll-target="#creating-the-objective-function-in-rtmb"><span class="header-section-number">2</span> Creating the objective function in RTMB</a></li>
-  <li><a href="#convergence-message" id="toc-convergence-message" class="nav-link" data-scroll-target="#convergence-message"><span class="header-section-number">3</span> Convergence message</a></li>
-  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix"><span class="header-section-number">4</span> Hessian matrix</a></li>
-  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors"><span class="header-section-number">5</span> Standard errors</a></li>
-  <li><a href="#jitter-test" id="toc-jitter-test" class="nav-link" data-scroll-target="#jitter-test"><span class="header-section-number">6</span> Jitter test</a></li>
-  <li><a href="#likelihood-profile" id="toc-likelihood-profile" class="nav-link" data-scroll-target="#likelihood-profile"><span class="header-section-number">7</span> Likelihood profile</a></li>
+  <li><a href="#stock-recruitment-functions-in-terms-of-alpha-and-beta" id="toc-stock-recruitment-functions-in-terms-of-alpha-and-beta" class="nav-link active" data-scroll-target="#stock-recruitment-functions-in-terms-of-alpha-and-beta"><span class="header-section-number">1</span> Stock recruitment functions in terms of alpha and beta</a>
+  <ul class="collapse">
+  <li><a href="#per-recruit-calculations" id="toc-per-recruit-calculations" class="nav-link" data-scroll-target="#per-recruit-calculations"><span class="header-section-number">1.1</span> Per-recruit calculations</a></li>
+  <li><a href="#beverton-holt" id="toc-beverton-holt" class="nav-link" data-scroll-target="#beverton-holt"><span class="header-section-number">1.2</span> Beverton-Holt</a></li>
+  <li><a href="#ricker" id="toc-ricker" class="nav-link" data-scroll-target="#ricker"><span class="header-section-number">1.3</span> Ricker</a></li>
+  </ul></li>
+  <li><a href="#stock-recruitment-functions-in-terms-of-steepness" id="toc-stock-recruitment-functions-in-terms-of-steepness" class="nav-link" data-scroll-target="#stock-recruitment-functions-in-terms-of-steepness"><span class="header-section-number">2</span> Stock recruitment functions in terms of steepness</a>
+  <ul class="collapse">
+  <li><a href="#beverton-holt-1" id="toc-beverton-holt-1" class="nav-link" data-scroll-target="#beverton-holt-1"><span class="header-section-number">2.1</span> Beverton-Holt</a></li>
+  <li><a href="#ricker-1" id="toc-ricker-1" class="nav-link" data-scroll-target="#ricker-1"><span class="header-section-number">2.2</span> Ricker</a></li>
+  </ul></li>
+  <li><a href="#stock-recruitment-functions-in-terms-of-compensation-ratio" id="toc-stock-recruitment-functions-in-terms-of-compensation-ratio" class="nav-link" data-scroll-target="#stock-recruitment-functions-in-terms-of-compensation-ratio"><span class="header-section-number">3</span> Stock recruitment functions in terms of compensation ratio</a>
+  <ul class="collapse">
+  <li><a href="#beverton-holt-2" id="toc-beverton-holt-2" class="nav-link" data-scroll-target="#beverton-holt-2"><span class="header-section-number">3.1</span> Beverton-Holt</a></li>
+  <li><a href="#ricker-2" id="toc-ricker-2" class="nav-link" data-scroll-target="#ricker-2"><span class="header-section-number">3.2</span> Ricker</a></li>
+  </ul></li>
   </ul>
 </nav>
 </nav>
@@ -210,8 +214,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Model convergence diagnostics for non-linear models</h1>
-</div>
+<h1 class="title d-none d-lg-block">Equilibrium Recruitment and Reference Points</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">recruitment</div>
+    <div class="quarto-category">ypr</div>
+    <div class="quarto-category">reference points</div>
+    <div class="quarto-category">stock-recruitment</div>
+    <div class="quarto-category">steepness</div>
+    <div class="quarto-category">compensation ratio</div>
+  </div>
+  </div>
 
 
 
@@ -227,151 +239,220 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This tutorial discusses what to check to make sure your model is consistent with convergence diagnostics. While this tutorial is focused on TMB/RTMB functions, this checklist can be applied to other non-linear models coded in other programs (e.g., ADMB).</p>
-<section id="checklist" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="checklist"><span class="header-section-number">1</span> Checklist:</h2>
-<p>This is a checklist of convergence checks and diagnostics that should be conducted at minimum to verify a model:</p>
-<p><label><input type="checkbox" unchecked=""> Model is executable (i.e., check objective function and gradients) </label><br>
-<label><input type="checkbox" unchecked=""> The convergence message from RTMB indicates that the diagnostics are consistent with convergence (<code>= 0</code>) </label><br>
-<label><input type="checkbox" unchecked=""> The Hessian matrix is positive definite </label><br>
-<label><input type="checkbox" unchecked=""> Standard errors for model estimates are reasonable </label><br>
-<label><input type="checkbox" unchecked=""> Alternative parameter starting points result in the same final parameter estimates (i.e., jitter test) </label><br>
-<label><input type="checkbox" unchecked=""> Likelihood profiles for important parameters are reasonable, e.g.&nbsp;(initial abundance, recruitment, natural mortality, selectivity): </label><br>
-&nbsp;</p>
-<p>It is recommended to do these checks in this order. If all of these checks pass, this indicates that the model is consistent with convergence and is estimable. It is necessary for the model to pass all these checks. If one of these checks fail, then the model is not consistent with convergence.</p>
+<p>Botsford and Wickham (1979) and Botsford (1981a, 1981b) developed relatively simple ways to do some equilibrium calculations of recruitment and yields, obtained at different levels of harvesting. This approach involves survivorship-at-age calculations in conjunction with age schedules of size, vulnerability, and fecundity to calculate equilibrium “incidence functions”.</p>
+<p>Fisheries management decisions are often based on abundance relative to reference points. The most common reference point is the population size at which MSY is achieved. The fully-selected fishing mortality corresponding to MSY (<span class="math inline">\(F_{MSY}\)</span>), which is defined as the fishing mortality at which yield is maximized.</p>
+<p>Yield refers to the total amount of fish harvested from a fishery within a given period of time, which is typically measured of the productivity or output of the fishery in terms of weight or number of fish caught.</p>
+<p>Note that yield-per-recruit is different than yield. Yield-per-recruit (YPR) is a measure of the average contribution of an individual fish to the total yield of the fishery. It focuses on the productivity of individual fish within the population rather than the total catch.</p>
+<p>The recruitment as a function of <span class="math inline">\(F\)</span> (<span class="math inline">\(R_F\)</span>) depends on the assumed form of the stock-recruitment relationship. The unfished spawning biomass (<span class="math inline">\(S_0\)</span>) is the expected spawning biomass for one unfished recruit (i.e., spawner biomass per recruit; <span class="math inline">\(\phi_0\)</span>) times the number of recruits (i.e., the unfished recruitment; <span class="math inline">\(R_0\)</span>)</p>
+<section id="stock-recruitment-functions-in-terms-of-alpha-and-beta" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="stock-recruitment-functions-in-terms-of-alpha-and-beta"><span class="header-section-number">1</span> Stock recruitment functions in terms of alpha and beta</h2>
+<section id="per-recruit-calculations" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="per-recruit-calculations"><span class="header-section-number">1.1</span> Per-recruit calculations</h3>
+<p>Yield (<span class="math inline">\(Y\)</span>) can be defined as a function of fully-selected fishing mortality:</p>
+<p><span id="eq-1"><span class="math display">\[
+Y_F = {YPR}_F R_F
+\tag{1}\]</span></span></p>
+<ul>
+<li><span class="math inline">\(YPR_F\)</span> is yield-per-recruit as a function of fishing mortality</li>
+<li><span class="math inline">\(R_F\)</span> is recruitment as a function of fishing mortality.</li>
+</ul>
+<p>YPR is defined as:</p>
+<p><span id="eq-2"><span class="math display">\[
+{YPR}_F = \sum_a w_a \dfrac{s_a F}{Z_a}N_a (1-e^{-Z_a})
+\tag{2}\]</span></span></p>
+<ul>
+<li><span class="math inline">\(w_a\)</span> is the weight at age</li>
+<li><span class="math inline">\(s_a\)</span> is the selectivity at age</li>
+<li><span class="math inline">\(Z_a\)</span> is the total mortality at age</li>
+</ul>
+<p><span id="eq-3"><span class="math display">\[
+Z_a = M + s_a F
+\tag{3}\]</span></span></p>
+<ul>
+<li><span class="math inline">\(N_a\)</span> is the number at age relative to the number of fish of age 0</li>
+</ul>
+<p><span id="eq-4"><span class="math display">\[
+N_{a}=\left\{\begin{array}{ll}
+1 &amp; \text { if } a=0 \\
+N_{a-1} e^{-Z_{a-1}} &amp; \text { if } 0&lt;a&lt;x \\
+\dfrac{N_{A-1} e^{-Z_{A-1}}}{1-e^{-Z_{A}}} &amp; \text { if } a=A
+\end{array}\right.
+\tag{4}\]</span></span></p>
+<p>The unfished spawning biomass (<span class="math inline">\(S_0\)</span>) is defined as:</p>
+<p><span id="eq-5"><span class="math display">\[
+S_0 = \phi_0 R_0
+\tag{5}\]</span></span></p>
+<p>The unfished recruitment (<span class="math inline">\(R_0\)</span>) can be obtained by some algebra with <a href="#eq-5" class="quarto-xref">eq&nbsp;5</a>:</p>
+<p><span id="eq-6"><span class="math display">\[
+R_0 = \dfrac{S_0}{\phi_0}
+\tag{6}\]</span></span></p>
+<p>This then also means that the spawner per biomass recruit (<span class="math inline">\(\phi_0\)</span>) can also be obtained:</p>
+<p><span id="eq-7"><span class="math display">\[
+\phi_0 = \dfrac{S_0}{R_0}
+\tag{7}\]</span></span></p>
+<p>The same relationship in <a href="#eq-5" class="quarto-xref">eq&nbsp;5</a> applies for equilibrium spawning biomass:</p>
+<p><span id="eq-8"><span class="math display">\[
+S_F = \phi_F R_F
+\tag{8}\]</span></span></p>
+<p>Spawner biomass per recruit as a function of <span class="math inline">\(F\)</span> is defined as:</p>
+<p><span id="eq-9"><span class="math display">\[
+\phi_F = \sum_a f_a N_a
+\tag{9}\]</span></span></p>
+<ul>
+<li><span class="math inline">\(f_a\)</span> is fecundity at age</li>
+</ul>
 </section>
-<section id="creating-the-objective-function-in-rtmb" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="creating-the-objective-function-in-rtmb"><span class="header-section-number">2</span> Creating the objective function in RTMB</h2>
-<p>Say you construct an objective function called <code>obj</code> using <code>f</code> as the model function and <code>par</code> as a list of initial parameter values. Using <code>RTMB::MakeADFun</code>, you can create the objective function:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> RTMB<span class="sc">::</span><span class="fu">MakeADFun</span>(f, par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>You need to check if the objective function will run before running an optimizer. You can look at this by checking if the objective function produces a likelihood and if a gradient is calculated for each parameter:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check likelihood</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>obj<span class="sc">$</span><span class="fu">fn</span>()</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># check gradients</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>obj<span class="sc">$</span><span class="fu">gr</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="beverton-holt" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="beverton-holt"><span class="header-section-number">1.2</span> Beverton-Holt</h3>
+<p>Recruitment as a function of <span class="math inline">\(F\)</span> for Beverton-Holt is defined as:</p>
+<p><span id="eq-10"><span class="math display">\[
+R_F = \dfrac{S_F}{\alpha + \beta S_F}
+\tag{10}\]</span></span></p>
+<p>Substitute <a href="#eq-8" class="quarto-xref">eq&nbsp;8</a> into <a href="#eq-10" class="quarto-xref">eq&nbsp;10</a> and solve for <span class="math inline">\(R_F\)</span> to get the stock recruitment relationship in terms of <span class="math inline">\(\phi_F\)</span>: <span id="eq-11"><span class="math display">\[
+R_F = \dfrac{\phi_F - \alpha}{\beta\hspace{0.5mm} \phi_F}
+\tag{11}\]</span></span></p>
+<p>Unfished recruitment for Beverton-Holt can be defined the same <a href="#eq-10" class="quarto-xref">eq&nbsp;10</a>:</p>
+<p><span id="eq-12"><span class="math display">\[
+R_0 = \dfrac{S_0}{\alpha + \beta S_0}
+\tag{12}\]</span></span></p>
+<p>Now we need a definition for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, the stock recruitment parameters. These only vary by <span class="math inline">\(R_0\)</span> and steepness (<span class="math inline">\(h\)</span>), which is defined as the expected recruitment at 20% of <span class="math inline">\(S_0\)</span> (hence <span class="math inline">\(0.2 S_0\)</span>):</p>
+<p><span id="eq-13"><span class="math display">\[
+h R_0 = \dfrac{0.2 S_0}{\alpha + 0.2 \beta S_0}
+\tag{13}\]</span></span></p>
+<p>With some extra algebra, we can obtain <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> in terms of steepness (<span class="math inline">\(h\)</span>), unfished recruitment (<span class="math inline">\(R_0\)</span>), and unfished spawning biomass (<span class="math inline">\(S_0\)</span>):</p>
+<p><span id="eq-14"><span class="math display">\[
+\alpha = \phi_0 \left(\dfrac{1-h}{4h}\right)
+\tag{14}\]</span></span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-What are gradients
+Algebra on alpha
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><strong>Gradients</strong> are the partial derivatives of the objective function with respect to the model parameters (goes into one vector - <code>obj$gr()</code>). These partial derivatives indicate how the objective function changes (direction and magnitude) as each parameter varies. This provides information for optimization algorithms to adjust the parameters iteratively to minimize or maximize the objective function.</p>
+
 </div>
 </div>
 </div>
-<p>If the model is estimable, it will calculate a likelihood based on the initial parameters. Each parameter should also provide a gradient value. If the gradient of a parameter = 0 or NA, this means that the model is not able to estimate that parameter or the parameter is not being used in the model.</p>
-<p>If the checks on the objective function are successful, you can run the objective function with an optimizer using the <code>nlminb</code> function and <code>opt</code> is the output:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> <span class="fu">nlminb</span>(obj<span class="sc">$</span>par, obj<span class="sc">$</span>fn, obj<span class="sc">$</span>gr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="convergence-message" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="convergence-message"><span class="header-section-number">3</span> Convergence message</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the model is converged</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>opt<span class="sc">$</span>convergence</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># check type of convergence</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>opt<span class="sc">$</span>message</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>If the diagnostics are consistent with convergence, then <code>opt$convergence = 0</code>. If the model did not converge, <code>opt$convergence = 1</code>. There can be some reasons why the model failed to converge (check <code>opt$message</code> for convergence message):</p>
-<ul>
-<li>singular convergence: model is likely overparameterized (too complex for the data, the data does not contain enough information to estimate the parameters reliably)</li>
-<li>false convergence: likelihood may be discontinuous (this could be related to the estimation of the parameters)</li>
-</ul>
-<p>Ideally, you want the convergence message: “relative convergence”.</p>
-<p>&nbsp;</p>
-<p>You may also encounter messages like these:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Warning</span> messages:</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">1:</span> In nlminb<span class="er">(</span><span class="ex">start</span> = par, objective = fn, gradient = gr<span class="kw">)</span> <span class="bu">:</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">NA/NaN</span> function evaluation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>This does not necessarily mean the model is not converged. This means that the optimizer wandered off into a bad region for a while (i.e., NAs/NaNs in the estimates) and may have gotten back out. As long as it is back in a good region by the end of the optimization, then it may be fine. However, this should be evaluated with caution, it can sometimes mean that the parameterization or model equations are not correct. Ideally, you do not want a model that is able to wander off into a bad region.</p>
-</section>
-<section id="hessian-matrix" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="hessian-matrix"><span class="header-section-number">4</span> Hessian matrix</h2>
+<p><span id="eq-15"><span class="math display">\[
+\beta = \dfrac{5h-1}{4h R_0}
+\tag{15}\]</span></span></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-What is a Hessian matrix?
+Algebra on beta
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>A Hessian matrix is a square matrix of second-order partial derivatives of the objective function. In other words, it contains information about how the rate of change of each parameter with respect to every other parameter changes.</p>
-<p>This represents the curvature of the likelihood surface and is used to calculate estimates of uncertainty for all the estimated model parameters and chosen derived quantities.</p>
-<ul>
-<li>Inverting the negative Hessian gives us the covariance matrix, which provides a measure of parameter uncertainty.</li>
-<li>The diagonal elements of the covariance matrix (i.e., inverse of the Hessian matrix) represent the variance of individual parameters.</li>
-<li>The square root of the diagonal elements (i.e., variance) gives standard errors of the parameter estimates.</li>
-</ul>
+
 </div>
 </div>
-</div>
-<p>The Hessian matrix will not be invertible if the negative log likelihood is not a true minimum. This usually occurs when the model is mis-specified, which could either mean that the model has been written incorrectly so the objective function is not differentiable/estimable with respect to all the parameters. Or the estimated parameters are confounded or overparameterized (i.e., too complex for the data). RTMB will warn you about a non-positive definite Hessian matrix.</p>
-</section>
-<section id="standard-errors" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="standard-errors"><span class="header-section-number">5</span> Standard errors</h2>
-<p>If the standard errors for the parameter estimates are high, this suggests that the model is not fully converged. This can mean:</p>
-<ul>
-<li>low precision: there is a wide range of plausible values for the parameters</li>
-<li>lack of stability in the estimation of the parameter</li>
-<li>overfitting: model may be too complex and is capturing noise in the data rather than true underlying patterns</li>
-</ul>
-<p>Considerations to the model formulation and parameter estimates should be made if the standard errors are too high and unreasonable.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sdrep <span class="ot">&lt;-</span> <span class="fu">sdreport</span>(obj)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sdrep</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="jitter-test" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="jitter-test"><span class="header-section-number">6</span> Jitter test</h2>
-<p>A jitter test is used to evaluate whether a model has actually converged to a global solution rather than a local minimum. This should check that none of the randomly generated starting values of the parameters results in a solution that has a smaller negative log likelihood than the reference model. A jitter test is conducted by changing the starting parameter values and rerunning the model several times. This should be done with multiple (if not all) the parameters.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this function runs the optimizer with the new parameters (opt$par + randomization)</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>doone <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">nlminb</span>(opt<span class="sc">$</span>par <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(opt<span class="sc">$</span>par), <span class="at">sd =</span> .<span class="dv">1</span>),</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    obj<span class="sc">$</span>fn, obj<span class="sc">$</span>gr,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">eval.max =</span> <span class="dv">1000</span>, <span class="at">iter.max =</span> <span class="dv">1000</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(fit<span class="sc">$</span>par, <span class="st">"convergence"</span> <span class="ot">=</span> fit<span class="sc">$</span>convergence)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># jitter the parameters 100 times</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>jit <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">100</span>, <span class="fu">doone</span>())</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check if the convergence are all 0s across the 100 iterations</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># check if there are any outliers or large intervals</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">t</span>(jit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Note: the magnitude of the jittering should be done within reason (e.g., 10% CV) as extreme jitters could start the model search in an unrealistic place and then the model would not be able to detect gradients that point towards reasonable solutions.</p>
+<section id="ricker" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="ricker"><span class="header-section-number">1.3</span> Ricker</h3>
+<p>Recruitment as a function of <span class="math inline">\(F\)</span> for Ricker is defined as:</p>
+<p><span id="eq-16"><span class="math display">\[
+R_F = \alpha S_F e^{-\beta S_F}
+\tag{16}\]</span></span></p>
+<p>Substitute <a href="#eq-8" class="quarto-xref">eq&nbsp;8</a> into <a href="#eq-16" class="quarto-xref">eq&nbsp;16</a> and solve for <span class="math inline">\(R_F\)</span> to get the stock recruitment relationship in terms of <span class="math inline">\(\phi_F\)</span>: <span id="eq-17"><span class="math display">\[
+R_F = \dfrac{log(\alpha \hspace{0.5mm} \phi_F)}{\beta \hspace{0.5mm} \phi_F}
+\tag{17}\]</span></span></p>
+<p>Unfished recruitment for Ricker can be defined the same <a href="#eq-16" class="quarto-xref">eq&nbsp;16</a>:</p>
+<p><span id="eq-18"><span class="math display">\[
+R_0 = \alpha S_0 e^{-\beta S_0}
+\tag{18}\]</span></span></p>
+<p>Now we need a definition for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, the stock recruitment parameters. These only vary by <span class="math inline">\(R_0\)</span> and steepness (<span class="math inline">\(h\)</span>). Steepness can be included as:</p>
+<p><span id="eq-19"><span class="math display">\[
+h R_0 = 0.2 \alpha S_0 e^{-0.2 \beta S_0}
+\tag{19}\]</span></span></p>
+<p>With some extra algebra, we can obtain <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> in terms of steepness (<span class="math inline">\(h\)</span>), unfished recruitment (<span class="math inline">\(R_0\)</span>), and unfished spawning biomass (<span class="math inline">\(S_0\)</span>):</p>
+<p><span id="eq-20"><span class="math display">\[
+\alpha = \dfrac{1}{\phi_0} \hspace{0.5mm} e^{\dfrac{5 log(5h)}{4}}
+\tag{20}\]</span></span></p>
+<p><span id="eq-21"><span class="math display">\[
+\beta = \dfrac{log(5h)}{0.8 S_0}
+\tag{21}\]</span></span></p>
 </section>
-<section id="likelihood-profile" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="likelihood-profile"><span class="header-section-number">7</span> Likelihood profile</h2>
-<p>A likelihood profile shows how the negative log likelihood changes as one of the parameters is fixed across a range of values while estimating the other parameters. This helps evaluate which parameters are informative, measure the amount of information contained in the data, and check the sensitivity (i.e., the consequence of using a fixed value) of the model result to the choice of the parameters. The shape of the likelihood profile for a parameter should look like a U:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="figs/likelihood.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
-</figure>
-</div>
-<p>This does not have to be done on all parameters, but select important parameters. This typically includes initial abundance (e.g., R0, initial abundance at age vector), recruitment (e.g., steepness or compensation ratio), natural mortality, selectivity, etc. The goal is to identify if there are any conflicting information in the data about abundance.</p>
+</section>
+<section id="stock-recruitment-functions-in-terms-of-steepness" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="stock-recruitment-functions-in-terms-of-steepness"><span class="header-section-number">2</span> Stock recruitment functions in terms of steepness</h2>
+<p>We are going to define steepness (<span class="math inline">\(h\)</span>) and unfished recruitment <span class="math inline">\(R0\)</span> in terms of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, which is a reparameterization of the previous section. The per-recruit calculations are the same as the previous section.</p>
+<section id="beverton-holt-1" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="beverton-holt-1"><span class="header-section-number">2.1</span> Beverton-Holt</h3>
+<p>Steepness for the Beverton-Holt function is defined as:</p>
+<p><span id="eq-22"><span class="math display">\[
+h = \dfrac{\alpha \hspace{0.5mm} \phi_0}{4 + \alpha \hspace{0.5mm} \phi_0}
+\tag{22}\]</span></span></p>
+<p>The unfished recruitment (<span class="math inline">\(R_0\)</span>) is defined as (similar to <a href="#eq-11" class="quarto-xref">eq&nbsp;11</a>):</p>
+<p><span id="eq-23"><span class="math display">\[
+R_0 = \dfrac{\phi_0 - \alpha}{\beta\hspace{0.5mm} \phi_0}
+\tag{23}\]</span></span></p>
+<p>The Beverton-Holt function in terms of <span class="math inline">\(F\)</span>, steepness (<span class="math inline">\(h\)</span>), and unfished recruitment (<span class="math inline">\(R_0\)</span>) becomes:</p>
+<p><span id="eq-24"><span class="math display">\[
+R_F = \dfrac{S_F 4h R_0}{S_0 (1-h) + S_F(5h-1)}
+\tag{24}\]</span></span></p>
+</section>
+<section id="ricker-1" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="ricker-1"><span class="header-section-number">2.2</span> Ricker</h3>
+<p>Steepness for the Ricker function is defined as:</p>
+<p><span id="eq-25"><span class="math display">\[
+h = \dfrac{(\alpha \hspace{0.5mm} \phi_0)^{4/5}}{5}
+\tag{25}\]</span></span></p>
+<p>The unfished recruitment (<span class="math inline">\(R_0\)</span>) is defined as (similar to <a href="#eq-17" class="quarto-xref">eq&nbsp;17</a>):</p>
+<p><span id="eq-26"><span class="math display">\[
+R_0 = \dfrac{log(\alpha \hspace{0.5mm} \phi_0)}{\beta \hspace{0.5mm} \phi_0}
+\tag{26}\]</span></span></p>
+<p>The Ricker function in terms of <span class="math inline">\(F\)</span>, steepness (<span class="math inline">\(h\)</span>), and unfished recruitment (<span class="math inline">\(R_0\)</span>) becomes:</p>
+<p><span id="eq-27"><span class="math display">\[
+R_F = \dfrac{S_F}{\phi_0} (5h)^{\left( \dfrac{5}{4} \right)\left(1- \dfrac{S_F}{R_0 \phi_0} \right)}
+\tag{27}\]</span></span></p>
+</section>
+</section>
+<section id="stock-recruitment-functions-in-terms-of-compensation-ratio" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="stock-recruitment-functions-in-terms-of-compensation-ratio"><span class="header-section-number">3</span> Stock recruitment functions in terms of compensation ratio</h2>
+<p>An alternative estimation of recruitment uses compensation ratio (<span class="math inline">\(CR\)</span>), which is defined as the ratio of <span class="math inline">\(\alpha\)</span> to the slope of the line drawn between the origin and the point on the stock-recruitment surve at which the stock is unfished (Goodyear, 1997; Myers et al., 1999).</p>
+<p><span class="math display">\[
+\]</span></p>
+<section id="beverton-holt-2" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="beverton-holt-2"><span class="header-section-number">3.1</span> Beverton-Holt</h3>
+<p><span class="math display">\[
+CR = \dfrac{4h}{1-h}
+\]</span></p>
+<p><span class="math display">\[
+\alpha = \dfrac{CR}{\phi_{E_0}}
+\]</span></p>
+<p><span class="math display">\[
+\beta = \dfrac{\alpha \phi_{E_0} - 1}{R_0 \phi_{E_0}}
+\]</span></p>
+<p><span class="math display">\[
+R_F = \dfrac{\alpha \phi_{E_F} - 1}{\beta \phi_{E_F}}
+\]</span></p>
+</section>
+<section id="ricker-2" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="ricker-2"><span class="header-section-number">3.2</span> Ricker</h3>
+<p><span class="math display">\[
+\alpha = \dfrac{CR}{\phi_0}
+\]</span></p>
+<p><span class="math display">\[
+\beta = \dfrac{log(\alpha \phi_0)}{R_0 \phi_0}
+\]</span></p>
+<p><span class="math display">\[
+R_F = \dfrac{log(\alpha \phi_F)}{\beta \phi_F}
+\]</span></p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -1,0 +1,253 @@
+---
+title: "Equilibrium Recruitment and Reference Points"
+categories: [recruitment, ypr, reference points, stock-recruitment, steepness, compensation ratio]
+freeze: true
+slug: eq-recruit
+format:
+  html:
+    toc: true
+    page-layout: full
+---
+
+Botsford and Wickham (1979) and Botsford (1981a, 1981b) developed relatively simple ways to do some equilibrium calculations of recruitment and yields, obtained at different levels of harvesting. This approach involves survivorship-at-age calculations in conjunction with age schedules of size, vulnerability, and fecundity to calculate equilibrium "incidence functions".
+
+Fisheries management decisions are often based on abundance relative to reference points. The most common reference point is the population size at which MSY is achieved. The fully-selected fishing mortality corresponding to MSY ($F_{MSY}$), which is defined as the fishing mortality at which yield is maximized.
+ 
+Yield refers to the total amount of fish harvested from a fishery within a given period of time, which is typically measured of the productivity or output of the fishery in terms of weight or number of fish caught. 
+
+Note that yield-per-recruit is different than yield. Yield-per-recruit (YPR) is a measure of the average contribution of an individual fish to the total yield of the fishery. It focuses on the productivity of individual fish within the population rather than the total catch.
+
+The recruitment as a function of $F$ ($R_F$) depends on the assumed form of the stock-recruitment relationship. The unfished spawning biomass ($S_0$) is the expected spawning biomass for one unfished recruit (i.e., spawner biomass per recruit; $\phi_0$) times the number of recruits (i.e., the unfished recruitment; $R_0$)
+
+## Stock recruitment functions in terms of alpha and beta
+
+### Per-recruit calculations
+
+Yield ($Y$) can be defined as a function of fully-selected fishing mortality:
+
+$$
+Y_F = {YPR}_F R_F
+$$ {#eq-1}
+
+- $YPR_F$ is yield-per-recruit as a function of fishing mortality
+- $R_F$ is recruitment as a function of fishing mortality.
+
+YPR is defined as:
+
+$$
+{YPR}_F = \sum_a w_a \dfrac{s_a F}{Z_a}N_a (1-e^{-Z_a})
+$$ {#eq-2}
+
+- $w_a$ is the weight at age
+- $s_a$ is the selectivity at age
+- $Z_a$ is the total mortality at age
+
+$$
+Z_a = M + s_a F
+$$ {#eq-3}
+
+- $N_a$ is the number at age relative to the number of fish of age 0
+
+$$
+N_{a}=\left\{\begin{array}{ll}
+1 & \text { if } a=0 \\
+N_{a-1} e^{-Z_{a-1}} & \text { if } 0<a<x \\
+\dfrac{N_{A-1} e^{-Z_{A-1}}}{1-e^{-Z_{A}}} & \text { if } a=A
+\end{array}\right.
+$$ {#eq-4}
+
+The unfished spawning biomass ($S_0$) is defined as:
+
+$$
+S_0 = \phi_0 R_0
+$$ {#eq-5}
+
+The unfished recruitment ($R_0$) can be obtained by some algebra with [eq @eq-5]:
+
+$$
+R_0 = \dfrac{S_0}{\phi_0}
+$$ {#eq-6}
+
+This then also means that the spawner per biomass recruit ($\phi_0$) can also be obtained:
+
+$$
+\phi_0 = \dfrac{S_0}{R_0}
+$$ {#eq-7}
+
+The same relationship in [eq @eq-5] applies for equilibrium spawning biomass:
+
+$$
+S_F = \phi_F R_F
+$$ {#eq-8}
+
+Spawner biomass per recruit as a function of $F$ is defined as:
+
+$$
+\phi_F = \sum_a f_a N_a
+$$ {#eq-9}
+
+- $f_a$ is fecundity at age
+
+### Beverton-Holt
+
+Recruitment as a function of $F$ for Beverton-Holt is defined as:
+
+$$
+R_F = \dfrac{S_F}{\alpha + \beta S_F}
+$$ {#eq-10}
+
+Substitute [eq @eq-8] into [eq @eq-10] and solve for $R_F$ to get the stock recruitment relationship in terms of $\phi_F$:
+$$
+R_F = \dfrac{\phi_F - \alpha}{\beta\hspace{0.5mm} \phi_F}
+$$ {#eq-11}
+
+Unfished recruitment for Beverton-Holt can be defined the same [eq @eq-10]:
+
+$$
+R_0 = \dfrac{S_0}{\alpha + \beta S_0}
+$$ {#eq-12}
+
+Now we need a definition for $\alpha$ and $\beta$, the stock recruitment parameters. These only vary by $R_0$ and steepness ($h$), which is defined as the expected recruitment at 20% of $S_0$ (hence $0.2 S_0$):
+
+$$
+h R_0 = \dfrac{0.2 S_0}{\alpha + 0.2 \beta S_0}
+$$ {#eq-13}
+
+With some extra algebra, we can obtain $\alpha$ and $\beta$ in terms of steepness ($h$), unfished recruitment ($R_0$), and unfished spawning biomass ($S_0$):
+
+$$
+\alpha = \phi_0 \left(\dfrac{1-h}{4h}\right)
+$$ {#eq-14}
+
+::: {.callout-note collapse="true"}
+## Algebra on alpha
+
+:::
+
+$$
+\beta = \dfrac{5h-1}{4h R_0}
+$$ {#eq-15}
+
+::: {.callout-note collapse="true"}
+## Algebra on beta
+
+:::
+
+### Ricker
+
+Recruitment as a function of $F$ for Ricker is defined as:
+
+$$
+R_F = \alpha S_F e^{-\beta S_F}
+$$ {#eq-16}
+
+Substitute [eq @eq-8] into [eq @eq-16] and solve for $R_F$ to get the stock recruitment relationship in terms of $\phi_F$:
+$$
+R_F = \dfrac{log(\alpha \hspace{0.5mm} \phi_F)}{\beta \hspace{0.5mm} \phi_F}
+$$ {#eq-17}
+
+Unfished recruitment for Ricker can be defined the same [eq @eq-16]:
+
+$$
+R_0 = \alpha S_0 e^{-\beta S_0}
+$$ {#eq-18}
+
+Now we need a definition for $\alpha$ and $\beta$, the stock recruitment parameters. These only vary by $R_0$ and steepness ($h$). Steepness can be included as:
+
+$$
+h R_0 = 0.2 \alpha S_0 e^{-0.2 \beta S_0}
+$$ {#eq-19}
+
+With some extra algebra, we can obtain $\alpha$ and $\beta$ in terms of steepness ($h$), unfished recruitment ($R_0$), and unfished spawning biomass ($S_0$):
+
+$$
+\alpha = \dfrac{1}{\phi_0} \hspace{0.5mm} e^{\dfrac{5 log(5h)}{4}}
+$$ {#eq-20}
+
+$$
+\beta = \dfrac{log(5h)}{0.8 S_0}
+$$ {#eq-21}
+
+
+## Stock recruitment functions in terms of steepness
+
+We are going to define steepness ($h$) and unfished recruitment $R0$ in terms of $\alpha$ and $\beta$, which is a reparameterization of the previous section. The per-recruit calculations are the same as the previous section. 
+
+### Beverton-Holt
+
+Steepness for the Beverton-Holt function is defined as:
+
+$$
+h = \dfrac{\alpha \hspace{0.5mm} \phi_0}{4 + \alpha \hspace{0.5mm} \phi_0}
+$$ {#eq-22}
+
+The unfished recruitment ($R_0$) is defined as (similar to [eq @eq-11]):
+
+$$
+R_0 = \dfrac{\phi_0 - \alpha}{\beta\hspace{0.5mm} \phi_0}
+$$ {#eq-23}
+
+The Beverton-Holt function in terms of $F$, steepness ($h$), and unfished recruitment ($R_0$) becomes:
+
+$$
+R_F = \dfrac{S_F 4h R_0}{S_0 (1-h) + S_F(5h-1)}
+$$ {#eq-24}
+
+### Ricker
+
+Steepness for the Ricker function is defined as:
+
+$$
+h = \dfrac{(\alpha \hspace{0.5mm} \phi_0)^{4/5}}{5}
+$$ {#eq-25}
+
+The unfished recruitment ($R_0$) is defined as (similar to [eq @eq-17]):
+
+$$
+R_0 = \dfrac{log(\alpha \hspace{0.5mm} \phi_0)}{\beta \hspace{0.5mm} \phi_0}
+$$ {#eq-26}
+
+The Ricker function in terms of $F$, steepness ($h$), and unfished recruitment ($R_0$) becomes:
+
+$$
+R_F = \dfrac{S_F}{\phi_0} (5h)^{\left( \dfrac{5}{4} \right)\left(1- \dfrac{S_F}{R_0 \phi_0} \right)}
+$$ {#eq-27}
+
+
+## Stock recruitment functions in terms of compensation ratio
+
+An alternative estimation of recruitment uses compensation ratio ($CR$), which is defined as the ratio of $\alpha$ to the slope of the line drawn between the origin and the point on the stock-recruitment surve at which the stock is unfished (Goodyear, 1997; Myers et al., 1999). 
+
+$$
+$$
+
+### Beverton-Holt
+$$
+CR = \dfrac{4h}{1-h}
+$$
+
+$$
+\alpha = \dfrac{CR}{\phi_{E_0}}
+$$
+
+$$
+\beta = \dfrac{\alpha \phi_{E_0} - 1}{R_0 \phi_{E_0}}
+$$
+
+$$
+R_F = \dfrac{\alpha \phi_{E_F} - 1}{\beta \phi_{E_F}}
+$$
+
+### Ricker
+
+$$
+\alpha = \dfrac{CR}{\phi_0}
+$$
+
+$$
+\beta = \dfrac{log(\alpha \phi_0)}{R_0 \phi_0}
+$$
+
+$$
+R_F = \dfrac{log(\alpha \phi_F)}{\beta \phi_F}
+$$
