@@ -98,7 +98,7 @@ $$ {#eq-10}
 
 Substitute [eq @eq-8] into [eq @eq-10] and solve for $R_F$ to get the stock recruitment relationship in terms of $\phi_F$:
 $$
-R_F = \dfrac{\phi_F - \alpha}{\beta\hspace{0.5mm} \phi_F}
+R_F = \dfrac{\alpha \phi_F - 1}{\beta\hspace{0.5mm} \phi_F}
 $$ {#eq-11}
 
 Unfished recruitment for Beverton-Holt can be defined the same [eq @eq-10]:
@@ -184,7 +184,7 @@ $$ {#eq-22}
 The unfished recruitment ($R_0$) is defined as (similar to [eq @eq-11]):
 
 $$
-R_0 = \dfrac{\phi_0 - \alpha}{\beta\hspace{0.5mm} \phi_0}
+R_0 = \dfrac{\alpha \phi_0 - 1}{\beta\hspace{0.5mm} \phi_0}
 $$ {#eq-23}
 
 The Beverton-Holt function in terms of $F$, steepness ($h$), and unfished recruitment ($R_0$) becomes:
